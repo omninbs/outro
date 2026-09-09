@@ -1,19 +1,13 @@
 import { Button, Panel } from '../components/ui';
 
-export function GenerateStep({
-	onGenerate,
-	onReset,
-}: {
-	onGenerate: () => void;
-	onReset: () => void;
-}) {
+export function GenerateStep({ onReset }: { onReset: () => void }) {
 	return (
 		<Panel title="生成">
 			<p class="mb-4 text-xs leading-relaxed text-ctp-subtext0">
-				点击后进入全屏版权页，内容会铺满整个窗口。按 F11 全屏后自行截图即可，页脚左侧的返回链接用于退出。
+				点击后打开版权页。它是一张独立的页面：按 F11 全屏后自行截图即可，页脚左侧的「编辑」可以回到这里。
 			</p>
 			<div class="flex flex-wrap gap-2">
-				<Button variant="primary" onClick={onGenerate}>
+				<Button variant="primary" href="colophon.html">
 					生成
 				</Button>
 				<Button

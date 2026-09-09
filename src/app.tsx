@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
-import { CardPage } from './components/CardPage';
+import { useState } from 'preact/hooks';
 import { Checklist } from './components/Checklist';
 import { newField } from './components/FieldEditor';
 import { Preview } from './components/Preview';
@@ -23,24 +22,7 @@ const STEPS: StepDef[] = [
 export function App() {
 	const { data, patch, reset } = useCard();
 	const [step, setStep] = useState(0);
-	const [viewing, setViewing] = useState(() => window.location.hash === '#view');
 	const { hints, score, grade } = evaluate(data);
-
-	// 生成页有自己的地址（#view），可刷新、可前进后退
-	useEffect(() => {
-		const sync = () => setViewing(window.location.hash === '#view');
-		window.addEventListener('hashchange', sync);
-		return () => window.removeEventListener('hashchange', sync);
-	}, []);
-
-	useEffect(() => {
-		if (!viewing) return;
-		const onKey = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') window.location.hash = '';
-		};
-		window.addEventListener('keydown', onKey);
-		return () => window.removeEventListener('keydown', onKey);
-	}, [viewing]);
 
 	const addQuickField = (label: string) => {
 		const quick = QUICK_FIELDS.find((q) => q.label === label);
@@ -49,18 +31,10 @@ export function App() {
 		setStep(0);
 	};
 
-	if (viewing) {
-		return (
-			<div class="h-dvh w-full">
-				<CardPage data={data} exitLink onExit={() => (window.location.hash = '')} />
-			</div>
-		);
-	}
-
 	return (
 		<div class="mx-auto max-w-360 px-6 py-8">
 			<header class="mb-6">
-				<h1 class="text-lg font-semibold">版权页卡片生成器</h1>
+				<h1 class="text-lg font-semibold">版权页生成器</h1>
 				<p class="mt-1 text-xs text-ctp-subtext0">
 					按步骤填写内容，右侧实时预览，最后生成版权页
 				</p>
@@ -73,12 +47,7 @@ export function App() {
 					{step === 0 && <ContentStep data={data} patch={patch} />}
 					{step === 1 && <NoticeStep data={data} patch={patch} />}
 					{step === 2 && <LookStep data={data} patch={patch} />}
-					{step === 3 && (
-						<GenerateStep
-							onGenerate={() => (window.location.hash = 'view')}
-							onReset={reset}
-						/>
-					)}
+					{step === 3 && <GenerateStep onReset={reset} />}
 
 					<div class="mt-6 flex items-center justify-between">
 						<Button disabled={step === 0} onClick={() => setStep(step - 1)}>

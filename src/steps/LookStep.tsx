@@ -1,4 +1,4 @@
-import { Field, Panel, Slider, TextInput, Toggle } from '../components/ui';
+import { Field, Panel, Slider, TextInput } from '../components/ui';
 import { DEFAULT_FOOTER } from '../lib/config';
 import { accentNames, flavorNames, flavors } from '../lib/palette';
 import type { CardData } from '../lib/types';
@@ -50,7 +50,7 @@ export function LookStep({
 					</div>
 				</Field>
 
-				<Field label="强调色" hint="用于标题分隔线、字段标签和声明边框">
+				<Field label="强调色" hint="用于标题分隔线、字段标签和声明标题">
 					<div class="flex flex-wrap gap-2">
 						{accentNames.map((name) => (
 							<button
@@ -83,20 +83,13 @@ export function LookStep({
 			</Panel>
 
 			<Panel title="页脚">
-				<Toggle
-					checked={data.footerOn}
-					onChange={(footerOn) => patch({ footerOn })}
-					label="显示页脚小字"
-				/>
-				{data.footerOn && (
-					<div class="mt-4">
-						<TextInput
-							value={data.footerText}
-							onInput={(footerText) => patch({ footerText })}
-							placeholder={`${DEFAULT_FOOTER}（留空即默认）`}
-						/>
-					</div>
-				)}
+				<Field label="页脚文字" hint="显示在页面底部右侧">
+					<TextInput
+						value={data.footerText}
+						onInput={(footerText) => patch({ footerText })}
+						placeholder={DEFAULT_FOOTER}
+					/>
+				</Field>
 			</Panel>
 		</>
 	);

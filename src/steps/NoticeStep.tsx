@@ -40,7 +40,7 @@ export function NoticeStep({
 					<TextArea
 						value={data.notice}
 						onInput={(notice) => patch({ notice })}
-						placeholder="留空则使用默认模板"
+						placeholder="例如：本工程仅供学习交流使用，允许转载，请注明出处"
 						rows={7}
 					/>
 				</Field>

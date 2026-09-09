@@ -14,6 +14,5 @@ export interface CardData {
 	flavor: FlavorName;
 	accent: AccentName;
 	textScale: number;
-	footerOn: boolean;
 	footerText: string;
 }

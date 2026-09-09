@@ -137,39 +137,6 @@ export function Slider({
 	);
 }
 
-export function Toggle({
-	checked,
-	onChange,
-	label,
-}: {
-	checked: boolean;
-	onChange: (checked: boolean) => void;
-	label: string;
-}) {
-	return (
-		<button
-			type="button"
-			role="switch"
-			aria-checked={checked}
-			onClick={() => onChange(!checked)}
-			class="flex items-center gap-3 text-left"
-		>
-			<span
-				class={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
-					checked ? 'bg-ctp-mauve' : 'bg-ctp-surface1'
-				}`}
-			>
-				<span
-					class={`absolute top-0.5 h-4 w-4 rounded-full bg-ctp-base transition-all ${
-						checked ? 'left-4.5' : 'left-0.5'
-					}`}
-				/>
-			</span>
-			<span class={`text-sm ${checked ? 'text-ctp-text' : 'text-ctp-subtext0'}`}>{label}</span>
-		</button>
-	);
-}
-
 type ButtonVariant = 'primary' | 'ghost' | 'danger';
 
 const VARIANTS: Record<ButtonVariant, string> = {
@@ -181,22 +148,34 @@ const VARIANTS: Record<ButtonVariant, string> = {
 export function Button({
 	children,
 	onClick,
+	href,
 	variant = 'ghost',
 	disabled,
 	class: cls,
 }: {
 	children: ComponentChildren;
 	onClick?: () => void;
+	href?: string;
 	variant?: ButtonVariant;
 	disabled?: boolean;
 	class?: string;
 }) {
+	const base = `rounded-md px-4 py-2 text-sm font-medium transition ${VARIANTS[variant]} ${cls ?? ''}`;
+
+	if (href) {
+		return (
+			<a href={href} class={`inline-block ${base}`}>
+				{children}
+			</a>
+		);
+	}
+
 	return (
 		<button
 			type="button"
 			onClick={onClick}
 			disabled={disabled}
-			class={`rounded-md px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTS[variant]} ${cls ?? ''}`}
+			class={`disabled:cursor-not-allowed disabled:opacity-50 ${base}`}
 		>
 			{children}
 		</button>

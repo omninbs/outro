@@ -14,8 +14,8 @@ export function ContentStep({
 
 	return (
 		<>
-			<Panel title="卡片标题">
-				<Field label="标题" hint="显示在卡片最上方，通常是「歌曲信息」这类总起">
+			<Panel title="页面标题">
+				<Field label="标题" hint="显示在页面最上方，通常是「歌曲信息」这类总起">
 					<TextInput
 						value={data.title}
 						onInput={(title) => patch({ title })}
