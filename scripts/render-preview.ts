@@ -1,9 +1,12 @@
 // 生成静态设计预览页，方便快速看版式效果。
-// 用法：npm run design  → 打开 design-preview.html
-import { writeFileSync } from 'node:fs';
+// 用法：npm run design  → 打开 design/preview.html
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { buildCardHtml } from '../src/lib/card';
 import { DEFAULT_CARD } from '../src/lib/config';
 import type { CardData } from '../src/lib/types';
+
+const OUT_DIR = 'design';
+mkdirSync(OUT_DIR, { recursive: true });
 
 const sample: CardData = {
 	...DEFAULT_CARD,
@@ -52,7 +55,7 @@ variants.forEach(({ data, w, h }, index) => {
 		`<!DOCTYPE html><html><head><meta charset="UTF-8" />` +
 		`<style>html,body{margin:0;padding:0;overflow:hidden}</style></head>` +
 		`<body>${buildCardHtml(data, w, h)}</body></html>`;
-	writeFileSync(`design-shot-${index}.html`, shot);
+	writeFileSync(`${OUT_DIR}/shot-${index}.html`, shot);
 });
 
 const html = `<!DOCTYPE html>
@@ -89,5 +92,5 @@ ${cards}
 </html>
 `;
 
-writeFileSync('design-preview.html', html);
-console.log(`wrote design-preview.html (${variants.length} variants)`);
+writeFileSync(`${OUT_DIR}/preview.html`, html);
+console.log(`wrote ${OUT_DIR}/preview.html (${variants.length} variants)`);

@@ -23,6 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 
-design-preview.html
-design-shot-*.html
-design-shot-*.png
+design/
