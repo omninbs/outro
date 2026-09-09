@@ -31,16 +31,16 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 	const fFooter = Math.round(u * 0.016 * ts);
 
 	// 留白节奏
-	const padX = Math.round(W * 0.1);
 	const padY = Math.round(u * 0.1);
+	const bodyW = Math.round(W * 0.72);
+	const padX = Math.round((W - bodyW) / 2);
 	const gapTitle = Math.round(u * 0.028);
 	const gapRule = Math.round(u * 0.055);
 	const gapBody = Math.round(u * 0.055);
 	const gapRow = Math.round(u * 0.018);
 	const gutter = Math.round(u * 0.055);
 
-	// 正文区只占卡片宽度的一部分，右侧留出安全距离
-	const bodyW = Math.round(W * 0.72);
+	// 正文区居中，左右留出等宽的安全距离
 	const leftW = Math.round(bodyW * 0.45);
 	const rightW = bodyW - leftW - gutter;
 	const labelW = Math.round(leftW * 0.44);
@@ -81,7 +81,7 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 
 	const footer =
 		data.footerOn && String(data.footerText).trim()
-			? `<div style="position:absolute;right:${W - padX - bodyW}px;bottom:${padY}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(data.footerText)}</div>`
+			? `<div style="position:absolute;right:${padX}px;bottom:${padY}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(data.footerText)}</div>`
 			: '';
 
 	return (
