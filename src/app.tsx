@@ -35,7 +35,7 @@ export function App() {
 
 	return (
 		<>
-			<div class="mx-auto max-w-[1440px] px-6 py-8">
+			<div class="mx-auto max-w-360 px-6 py-8">
 				<header class="mb-6">
 					<h1 class="text-lg font-semibold">版权页卡片生成器</h1>
 					<p class="mt-1 text-xs text-ctp-subtext0">
