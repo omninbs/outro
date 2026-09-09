@@ -23,7 +23,7 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 	const ts = (data.textScale || 100) / 100;
 
 	// 字号阶梯
-	const fTitle = Math.round(u * 0.062 * ts);
+	const fTitle = Math.round(u * 0.046 * ts);
 	const fLabel = Math.round(u * 0.019 * ts);
 	const fValue = Math.round(u * 0.024 * ts);
 	const fNoticeLabel = Math.round(u * 0.019 * ts);
