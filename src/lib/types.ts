@@ -1,5 +1,3 @@
-import type { AccentName, FlavorName } from './palette';
-
 export interface Field {
 	id: string;
 	label: string;
@@ -11,8 +9,5 @@ export interface CardData {
 	fields: Field[];
 	noticeLabel: string;
 	notice: string;
-	flavor: FlavorName;
-	accent: AccentName;
-	textScale: number;
 	footerText: string;
 }

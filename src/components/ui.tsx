@@ -103,40 +103,6 @@ export function Select<T extends string | number>({
 	);
 }
 
-export function Slider({
-	value,
-	min,
-	max,
-	step = 1,
-	onInput,
-	suffix,
-}: {
-	value: number;
-	min: number;
-	max: number;
-	step?: number;
-	onInput: (value: number) => void;
-	suffix?: string;
-}) {
-	return (
-		<div class="flex items-center gap-3">
-			<input
-				type="range"
-				class="h-1.5 flex-1 cursor-pointer appearance-none rounded-full bg-ctp-surface1 accent-ctp-mauve"
-				value={value}
-				min={min}
-				max={max}
-				step={step}
-				onInput={(e) => onInput(Number(e.currentTarget.value))}
-			/>
-			<span class="w-12 shrink-0 text-right text-xs tabular-nums text-ctp-subtext0">
-				{value}
-				{suffix}
-			</span>
-		</div>
-	);
-}
-
 type ButtonVariant = 'primary' | 'ghost' | 'danger';
 
 const VARIANTS: Record<ButtonVariant, string> = {

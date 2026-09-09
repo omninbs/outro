@@ -46,8 +46,5 @@ export const DEFAULT_CARD: CardData = {
 	],
 	noticeLabel: '',
 	notice: '',
-	flavor: 'mocha',
-	accent: 'mauve',
-	textScale: 100,
 	footerText: DEFAULT_FOOTER,
 };

@@ -10,13 +10,11 @@ import { evaluate } from './lib/evaluate';
 import { useCard } from './lib/store';
 import { ContentStep } from './steps/ContentStep';
 import { GenerateStep } from './steps/GenerateStep';
-import { LookStep } from './steps/LookStep';
 import { NoticeStep } from './steps/NoticeStep';
 
 const STEPS: StepDef[] = [
 	{ id: 'content', label: '内容' },
 	{ id: 'notice', label: '声明' },
-	{ id: 'look', label: '外观' },
 	{ id: 'generate', label: '生成' },
 ];
 
@@ -65,8 +63,7 @@ export function App() {
 				<div>
 					{step === 0 && <ContentStep data={data} patch={patch} />}
 					{step === 1 && <NoticeStep data={data} patch={patch} />}
-					{step === 2 && <LookStep data={data} patch={patch} />}
-					{step === 3 && <GenerateStep onReset={reset} />}
+					{step === 2 && <GenerateStep onReset={reset} />}
 
 					<div class="mt-6 flex items-center justify-between">
 						<Button disabled={step === 0} onClick={() => setStep(step - 1)}>

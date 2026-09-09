@@ -1,5 +1,5 @@
 import { Field, Panel, Select, TextArea, TextInput } from '../components/ui';
-import { NOTICE_TEMPLATES } from '../lib/config';
+import { DEFAULT_FOOTER, NOTICE_TEMPLATES } from '../lib/config';
 import type { CardData } from '../lib/types';
 
 export function NoticeStep({
@@ -42,6 +42,16 @@ export function NoticeStep({
 						onInput={(notice) => patch({ notice })}
 						placeholder="例如：本工程仅供学习交流使用，允许转载，请注明出处"
 						rows={7}
+					/>
+				</Field>
+			</Panel>
+
+			<Panel title="页脚">
+				<Field label="页脚文字" hint="始终显示在页面底部右侧，左侧是「编辑」链接">
+					<TextInput
+						value={data.footerText}
+						onInput={(footerText) => patch({ footerText })}
+						placeholder={DEFAULT_FOOTER}
 					/>
 				</Field>
 			</Panel>

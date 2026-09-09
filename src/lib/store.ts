@@ -9,11 +9,14 @@ function loadCard(): CardData {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
 		if (!raw) return structuredClone(DEFAULT_CARD);
-		const parsed = JSON.parse(raw) as Partial<CardData> & { footerOn?: boolean };
+		const parsed = JSON.parse(raw) as Partial<CardData>;
 		const merged = { ...DEFAULT_CARD, ...parsed };
 		if (!Array.isArray(merged.fields)) merged.fields = structuredClone(DEFAULT_CARD.fields);
 		if (!merged.footerText.trim()) merged.footerText = DEFAULT_FOOTER;
-		delete (merged as Record<string, unknown>).footerOn;
+		// 清掉已废弃的外观字段
+		for (const key of ['footerOn', 'flavor', 'accent', 'textScale']) {
+			delete (merged as Record<string, unknown>)[key];
+		}
 		return merged;
 	} catch {
 		return structuredClone(DEFAULT_CARD);
