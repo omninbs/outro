@@ -38,13 +38,14 @@ export const DEFAULT_NOTICE_LABEL = '版权声明';
 export const DEFAULT_NOTICE = NOTICE_TEMPLATES[0].text;
 export const DEFAULT_FOOTER = '由 kemiamu/colophon 生成';
 
+/** 初始内容一律留空，默认文案只作占位提示，不预填 */
 export const DEFAULT_CARD: CardData = {
-	title: DEFAULT_TITLE,
+	title: '',
 	meta: [
 		{ id: 'm1', label: '原歌曲作者', value: '' },
 		{ id: 'm2', label: 'NBS 作者', value: '' },
 		{ id: 'm3', label: '结构设计者', value: '' },
 	],
-	blocks: [{ id: 'b1', label: DEFAULT_NOTICE_LABEL, text: DEFAULT_NOTICE }],
-	footerText: DEFAULT_FOOTER,
+	blocks: [],
+	footerText: '',
 };

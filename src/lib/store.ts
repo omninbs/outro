@@ -1,40 +1,72 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import { DEFAULT_CARD, DEFAULT_FOOTER, DEFAULT_NOTICE, DEFAULT_NOTICE_LABEL } from './config';
+import {
+	DEFAULT_CARD,
+	DEFAULT_FOOTER,
+	DEFAULT_NOTICE,
+	DEFAULT_NOTICE_LABEL,
+	DEFAULT_TITLE,
+} from './config';
 import { newId } from './id';
 import type { CardData, MetaItem, TextBlock } from './types';
 
-const STORAGE_KEY = 'colophon.card.v1';
+const STORAGE_KEY = 'colophon.card.v2';
+const LEGACY_KEY = 'colophon.card.v1';
 
 const str = (value: unknown, fallback = '') => (typeof value === 'string' ? value : fallback);
 
-/** 读取已保存的内容，并兼容旧的「字段 + 声明」结构 */
-function loadCard(): CardData {
-	try {
-		const raw = localStorage.getItem(STORAGE_KEY);
-		if (!raw) return structuredClone(DEFAULT_CARD);
-		const old = JSON.parse(raw) as Record<string, unknown>;
+/** 旧版本把默认文案直接写进了输入框，迁移时把它当作「未填写」 */
+const dropDefault = (value: string, fallback: string) => (value.trim() === fallback ? '' : value);
 
-		const meta: MetaItem[] = Array.isArray(old.meta)
-			? (old.meta as MetaItem[])
-			: Array.isArray(old.fields)
-				? (old.fields as MetaItem[])
-				: structuredClone(DEFAULT_CARD.meta);
+/** 解析已保存的内容，并兼容旧的「字段 + 声明」结构 */
+function parseCard(raw: string): CardData {
+	const old = JSON.parse(raw) as Record<string, unknown>;
 
-		const blocks: TextBlock[] = Array.isArray(old.blocks)
-			? (old.blocks as TextBlock[])
-			: [
+	const meta: MetaItem[] = Array.isArray(old.meta)
+		? (old.meta as MetaItem[])
+		: Array.isArray(old.fields)
+			? (old.fields as MetaItem[])
+			: structuredClone(DEFAULT_CARD.meta);
+
+	const blocks: TextBlock[] = Array.isArray(old.blocks)
+		? (old.blocks as TextBlock[])
+		: str(old.notice).trim()
+			? [
 					{
 						id: newId('b'),
 						label: str(old.noticeLabel, DEFAULT_NOTICE_LABEL),
-						text: str(old.notice).trim() || DEFAULT_NOTICE,
+						text: str(old.notice),
 					},
-				];
+				]
+			: [];
 
+	return {
+		title: str(old.title),
+		meta,
+		blocks,
+		footerText: str(old.footerText),
+	};
+}
+
+function loadCard(): CardData {
+	try {
+		const current = localStorage.getItem(STORAGE_KEY);
+		if (current) return parseCard(current);
+
+		const legacy = localStorage.getItem(LEGACY_KEY);
+		if (!legacy) return structuredClone(DEFAULT_CARD);
+
+		const card = parseCard(legacy);
 		return {
-			title: str(old.title, DEFAULT_CARD.title),
-			meta,
-			blocks,
-			footerText: str(old.footerText).trim() || DEFAULT_FOOTER,
+			...card,
+			title: dropDefault(card.title, DEFAULT_TITLE),
+			footerText: dropDefault(card.footerText, DEFAULT_FOOTER),
+			blocks: card.blocks.filter(
+				(block) =>
+					!(
+						str(block.label).trim() === DEFAULT_NOTICE_LABEL &&
+						str(block.text).trim() === DEFAULT_NOTICE
+					),
+			),
 		};
 	} catch {
 		return structuredClone(DEFAULT_CARD);
