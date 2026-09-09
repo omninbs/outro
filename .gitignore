@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+design-preview.html
+design-shot-*.html
+design-shot-*.png

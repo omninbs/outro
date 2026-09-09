@@ -13,8 +13,8 @@ const esc = (value: string) =>
 		.replace(/'/g, '&#39;');
 
 /**
- * 生成卡片的 HTML 字符串。预览直接注入 DOM，导出时包进 SVG foreignObject。
- * 两种用法共用同一份标记，保证所见即所得。
+ * 文档式版式：不用任何容器（无填充块 / 边框 / 圆角），
+ * 层级只由字号、字距、留白与两栏分栏表达。全卡仅一条强调色细线。
  */
 export function buildCardHtml(data: CardData, W: number, H: number): string {
 	const c = flavors[data.flavor].colors;
@@ -22,66 +22,76 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 	const u = Math.min(W, H);
 	const ts = (data.textScale || 100) / 100;
 
-	const fTitle = Math.round(u * 0.058 * ts);
-	const fLabel = Math.round(u * 0.021 * ts);
-	const fValue = Math.round(u * 0.028 * ts);
-	const fNoticeLabel = Math.round(u * 0.026 * ts);
-	const fNoticeBody = Math.round(u * 0.023 * ts);
-	const fFooter = Math.round(u * 0.018 * ts);
+	// 字号阶梯
+	const fTitle = Math.round(u * 0.062 * ts);
+	const fLabel = Math.round(u * 0.019 * ts);
+	const fValue = Math.round(u * 0.024 * ts);
+	const fNoticeLabel = Math.round(u * 0.019 * ts);
+	const fNoticeBody = Math.round(u * 0.022 * ts);
+	const fFooter = Math.round(u * 0.016 * ts);
 
-	const pad = Math.round(u * 0.05);
-	const gap = Math.round(u * 0.016);
-	const cellPad = Math.round(u * 0.018);
-	const radius = Math.round(u * 0.012);
-	const width = Math.min(Math.round(W * 0.82), Math.round(u * 1.35));
+	// 留白节奏
+	const pad = Math.round(u * 0.1);
+	const gapTitle = Math.round(u * 0.028);
+	const gapRule = Math.round(u * 0.055);
+	const gapBody = Math.round(u * 0.055);
+	const gapRow = Math.round(u * 0.018);
+	const gutter = Math.round(u * 0.06);
+
+	const contentW = W - pad * 2;
+	const leftW = Math.round(contentW * 0.36);
+	const rightW = contentW - leftW - gutter;
+	const labelW = Math.round(leftW * 0.44);
 
 	const fields = data.fields.filter((f) => String(f.value).trim() !== '');
-	const cols = fields.length >= 2 && W > u * 1.3 ? 2 : 1;
-
-	const fieldsHtml = fields
+	const credits = fields
 		.map((f) => {
 			const label = esc(f.label.trim());
 			return (
-				`<div style="box-sizing:border-box;background:${c.surface0};border:1px solid ${c.surface1};` +
-				`border-left:3px solid ${accent};border-radius:${radius}px;padding:${cellPad}px;">` +
+				`<div style="display:flex;align-items:baseline;gap:${Math.round(u * 0.014)}px;">` +
 				(label
-					? `<div style="font-size:${fLabel}px;color:${accent};font-weight:600;margin-bottom:${Math.round(u * 0.006)}px;">${label}</div>`
+					? `<div style="flex:none;width:${labelW}px;font-size:${fLabel}px;color:${c.subtext0};letter-spacing:0.06em;line-height:1.6;">${label}</div>`
 					: '') +
-				`<div style="font-size:${fValue}px;color:${c.text};line-height:1.5;word-break:break-word;">${esc(String(f.value).trim())}</div>` +
+				`<div style="flex:1;font-size:${fValue}px;color:${c.text};line-height:1.6;word-break:break-word;">${esc(String(f.value).trim())}</div>` +
 				`</div>`
 			);
 		})
 		.join('');
 
 	const notice = String(data.notice).trim();
-	const noticeHtml = notice
-		? `<div style="box-sizing:border-box;width:${width}px;background:${c.mantle};border:1px solid ${c.surface0};` +
-		  `border-left:4px solid ${accent};border-radius:${radius}px;padding:${Math.round(u * 0.024)}px;">` +
-		  `<div style="font-size:${fNoticeLabel}px;color:${accent};font-weight:700;margin-bottom:${Math.round(u * 0.009)}px;">${esc(data.noticeLabel || '版权声明')}</div>` +
-		  `<div style="font-size:${fNoticeBody}px;color:${c.subtext0};line-height:1.7;white-space:pre-wrap;word-break:break-word;">${esc(notice)}</div>` +
-		  `</div>`
+	const noticeBlock = notice
+		? `<div style="font-size:${fNoticeLabel}px;color:${accent};letter-spacing:0.1em;margin-bottom:${Math.round(u * 0.016)}px;">${esc(data.noticeLabel || '版权声明')}</div>` +
+			`<div style="font-size:${fNoticeBody}px;color:${c.subtext0};line-height:1.85;white-space:pre-wrap;word-break:break-word;">${esc(notice)}</div>`
 		: '';
+
+	const creditsBlock = credits
+		? `<div style="display:flex;flex-direction:column;gap:${gapRow}px;">${credits}</div>`
+		: '';
+
+	// 竖屏 / 方形卡片放不下两栏，改为上下堆叠
+	const twoCols = Boolean(creditsBlock && noticeBlock) && W > u * 1.15;
+	const body = twoCols
+		? `<div style="display:flex;align-items:flex-start;gap:${gutter}px;">` +
+			`<div style="flex:none;width:${leftW}px;">${creditsBlock}</div>` +
+			`<div style="flex:none;width:${rightW}px;">${noticeBlock}</div>` +
+			`</div>`
+		: `<div style="display:flex;flex-direction:column;gap:${gapBody}px;">${creditsBlock}${noticeBlock}</div>`;
 
 	const footer =
 		data.footerOn && String(data.footerText).trim()
-			? `<div style="font-size:${fFooter}px;color:${c.overlay0};text-align:center;">${esc(data.footerText)}</div>`
+			? `<div style="position:absolute;right:${pad}px;bottom:${pad}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(data.footerText)}</div>`
 			: '';
-
-	const inset = Math.max(2, Math.round(u * 0.004));
 
 	return (
 		`<div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;overflow:hidden;box-sizing:border-box;` +
 		`width:${W}px;height:${H}px;background:${c.base};color:${c.text};font-family:${FONT};">` +
-		`<div style="position:absolute;inset:${inset}px;border:1px solid ${c.surface0};border-radius:${Math.round(u * 0.01)}px;"></div>` +
-		`<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;` +
-		`box-sizing:border-box;width:100%;height:100%;padding:${pad}px;gap:${gap}px;">` +
-		`<div style="font-size:${fTitle}px;font-weight:700;color:${c.text};text-align:center;letter-spacing:0.03em;">${esc(data.title)}</div>` +
-		`<div style="width:${Math.round(width * 0.22)}px;height:3px;border-radius:99px;background:${accent};"></div>` +
-		(fields.length
-			? `<div style="display:grid;grid-template-columns:repeat(${cols},minmax(0,1fr));gap:${gap}px;width:${width}px;">${fieldsHtml}</div>`
-			: '') +
-		noticeHtml +
+		`<div style="box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;` +
+		`width:100%;height:100%;padding:${pad}px;">` +
+		`<div style="font-size:${fTitle}px;font-weight:600;color:${c.text};letter-spacing:0.06em;line-height:1.25;">${esc(data.title)}</div>` +
+		`<div style="width:${Math.round(u * 0.13)}px;height:${Math.max(2, Math.round(u * 0.0035))}px;background:${accent};margin-top:${gapTitle}px;"></div>` +
+		`<div style="margin-top:${gapRule}px;">${body}</div>` +
+		`</div>` +
 		footer +
-		`</div></div>`
+		`</div>`
 	);
 }

@@ -5,7 +5,8 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"design": "esbuild scripts/render-preview.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/card-preview.mjs --log-level=error && node node_modules/.cache/card-preview.mjs"
 	},
 	"dependencies": {
 		"preact": "^10.26.9"
