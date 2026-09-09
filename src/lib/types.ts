@@ -1,7 +1,5 @@
 import type { AccentName, FlavorName } from './palette';
 
-export type RatioId = '16:9' | '21:9' | '1:1' | '4:3' | '9:16';
-
 export interface Field {
 	id: string;
 	label: string;
@@ -16,7 +14,6 @@ export interface CardData {
 	flavor: FlavorName;
 	accent: AccentName;
 	textScale: number;
-	ratio: RatioId;
 	footerOn: boolean;
 	footerText: string;
 }

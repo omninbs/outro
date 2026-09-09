@@ -51,12 +51,7 @@ export function App() {
 						{step === 1 && <NoticeStep data={data} patch={patch} />}
 						{step === 2 && <LookStep data={data} patch={patch} />}
 						{step === 3 && (
-							<GenerateStep
-								data={data}
-								patch={patch}
-								onGenerate={() => setStage(true)}
-								onReset={reset}
-							/>
+							<GenerateStep onGenerate={() => setStage(true)} onReset={reset} />
 						)}
 
 						<div class="mt-6 flex items-center justify-between">

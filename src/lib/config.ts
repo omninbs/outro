@@ -1,20 +1,4 @@
-import type { CardData, RatioId } from './types';
-
-export interface Ratio {
-	id: RatioId;
-	label: string;
-	note: string;
-	w: number;
-	h: number;
-}
-
-export const RATIOS: Ratio[] = [
-	{ id: '16:9', label: '16:9', note: '横屏', w: 1280, h: 720 },
-	{ id: '21:9', label: '21:9', note: '影院', w: 1470, h: 630 },
-	{ id: '1:1', label: '1:1', note: '方形', w: 1080, h: 1080 },
-	{ id: '4:3', label: '4:3', note: '横屏', w: 1440, h: 1080 },
-	{ id: '9:16', label: '9:16', note: '竖屏', w: 720, h: 1280 },
-];
+import type { CardData } from './types';
 
 export const NOTICE_TEMPLATES = [
 	{
@@ -65,11 +49,6 @@ export const DEFAULT_CARD: CardData = {
 	flavor: 'mocha',
 	accent: 'mauve',
 	textScale: 100,
-	ratio: '16:9',
 	footerOn: true,
 	footerText: '',
 };
-
-export function ratioOf(id: RatioId): Ratio {
-	return RATIOS.find((r) => r.id === id) ?? RATIOS[0];
-}

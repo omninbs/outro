@@ -8,3 +8,25 @@ body {
 	font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
+
+/* 版权页正文：窄容器或竖向容器堆叠，宽容器分两栅 */
+.card-body {
+	display: flex;
+	flex-direction: column;
+}
+
+@container (min-aspect-ratio: 1.15) {
+	.card-body {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+
+	.card-credits {
+		flex: none;
+		width: 45%;
+	}
+
+	.card-notice {
+		flex: 1;
+	}
+}
