@@ -22,7 +22,12 @@ const esc = (value: string) =>
  * 文档式版式：不用任何容器（无填充块 / 边框 / 圆角），
  * 层级只由字号、字距、留白与两栏分栏表达。全卡仅一条强调色细线。
  */
-export function buildCardHtml(data: CardData, W: number, H: number): string {
+export function buildCardHtml(
+	data: CardData,
+	W: number,
+	H: number,
+	opts: { exitLink?: boolean } = {},
+): string {
 	const c = flavors[data.flavor].colors;
 	const accent = c[data.accent];
 	const u = Math.min(W, H);
@@ -86,9 +91,16 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 		: `<div style="display:flex;flex-direction:column;gap:${gapBody}px;width:${bodyW}px;">${creditsBlock}${noticeBlock}</div>`;
 
 	const footerText = String(data.footerText).trim() || DEFAULT_FOOTER;
-	const footer = data.footerOn
-		? `<div style="position:absolute;right:${padX}px;bottom:${padY}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(footerText)}</div>`
+	const footerLeft = opts.exitLink
+		? `<a data-exit="1" style="color:${c.overlay0};text-decoration:none;cursor:pointer;">← 返回</a>`
 		: '';
+	const footer =
+		data.footerOn || opts.exitLink
+			? `<div style="position:absolute;left:${padX}px;right:${padX}px;bottom:${padY}px;display:flex;justify-content:space-between;gap:${Math.round(u * 0.03)}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">` +
+				`<div>${footerLeft}</div>` +
+				`<div>${data.footerOn ? esc(footerText) : ''}</div>` +
+				`</div>`
+			: '';
 
 	return (
 		`<div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;overflow:hidden;box-sizing:border-box;` +

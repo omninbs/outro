@@ -17,7 +17,6 @@ export interface CardData {
 	accent: AccentName;
 	textScale: number;
 	ratio: RatioId;
-	scale: number;
 	footerOn: boolean;
 	footerText: string;
 }

@@ -16,13 +16,6 @@ export const RATIOS: Ratio[] = [
 	{ id: '9:16', label: '9:16', note: '竖屏', w: 720, h: 1280 },
 ];
 
-export const SCALES = [
-	{ value: 1, label: '1×（基准）' },
-	{ value: 1.5, label: '1.5×' },
-	{ value: 2, label: '2×（2K）' },
-	{ value: 3, label: '3×（4K）' },
-];
-
 export const NOTICE_TEMPLATES = [
 	{
 		id: 'study',
@@ -73,7 +66,6 @@ export const DEFAULT_CARD: CardData = {
 	accent: 'mauve',
 	textScale: 100,
 	ratio: '16:9',
-	scale: 2,
 	footerOn: true,
 	footerText: '',
 };
