@@ -16,16 +16,22 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 	});
 }
 
+/** 把非 ASCII 字符转成数字字符引用，使 SVG 字节流为纯 ASCII，
+ * 这样无论浏览器用哪种编码解码都不会出现中文乱码。 */
+const toAscii = (value: string) =>
+	value.replace(/[^\x00-\x7F]/gu, (ch) => `&#x${ch.codePointAt(0)!.toString(16)};`);
+
 /** 借助 SVG foreignObject 把卡片标记画进 canvas，再导出为 PNG。无需第三方库。 */
 export async function renderPng(data: CardData): Promise<Blob> {
 	const { w, h } = cardSizeOf(data);
 	const html = buildCardHtml(data, w, h);
-	// 显式声明 UTF-8，并用 Blob 承载字节流，
+	// 显式声明 UTF-8、用 Blob 承载字节流，并把中文转成数字字符引用，
 	// 避免浏览器按系统默认编码（如 GBK）解码 SVG 导致中文乱码。
-	const svg =
+	const svg = toAscii(
 		`<?xml version="1.0" encoding="UTF-8"?>` +
-		`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">` +
-		`<foreignObject width="100%" height="100%">${html}</foreignObject></svg>`;
+			`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">` +
+			`<foreignObject width="100%" height="100%">${html}</foreignObject></svg>`,
+	);
 
 	const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
 	try {
