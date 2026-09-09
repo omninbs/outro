@@ -14,7 +14,15 @@ const FONT =
  * 版权页本身就是一个页面：铺满容器、随容器尺寸排版，
  * 所有尺度都用容器查询单位表达，因此预览与全屏是同一套布局。
  */
-export function CardPage({ data, exitLink }: { data: CardData; exitLink?: boolean }) {
+export function CardPage({
+	data,
+	exitLink,
+	onExit,
+}: {
+	data: CardData;
+	exitLink?: boolean;
+	onExit?: () => void;
+}) {
 	const c = flavors[data.flavor].colors;
 	const accent = c[data.accent];
 	const ts = (data.textScale || 100) / 100;
@@ -34,7 +42,14 @@ export function CardPage({ data, exitLink }: { data: CardData; exitLink?: boolea
 	const fields = data.fields.filter((f) => f.value.trim() !== '');
 
 	return (
-		<div class="h-full w-full" style={{ containerType: 'size', ['--ts' as string]: ts }}>
+		<div
+			class="h-full w-full"
+			style={{ containerType: 'size', ['--ts' as string]: ts }}
+			onClick={(event) => {
+				const target = event.target as HTMLElement | null;
+				if (target?.closest('[data-exit]')) onExit?.();
+			}}
+		>
 			<div
 				class="relative flex h-full w-full flex-col justify-center overflow-hidden"
 				style={{
