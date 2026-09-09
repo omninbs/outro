@@ -23,6 +23,9 @@ export function CardPage({ data, exitLink }: { data: CardData; exitLink?: boolea
 	const fs = (n: number) => `calc(${n}cqmin * var(--ts))`;
 	/** 间距：只随容器缩放 */
 	const sp = (n: number) => `${n}cqmin`;
+	/** 安全距离：水平按容器宽度、垂直按容器高度算 */
+	const padX = (n: number) => `${n}cqw`;
+	const padY = (n: number) => `${n}cqh`;
 
 	const title = data.title.trim() || DEFAULT_TITLE;
 	const noticeLabel = data.noticeLabel.trim() || DEFAULT_NOTICE_LABEL;
@@ -35,7 +38,7 @@ export function CardPage({ data, exitLink }: { data: CardData; exitLink?: boolea
 			<div
 				class="relative flex h-full w-full flex-col justify-center overflow-hidden"
 				style={{
-					padding: `${sp(10)} ${sp(14)}`,
+					padding: `${padY(12)} ${padX(16)}`,
 					background: c.base,
 					color: c.text,
 					fontFamily: FONT,
@@ -119,9 +122,9 @@ export function CardPage({ data, exitLink }: { data: CardData; exitLink?: boolea
 					<div
 						class="absolute flex justify-between"
 						style={{
-							left: sp(14),
-							right: sp(14),
-							bottom: sp(10),
+							left: padX(16),
+							right: padX(16),
+							bottom: padY(12),
 							gap: sp(3),
 							fontSize: fs(1.6),
 							color: c.overlay0,
@@ -134,7 +137,7 @@ export function CardPage({ data, exitLink }: { data: CardData; exitLink?: boolea
 									data-exit="1"
 									style={{ color: c.overlay0, textDecoration: 'none', cursor: 'pointer' }}
 								>
-									← 返回
+									编辑
 								</a>
 							)}
 						</div>
