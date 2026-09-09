@@ -70,7 +70,7 @@ export const DEFAULT_CARD: CardData = {
 	ratio: '16:9',
 	scale: 2,
 	footerOn: true,
-	footerText: '由 colophon 生成',
+	footerText: '由 kemiamu/colophon 生成',
 };
 
 export function ratioOf(id: RatioId): Ratio {
