@@ -36,11 +36,13 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 	const gapRule = Math.round(u * 0.055);
 	const gapBody = Math.round(u * 0.055);
 	const gapRow = Math.round(u * 0.018);
-	const gutter = Math.round(u * 0.06);
+	const gutter = Math.round(u * 0.055);
 
+	// 正文区只占内容宽度的一部分，右侧留出安全距离
 	const contentW = W - pad * 2;
-	const leftW = Math.round(contentW * 0.36);
-	const rightW = contentW - leftW - gutter;
+	const bodyW = Math.round(contentW * 0.8);
+	const leftW = Math.round(bodyW * 0.45);
+	const rightW = bodyW - leftW - gutter;
 	const labelW = Math.round(leftW * 0.44);
 
 	const fields = data.fields.filter((f) => String(f.value).trim() !== '');
@@ -75,11 +77,11 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 			`<div style="flex:none;width:${leftW}px;">${creditsBlock}</div>` +
 			`<div style="flex:none;width:${rightW}px;">${noticeBlock}</div>` +
 			`</div>`
-		: `<div style="display:flex;flex-direction:column;gap:${gapBody}px;">${creditsBlock}${noticeBlock}</div>`;
+		: `<div style="display:flex;flex-direction:column;gap:${gapBody}px;width:${bodyW}px;">${creditsBlock}${noticeBlock}</div>`;
 
 	const footer =
 		data.footerOn && String(data.footerText).trim()
-			? `<div style="position:absolute;right:${pad}px;bottom:${pad}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(data.footerText)}</div>`
+			? `<div style="position:absolute;right:${pad + (contentW - bodyW)}px;bottom:${pad}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(data.footerText)}</div>`
 			: '';
 
 	return (
