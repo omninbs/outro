@@ -60,9 +60,11 @@ export function App() {
 
 				<div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 					<div>
-						{step === 0 && <SummaryStep data={data} patch={patch} />}
-						{step === 1 && <DescribeStep data={data} patch={patch} />}
-						{step === 2 && <GenerateStep onReset={reset} />}
+						<div class="space-y-6">
+							{step === 0 && <SummaryStep data={data} patch={patch} />}
+							{step === 1 && <DescribeStep data={data} patch={patch} />}
+							{step === 2 && <GenerateStep onReset={reset} />}
+						</div>
 
 						<div class="mt-6 flex items-center justify-between">
 							<Button disabled={step === 0} onClick={() => setStep(step - 1)}>
