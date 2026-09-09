@@ -6,6 +6,7 @@
 		"noEmit": true,
 		"allowJs": true,
 		"checkJs": true,
+		"strict": true,
 
 		/* Preact Config */
 		"jsx": "react-jsx",
@@ -16,5 +17,5 @@
 			"react-dom": ["./node_modules/preact/compat/"]
 		}
 	},
-	"include": ["node_modules/vite/client.d.ts", "**/*"]
+	"include": ["src", "node_modules/vite/client.d.ts"]
 }

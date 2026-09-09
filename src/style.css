@@ -1,70 +1,10 @@
 @import "tailwindcss";
 @import "@catppuccin/tailwindcss/mocha.css";
 
-:root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
-
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%;
-}
-
 body {
 	margin: 0;
-	display: flex;
-	align-items: center;
-	min-height: 100vh;
-
-	color: var(--catppuccin-color-text);
 	background-color: var(--catppuccin-color-base);
+	color: var(--catppuccin-color-text);
+	font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+	-webkit-font-smoothing: antialiased;
 }
-
-#app {
-	max-width: 1280px;
-	margin: 0 auto;
-	text-align: center;
-}
-
-img {
-	margin-bottom: 1.5rem;
-}
-
-img:hover {
-	filter: drop-shadow(0 0 2em var(--catppuccin-color-mauve));
-}
-
-section {
-	margin-top: 5rem;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	column-gap: 1.5rem;
-}
-
-.resource {
-	padding: 0.75rem 1.5rem;
-	border-radius: 0.5rem;
-	text-align: left;
-	text-decoration: none;
-	border: 1px solid transparent;
-}
-
-.resource:hover {
-	border: 1px solid var(--catppuccin-color-mauve);
-	box-shadow: 0 25px 50px -12px var(--catppuccin-color-mauve);
-}
-
-@media (max-width: 639px) {
-	#app {
-		margin: 2rem;
-	}
-	section {
-		margin-top: 5rem;
-		grid-template-columns: 1fr;
-		row-gap: 1rem;
-	}
-}
-
