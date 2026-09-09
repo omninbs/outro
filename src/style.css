@@ -1,10 +1,10 @@
+@import "tailwindcss";
+@import "@catppuccin/tailwindcss/mocha.css";
+
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
-
-	color: #222;
-	background-color: #ffffff;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -18,6 +18,9 @@ body {
 	display: flex;
 	align-items: center;
 	min-height: 100vh;
+
+	color: var(--catppuccin-color-text);
+	background-color: var(--catppuccin-color-base);
 }
 
 #app {
@@ -31,7 +34,7 @@ img {
 }
 
 img:hover {
-	filter: drop-shadow(0 0 2em #673ab8aa);
+	filter: drop-shadow(0 0 2em var(--catppuccin-color-mauve));
 }
 
 section {
@@ -46,14 +49,12 @@ section {
 	border-radius: 0.5rem;
 	text-align: left;
 	text-decoration: none;
-	color: #222;
-	background-color: #f1f1f1;
 	border: 1px solid transparent;
 }
 
 .resource:hover {
-	border: 1px solid #000;
-	box-shadow: 0 25px 50px -12px #673ab888;
+	border: 1px solid var(--catppuccin-color-mauve);
+	box-shadow: 0 25px 50px -12px var(--catppuccin-color-mauve);
 }
 
 @media (max-width: 639px) {
@@ -67,16 +68,3 @@ section {
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		color: #ccc;
-		background-color: #1a1a1a;
-	}
-	.resource {
-		color: #ccc;
-		background-color: #161616;
-	}
-	.resource:hover {
-		border: 1px solid #bbb;
-	}
-}
