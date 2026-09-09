@@ -1,3 +1,4 @@
+import { DEFAULT_FOOTER } from './config';
 import { flavors } from './palette';
 import type { CardData } from './types';
 
@@ -79,10 +80,10 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 			`</div>`
 		: `<div style="display:flex;flex-direction:column;gap:${gapBody}px;width:${bodyW}px;">${creditsBlock}${noticeBlock}</div>`;
 
-	const footer =
-		data.footerOn && String(data.footerText).trim()
-			? `<div style="position:absolute;right:${padX}px;bottom:${padY}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(data.footerText)}</div>`
-			: '';
+	const footerText = String(data.footerText).trim() || DEFAULT_FOOTER;
+	const footer = data.footerOn
+		? `<div style="position:absolute;right:${padX}px;bottom:${padY}px;font-size:${fFooter}px;color:${c.overlay0};letter-spacing:0.08em;">${esc(footerText)}</div>`
+		: '';
 
 	return (
 		`<div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;overflow:hidden;box-sizing:border-box;` +

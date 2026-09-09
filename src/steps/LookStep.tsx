@@ -1,4 +1,5 @@
 import { Field, Panel, Slider, TextInput, Toggle } from '../components/ui';
+import { DEFAULT_FOOTER } from '../lib/config';
 import { accentNames, flavorNames, flavors } from '../lib/palette';
 import type { CardData } from '../lib/types';
 
@@ -92,7 +93,7 @@ export function LookStep({
 						<TextInput
 							value={data.footerText}
 							onInput={(footerText) => patch({ footerText })}
-							placeholder="由 xxx 生成"
+							placeholder={`${DEFAULT_FOOTER}（留空即默认）`}
 						/>
 					</div>
 				)}

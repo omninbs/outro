@@ -55,6 +55,8 @@ export const QUICK_FIELDS = [
 	{ label: '参与人员', placeholder: '调教 / 混音 / 校对…' },
 ];
 
+export const DEFAULT_FOOTER = '由 kemiamu/colophon 生成';
+
 export const DEFAULT_CARD: CardData = {
 	title: '歌曲信息',
 	fields: [
@@ -70,7 +72,7 @@ export const DEFAULT_CARD: CardData = {
 	ratio: '16:9',
 	scale: 2,
 	footerOn: true,
-	footerText: '由 kemiamu/colophon 生成',
+	footerText: '',
 };
 
 export function ratioOf(id: RatioId): Ratio {
