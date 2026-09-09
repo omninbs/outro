@@ -1,4 +1,5 @@
 import { Fragment } from 'preact';
+import { DEFAULT_TITLE } from '../lib/config';
 import { latte } from '../lib/palette';
 import type { CardData } from '../lib/types';
 
@@ -8,7 +9,7 @@ import type { CardData } from '../lib/types';
  * 文档流排版，字号用 rem，高度随内容增长。
  */
 export function ColophonPage({ data, exitHref }: { data: CardData; exitHref?: string }) {
-	const title = data.title.trim();
+	const title = data.title.trim() || DEFAULT_TITLE;
 	const meta = data.meta.filter((item) => item.value.trim() !== '');
 	const blocks = data.blocks.filter((block) => block.text.trim() !== '');
 
@@ -16,8 +17,8 @@ export function ColophonPage({ data, exitHref }: { data: CardData; exitHref?: st
 		<div class="colophon" style={{ background: latte.base, color: latte.text }}>
 			<div class="colophon-inner">
 				<header class="colophon-head">
-					{title && <h1 class="colophon-title">{title}</h1>}
-					{title && <div class="colophon-rule" style={{ background: latte.mauve }} />}
+					<h1 class="colophon-title">{title}</h1>
+					<div class="colophon-rule" style={{ background: latte.mauve }} />
 				</header>
 
 				<main class={`colophon-body${meta.length > 0 ? '' : ' colophon-body--single'}`}>
