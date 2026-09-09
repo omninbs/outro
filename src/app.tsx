@@ -1,5 +1,6 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { Checklist } from './components/Checklist';
+import { ColophonPage } from './components/ColophonPage';
 import { newField } from './components/FieldEditor';
 import { Preview } from './components/Preview';
 import { Stepper, type StepDef } from './components/Stepper';
@@ -19,10 +20,20 @@ const STEPS: StepDef[] = [
 	{ id: 'generate', label: '生成' },
 ];
 
+/** 版权页是应用里的一个路由：#/colophon */
+const PAGE_HASH = '#/colophon';
+
 export function App() {
 	const { data, patch, reset } = useCard();
 	const [step, setStep] = useState(0);
+	const [viewing, setViewing] = useState(() => window.location.hash === PAGE_HASH);
 	const { hints, score, grade } = evaluate(data);
+
+	useEffect(() => {
+		const sync = () => setViewing(window.location.hash === PAGE_HASH);
+		window.addEventListener('hashchange', sync);
+		return () => window.removeEventListener('hashchange', sync);
+	}, []);
 
 	const addQuickField = (label: string) => {
 		const quick = QUICK_FIELDS.find((q) => q.label === label);
@@ -30,6 +41,14 @@ export function App() {
 		patch({ fields: [...data.fields, newField(quick.label)] });
 		setStep(0);
 	};
+
+	if (viewing) {
+		return (
+			<div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
+				<ColophonPage data={data} exitHref="#/" />
+			</div>
+		);
+	}
 
 	return (
 		<div class="mx-auto max-w-360 px-6 py-8">

@@ -4,8 +4,8 @@ import type { CardData } from './types';
 
 const STORAGE_KEY = 'colophon.card.v1';
 
-/** 读取已保存的内容；生成页是独立文档，也从这里取数据 */
-export function loadCard(): CardData {
+/** 读取已保存的内容 */
+function loadCard(): CardData {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
 		if (!raw) return structuredClone(DEFAULT_CARD);
