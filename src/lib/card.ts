@@ -1,4 +1,9 @@
-import { DEFAULT_FOOTER } from './config';
+import {
+	DEFAULT_FOOTER,
+	DEFAULT_NOTICE,
+	DEFAULT_NOTICE_LABEL,
+	DEFAULT_TITLE,
+} from './config';
 import { flavors } from './palette';
 import type { CardData } from './types';
 
@@ -46,6 +51,8 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 	const rightW = bodyW - leftW - gutter;
 	const labelW = Math.round(leftW * 0.44);
 
+	const title = String(data.title).trim() || DEFAULT_TITLE;
+
 	const fields = data.fields.filter((f) => String(f.value).trim() !== '');
 	const credits = fields
 		.map((f) => {
@@ -61,11 +68,9 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 		})
 		.join('');
 
-	const notice = String(data.notice).trim();
-	const noticeBlock = notice
-		? `<div style="font-size:${fNoticeLabel}px;color:${accent};letter-spacing:0.1em;margin-bottom:${Math.round(u * 0.016)}px;">${esc(data.noticeLabel || '版权声明')}</div>` +
-			`<div style="font-size:${fNoticeBody}px;color:${c.subtext0};line-height:1.85;white-space:pre-wrap;word-break:break-word;">${esc(notice)}</div>`
-		: '';
+	const notice = String(data.notice).trim() || DEFAULT_NOTICE;
+	const noticeBlock = `<div style="font-size:${fNoticeLabel}px;color:${accent};letter-spacing:0.1em;margin-bottom:${Math.round(u * 0.016)}px;">${esc(data.noticeLabel.trim() || DEFAULT_NOTICE_LABEL)}</div>` +
+		`<div style="font-size:${fNoticeBody}px;color:${c.subtext0};line-height:1.85;white-space:pre-wrap;word-break:break-word;">${esc(notice)}</div>`;
 
 	const creditsBlock = credits
 		? `<div style="display:flex;flex-direction:column;gap:${gapRow}px;">${credits}</div>`
@@ -90,7 +95,7 @@ export function buildCardHtml(data: CardData, W: number, H: number): string {
 		`width:${W}px;height:${H}px;background:${c.base};color:${c.text};font-family:${FONT};">` +
 		`<div style="box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;` +
 		`width:100%;height:100%;padding:${padY}px ${padX}px;">` +
-		`<div style="font-size:${fTitle}px;font-weight:600;color:${c.text};letter-spacing:0.06em;line-height:1.25;">${esc(data.title)}</div>` +
+		`<div style="font-size:${fTitle}px;font-weight:600;color:${c.text};letter-spacing:0.06em;line-height:1.25;">${esc(title)}</div>` +
 		`<div style="width:${Math.round(u * 0.13)}px;height:${Math.max(2, Math.round(u * 0.0035))}px;background:${accent};margin-top:${gapTitle}px;"></div>` +
 		`<div style="margin-top:${gapRule}px;">${body}</div>` +
 		`</div>` +

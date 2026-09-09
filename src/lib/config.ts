@@ -55,17 +55,20 @@ export const QUICK_FIELDS = [
 	{ label: '参与人员', placeholder: '调教 / 混音 / 校对…' },
 ];
 
+export const DEFAULT_TITLE = '歌曲信息';
+export const DEFAULT_NOTICE_LABEL = '版权声明';
+export const DEFAULT_NOTICE = NOTICE_TEMPLATES[0].text;
 export const DEFAULT_FOOTER = '由 kemiamu/colophon 生成';
 
 export const DEFAULT_CARD: CardData = {
-	title: '歌曲信息',
+	title: '',
 	fields: [
 		{ id: 'f1', label: '原歌曲作者', value: '' },
 		{ id: 'f2', label: 'NBS 作者', value: '' },
 		{ id: 'f3', label: '结构设计者', value: '' },
 	],
-	noticeLabel: '版权声明',
-	notice: NOTICE_TEMPLATES[0].text,
+	noticeLabel: '',
+	notice: '',
 	flavor: 'mocha',
 	accent: 'mauve',
 	textScale: 100,
