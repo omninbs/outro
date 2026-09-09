@@ -24,12 +24,13 @@ export const NOTICE_TEMPLATES = [
 	},
 ];
 
-export const QUICK_FIELDS = [
-	{ label: '原曲链接', placeholder: 'https://… 或 BV 号' },
-	{ label: '扒谱日期', placeholder: '如 2026-09-09' },
-	{ label: '工程版本', placeholder: '如 NBS 3.1' },
-	{ label: '联系/授权渠道', placeholder: '邮箱、私信或主页' },
-	{ label: '参与人员', placeholder: '调教 / 混音 / 校对…' },
+/** 摘要步骤里的常用元数据条目 */
+export const QUICK_META = [
+	'原曲链接',
+	'扒谱日期',
+	'工程版本',
+	'联系/授权渠道',
+	'参与人员',
 ];
 
 export const DEFAULT_TITLE = '歌曲信息';
@@ -38,13 +39,12 @@ export const DEFAULT_NOTICE = NOTICE_TEMPLATES[0].text;
 export const DEFAULT_FOOTER = '由 kemiamu/colophon 生成';
 
 export const DEFAULT_CARD: CardData = {
-	title: '',
-	fields: [
-		{ id: 'f1', label: '原歌曲作者', value: '' },
-		{ id: 'f2', label: 'NBS 作者', value: '' },
-		{ id: 'f3', label: '结构设计者', value: '' },
+	title: DEFAULT_TITLE,
+	meta: [
+		{ id: 'm1', label: '原歌曲作者', value: '' },
+		{ id: 'm2', label: 'NBS 作者', value: '' },
+		{ id: 'm3', label: '结构设计者', value: '' },
 	],
-	noticeLabel: '',
-	notice: '',
+	blocks: [{ id: 'b1', label: DEFAULT_NOTICE_LABEL, text: DEFAULT_NOTICE }],
 	footerText: DEFAULT_FOOTER,
 };

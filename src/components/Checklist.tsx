@@ -43,10 +43,10 @@ export function Checklist({
 								{icon.char}
 							</span>
 							<span class="flex-1 text-ctp-subtext0">{hint.text}</span>
-							{hint.addField && (
+							{hint.addMeta && (
 								<button
 									type="button"
-									onClick={() => onAdd(hint.addField!)}
+									onClick={() => onAdd(hint.addMeta!)}
 									class="shrink-0 rounded bg-ctp-surface0 px-2 py-0.5 text-ctp-mauve transition hover:bg-ctp-surface1"
 								>
 									补上

@@ -9,7 +9,11 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
-/* 版权页：一个独立的文档页面。字号用 rem，布局不随窗口缩放。 */
+/*
+ * 版权页：一个独立的文档页面。
+ * 上：标题　中：主体（左元数据 / 右文本块）　下：页脚
+ * 字号用 rem，布局不随窗口缩放。
+ */
 .colophon {
 	flex: 1 1 auto;
 	display: flex;
@@ -26,13 +30,9 @@ body {
 	flex-direction: column;
 	box-sizing: border-box;
 	width: 100%;
-	max-width: 64rem;
+	max-width: 72rem;
 	margin: 0 auto;
 	padding: 6.5rem 4rem 2.5rem;
-}
-
-.colophon-main {
-	flex: 1 1 auto;
 }
 
 .colophon-title {
@@ -49,42 +49,57 @@ body {
 	margin-top: 1.5rem;
 }
 
-.colophon-credits {
+.colophon-body {
+	flex: 1 1 auto;
 	display: grid;
-	grid-template-columns: minmax(6rem, max-content) minmax(0, 1fr);
-	column-gap: 2.5rem;
-	row-gap: 0.9rem;
-	align-items: baseline;
-	margin: 2.5rem 0 0;
+	grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+	column-gap: 4rem;
+	align-items: start;
+	margin-top: 3.5rem;
 }
 
-.colophon-credits dt {
-	font-size: 0.95rem;
+.colophon-body--single {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.colophon-meta {
+	display: grid;
+	grid-template-columns: minmax(6rem, max-content) minmax(0, 1fr);
+	column-gap: 1.5rem;
+	row-gap: 1rem;
+	align-items: baseline;
+	margin: 0;
+}
+
+.colophon-meta dt {
+	font-size: 0.9rem;
 	letter-spacing: 0.06em;
 	line-height: 1.6;
 }
 
-.colophon-credits dd {
+.colophon-meta dd {
 	margin: 0;
-	font-size: 1.15rem;
+	font-size: 1.05rem;
 	line-height: 1.6;
 	word-break: break-word;
 }
 
-.colophon-notice {
-	margin-top: 3rem;
+.colophon-blocks {
+	display: flex;
+	flex-direction: column;
+	gap: 2.25rem;
 }
 
-.colophon-notice h2 {
+.colophon-block h2 {
 	margin: 0;
-	font-size: 0.95rem;
+	font-size: 0.9rem;
 	font-weight: 500;
 	letter-spacing: 0.14em;
 }
 
-.colophon-notice p {
-	margin: 1rem 0 0;
-	font-size: 1.05rem;
+.colophon-block p {
+	margin: 0.75rem 0 0;
+	font-size: 1.02rem;
 	line-height: 1.9;
 	white-space: pre-wrap;
 	word-break: break-word;
@@ -111,6 +126,11 @@ body {
 @media (max-width: 880px) {
 	.colophon-inner {
 		padding: 3.5rem 1.5rem 2rem;
+	}
+
+	.colophon-body {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 3rem;
 	}
 }
 

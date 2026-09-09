@@ -1,23 +1,41 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import { DEFAULT_CARD, DEFAULT_FOOTER } from './config';
-import type { CardData } from './types';
+import { DEFAULT_CARD, DEFAULT_FOOTER, DEFAULT_NOTICE, DEFAULT_NOTICE_LABEL } from './config';
+import { newId } from './id';
+import type { CardData, MetaItem, TextBlock } from './types';
 
 const STORAGE_KEY = 'colophon.card.v1';
 
-/** 读取已保存的内容 */
+const str = (value: unknown, fallback = '') => (typeof value === 'string' ? value : fallback);
+
+/** 读取已保存的内容，并兼容旧的「字段 + 声明」结构 */
 function loadCard(): CardData {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
 		if (!raw) return structuredClone(DEFAULT_CARD);
-		const parsed = JSON.parse(raw) as Partial<CardData>;
-		const merged = { ...DEFAULT_CARD, ...parsed };
-		if (!Array.isArray(merged.fields)) merged.fields = structuredClone(DEFAULT_CARD.fields);
-		if (!merged.footerText.trim()) merged.footerText = DEFAULT_FOOTER;
-		// 清掉已废弃的外观字段
-		for (const key of ['footerOn', 'flavor', 'accent', 'textScale']) {
-			delete (merged as Record<string, unknown>)[key];
-		}
-		return merged;
+		const old = JSON.parse(raw) as Record<string, unknown>;
+
+		const meta: MetaItem[] = Array.isArray(old.meta)
+			? (old.meta as MetaItem[])
+			: Array.isArray(old.fields)
+				? (old.fields as MetaItem[])
+				: structuredClone(DEFAULT_CARD.meta);
+
+		const blocks: TextBlock[] = Array.isArray(old.blocks)
+			? (old.blocks as TextBlock[])
+			: [
+					{
+						id: newId('b'),
+						label: str(old.noticeLabel, DEFAULT_NOTICE_LABEL),
+						text: str(old.notice).trim() || DEFAULT_NOTICE,
+					},
+				];
+
+		return {
+			title: str(old.title, DEFAULT_CARD.title),
+			meta,
+			blocks,
+			footerText: str(old.footerText).trim() || DEFAULT_FOOTER,
+		};
 	} catch {
 		return structuredClone(DEFAULT_CARD);
 	}
@@ -26,7 +44,7 @@ function loadCard(): CardData {
 export function useCard() {
 	const [data, setData] = useState<CardData>(loadCard);
 
-	// 立即写入，保证跳到生成页时拿到的就是最新内容
+	// 立即写入，保证刷新后内容不丢
 	useEffect(() => {
 		try {
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

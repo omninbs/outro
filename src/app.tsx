@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'preact/hooks';
 import { Checklist } from './components/Checklist';
 import { ColophonPage } from './components/ColophonPage';
-import { newField } from './components/FieldEditor';
+import { newMetaItem } from './components/MetaEditor';
 import { Preview } from './components/Preview';
 import { Stepper, type StepDef } from './components/Stepper';
 import { Button } from './components/ui';
-import { QUICK_FIELDS } from './lib/config';
 import { evaluate } from './lib/evaluate';
 import { useCard } from './lib/store';
-import { ContentStep } from './steps/ContentStep';
+import { DescribeStep } from './steps/DescribeStep';
 import { GenerateStep } from './steps/GenerateStep';
-import { NoticeStep } from './steps/NoticeStep';
+import { SummaryStep } from './steps/SummaryStep';
 
 const STEPS: StepDef[] = [
-	{ id: 'content', label: '内容' },
-	{ id: 'notice', label: '声明' },
+	{ id: 'summary', label: '摘要' },
+	{ id: 'describe', label: '描述' },
 	{ id: 'generate', label: '生成' },
 ];
 
@@ -33,10 +32,9 @@ export function App() {
 		return () => window.removeEventListener('hashchange', sync);
 	}, []);
 
-	const addQuickField = (label: string) => {
-		const quick = QUICK_FIELDS.find((q) => q.label === label);
-		if (!quick || data.fields.some((f) => f.label.trim() === label)) return;
-		patch({ fields: [...data.fields, newField(quick.label)] });
+	const addQuickMeta = (label: string) => {
+		if (data.meta.some((item) => item.label.trim() === label)) return;
+		patch({ meta: [...data.meta, newMetaItem(label)] });
 		setStep(0);
 	};
 
@@ -61,8 +59,8 @@ export function App() {
 
 			<div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 				<div>
-					{step === 0 && <ContentStep data={data} patch={patch} />}
-					{step === 1 && <NoticeStep data={data} patch={patch} />}
+					{step === 0 && <SummaryStep data={data} patch={patch} />}
+					{step === 1 && <DescribeStep data={data} patch={patch} />}
 					{step === 2 && <GenerateStep onReset={reset} />}
 
 					<div class="mt-6 flex items-center justify-between">
@@ -79,7 +77,7 @@ export function App() {
 
 				<div class="space-y-4 lg:sticky lg:top-8">
 					<Preview data={data} />
-					<Checklist hints={hints} score={score} grade={grade} onAdd={addQuickField} />
+					<Checklist hints={hints} score={score} grade={grade} onAdd={addQuickMeta} />
 				</div>
 			</div>
 		</div>
