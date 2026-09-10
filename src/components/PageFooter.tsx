@@ -1,10 +1,6 @@
 import { COPY } from '../lib/copy';
 import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
-import { useRouter } from '../lib/router';
-import { HEADING, SUB_TEXT, HOVER } from './ui';
-
-/** 链接的统一样式：正文色，悬停转 blue 并加下划线（下划线那两笔参数见下面的注释） */
-const LINK = `block cursor-pointer py-1 text-ctp-text hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em] ${HOVER}`;
+import { LinkRow, SUB_TEXT, HEADING } from './ui';
 
 /** 源代码仓库：页脚「链接」里的那条外链，地址就是本仓库 */
 const REPO_URL = 'https://github.com/omninbs/outro';
@@ -21,14 +17,12 @@ const REPO_URL = 'https://github.com/omninbs/outro';
  *
  * 两栏的标题（品牌名、「链接」）是**并排的两个标题**，谁也不从属谁：都用 `HEADING`、都写 `h2`，
  * 也就是跟页面标题同一款字样——原来品牌是 `h2 + text-lg`、链接是 `h3 + text-base`，
- * 看着像一个管着另一个（2026-09 统一，原来还试过把两个都压到卡片小标题那一档，太轻了）。
+ * 看着像一个管着另一个（2026-09 统一，原来还试过把两个都压到卡片小标题那一档，太轻）。
  *
- * 链接默认用正文色，悬停转 blue 并加下划线——下划线加粗到 0.1em、下沉 0.25em，
- * 这两笔是参考站的做法，少了会显得糙。
+ * 两条链接都是 `LinkRow`（整行可点的透明选项），样式只有那一个定义；这里只管它们指向哪、
+ * 叫什么名字——「返回主页」指应用内的首页（空 fragment 那个 `#`），「源代码」是外链。
  */
 export function PageFooter() {
-	const { navigate } = useRouter();
-
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
@@ -43,15 +37,12 @@ export function PageFooter() {
 					<h2 class={`mb-2 ${HEADING}`}>链接</h2>
 					<ul>
 						<li>
-							<button type="button" onClick={() => navigate('home')} class={LINK}>
-								{COPY.action.backHome}
-							</button>
+							<LinkRow href="#">{COPY.action.backHome}</LinkRow>
 						</li>
 						<li>
-							{/* 外链开新标签页：这个工具是拿来当片尾用的，中途跳走会丢掉正在填的内容 */}
-							<a href={REPO_URL} target="_blank" rel="noreferrer" class={LINK}>
+							<LinkRow href={REPO_URL} external>
 								源代码
-							</a>
+							</LinkRow>
 						</li>
 					</ul>
 				</nav>
