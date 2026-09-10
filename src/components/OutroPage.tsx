@@ -60,13 +60,14 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 /**
  * 页脚：左边「返回编辑」（打印时隐藏），右边署名。
  *
+ * 它是最终页那一列里的第三段，段间距由父层的 `gap` 给，自己不带外边距。
  * 两端各只有一段短字，中档一行放得下，所以只在**最窄那一档**折起来（`max-narrow:flex-col`）。
  * 折与不折由档位写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
  * （向导那份页脚内容多，中档就放不下了，所以它是反过来写的：`wide:` 才左右分列。）
  */
 function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
 	return (
-		<footer class="mt-16 flex justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
+		<footer class="flex justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
 			<span>
 				{onExit && (
 					<button type="button" onClick={onExit} class="cursor-pointer hover:underline print:hidden">
@@ -91,10 +92,12 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
  *
  * ① 版面只有一个宽度数（`max-w-[48rem]`），比向导的容器窄一档——行短了看着更紧，截图也更像一张版面；
  * ② 整块在视口里**横竖都居中**：上下那点空隙不归内容，全部由剩余空间均分
- *    （`justify-center-safe`：内容比屏幕高时退回从顶部排，不会被切掉上半截）。
+ *    （`justify-center-safe`：内容比屏幕高时退回从顶部排，不会被切掉上半截）；
+ * ③ 三段（标题 / 主体 / 页脚）在**一个** flex 列里，段间距一律 `gap-12`；外层那圈内边距
+ *    四边同一个 48（窄屏收成 `p-inset`），不做上下的不对称偏移。
  *
  * 它身上没有「面」——没有卡片、没有底色、没有描边，所以窄屏那套「边距内化」落到这里
- * 就只是这条内边距本身：`px-6` 收到 `px-inset`（`max-narrow:px-inset`），文字仍落在
+ * 就只是这条内边距本身：`p-12` 收到 `p-inset`（`max-narrow:p-inset`），文字仍落在
  * 跟全站同一条竖线上。
  */
 export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
@@ -102,20 +105,18 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 
 	return (
 		<div class="flex flex-1 flex-col justify-center-safe">
-			{/* 这一层就是版面本身：宽度上限、页边距、纵向那点最小留白都在这里。
+			{/* 这一层就是版面本身：宽度上限 + 一圈内边距，四边同一个 48（`p-12`）。
 			    宽度是「一行」的宽：中档单栏 `24rem`，宽档 `wide:48rem` —— 正好一倍，
 			    因为宽档把那两栏并排（左元数据 1.2 : 右文本块 1），一栏就还是这一行的宽。
-			    窄屏不另给数：它本来就比 24rem 窄，于是自然全宽 + `px-inset`，384–480 之间
-			    则是这两条内边距（16 / 24）之差，行宽始终不变。
-			    下面比上面多留 56px（`pb-26` = 6.5rem = 上面的 3rem + 3.5rem）：整块重心因此上移 28px，
-			    也就是原来那个 `-translate-y-7` 光学补偿（一个标题的行高 = text-xl = 1.75rem）。
-			    这里改用内边距拿，是因为它**真占布局**：内容比屏幕高时退回顶部排，标题还剩 pt 那点边距；
-			    换成 translate 时实测只剩 4px（2026-09 探针量到的）。窄屏的 56px 差照旧（pt-8 / pb-22） */}
-			<div class="mx-auto w-full max-w-[24rem] px-6 pt-12 pb-26 wide:max-w-[48rem] max-narrow:px-inset max-narrow:pt-8 max-narrow:pb-22">
-				{/* 标题与主体之间的 48px 由这一层的 `gap` 给，**只在两块都渲染时才存在**：
-				    原来那 48px 写在 `main` 的 `mt-12` 上，标题留空时它照旧占着，版面顶上凭空多一段
-				    （2026-09 探针量到：无标题时「版面顶 → 内容顶」96px，有标题时才是 48 + 标题 + 48）。
-				    页脚留在这层外面：它跟内容之间是 64px（`mt-16`），跟这里的 48px 不是一个数 */}
+			    窄屏不另给数：它本来就比 24rem 窄，于是自然全宽，横向留白收到 `p-inset`（16），
+			    跟全站同一条竖线；纵向跟着一起收，四边仍然是一个数。
+			    （2026-09 之前这里是 `pt-12 pb-26`：下面多 56px，把整块重心顶高 28px 当光学补偿。
+			    用户要求内边距取同一个值，那套补偿连同它的注释一起收掉了——别再悄悄加回来。） */}
+			<div class="mx-auto w-full max-w-[24rem] p-12 wide:max-w-[48rem] max-narrow:p-inset">
+				{/* 最终页就三段：标题 → 主体 → 页脚。它们在这**一个** flex 列里自上而下排，
+				    段与段都是同一个 `gap-12`——页脚也在这列里（它常驻，不用单独挂在外面），
+				    所以没有谁的间距是挂在 margin 上的：哪一段不印（标题留空、页脚留空），
+				    `gap` 自动少一份，不会留下孤零零的一段空白 */}
 				<div class="flex flex-col gap-12">
 					{title && <OutroHeader title={title} />}
 
@@ -130,9 +131,9 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 						<MetaList meta={meta} />
 						<BlockList blocks={blocks} />
 					</main>
-				</div>
 
-				<OutroFooter footer={footer} onExit={onExit} />
+					<OutroFooter footer={footer} onExit={onExit} />
+				</div>
 			</div>
 		</div>
 	);
