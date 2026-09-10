@@ -20,7 +20,6 @@ const blockId = (question: Question) => `b-${question.id}`;
  *
  * 问到却答空的标题 / 页脚写成空串：那是「这一块就是要空着」，跟「没问过」不是一回事。
  * 元数据与文本块不同，空白答案整条丢掉——没答的题不该在结尾页留一行空标签。
- * `into` 没写 `label` 就用题面当标签（见 `Placement`）。
  * 同一去处写多次时后者覆盖前者（标题、页脚），元数据与文本块则按题目顺序堆叠。
  */
 export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
@@ -33,7 +32,7 @@ export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
 		if (!into) continue;
 		const value = (answers[question.id] ?? '').trim();
 
-		switch (into.kind) {
+		switch (into) {
 			case 'title':
 				said.title = value;
 				break;
@@ -41,13 +40,13 @@ export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
 				said.footerText = value;
 				break;
 			case 'meta':
-				if (value) meta.push({ id: metaId(question), label: into.label ?? question.label, value });
+				if (value) meta.push({ id: metaId(question), label: question.label, value });
 				break;
 			case 'block':
 				if (value) {
 					blocks.push({
 						id: blockId(question),
-						label: into.label ?? question.label,
+						label: question.label,
 						text: value,
 					});
 				}

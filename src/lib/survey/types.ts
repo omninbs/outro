@@ -4,16 +4,13 @@ import type { CardData } from '../types';
 export type QuestionKind = 'text' | 'long' | 'choice';
 
 /**
- * 答案的去处：结尾页上就这四块。
+ * 答案的去处：结尾页上就这四块，写成一个字符串。
  *
- * `meta` / `block` 的 `label` 是结尾页上那一行 / 那一块的名字，**不写就取题面**
- * （`Question.label`）——两者本来就常常是同一句话，只有在结尾页上要换个叫法时才写。
+ * 结尾页上那一行 / 那一块的名字取题面（`Question.label`）——「换个叫法」是另一件事，
+ * 真需要时再加字段。2026-09 它原本是 `{ kind, label? }`，11 道题一处都没写过 `label`，
+ * 于是那层对象只剩包装，压成了字符串。
  */
-export type Placement =
-	| { kind: 'title' }
-	| { kind: 'footer' }
-	| { kind: 'meta'; label?: string }
-	| { kind: 'block'; label?: string };
+export type Placement = 'title' | 'footer' | 'meta' | 'block';
 
 /**
  * 一道题。
