@@ -10,6 +10,7 @@
 - 回答简短：能上表格就上表格；不复述过程，说清结论、改动文件、验证结果就够
 - 工具调用能并行的并成一批发出去
 - **单条命令不超过 10 秒**。跑不完就拆开跑，或者直接说「这条跑不动」，不要硬试
+- **以快为先：验证能省就省**。改完把两条闸门合成**一条**命令跑（`npm run typecheck && npm run build`），过了就提交；已经读过的文件不重读，几条能合的命令合成一条（`&&`），别顺手再去量点别的。探针、起浏览器、翻线上这些一律是**慢路径**，默认不走，理由见「验证」那一节
 - 设计取舍拿不准先问，不替人拍板；被否掉的方向不要换个说法再端上来
 
 ## 提交
@@ -35,6 +36,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - **半新半旧比整体旧更难认**：同一个 dev server 里 `copy.ts`、`outro.ts` 都已经是新的，偏偏 `OutroPage.tsx` 停在改动前（`curl` 出来 `jsxDEV(OutroHeader, …)` 前面没有 `title &&` 那层判空、`lineNumber` 还指着旧的一行），于是「全部留空」时页面照样画出标题块和那根横线，看着像改了没用。判断只能**逐个模块 `curl` 比**（拿源码里的特征串去对），别只 curl 一个文件就下结论，也别让人刷新猜
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
+- **探针是慢路径，慎用**（2026-09 用户明确要求「尽可能快」）：起 Firefox、为了释放会话再重启、一个脚本量十档宽度，一轮就是好几分钟。只在**读代码判断不了、改错了代价又大**的时候才用（真实几何 / 断点 / 真实点击这类），而且要：用 `.git/` 里**已有**的那个脚本（需要新量什么就给它加一行，别为一次改动新写一个脚本）、一个脚本里把宽度 / 路由循环量完、量完立刻把 Firefox 那个后台任务 `job_kill` 掉。纯样式或纯文案的小改动，读一遍代码 + 跑一次闸门就提交
 - **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）或 `probe-outro.mjs`（最终页版面：量宽度上限 / 居中 / 分栏条件 / 有没有溢出，自带一份种进 localStorage 的存档，种完要**重新加载**才生效）、`probe-back.mjs`（点结尾页的「返回编辑」，看落在第几步）、`probe-empty.mjs`（标题 / 页脚留空时结尾页与清单各该消失什么，以及**答完问卷后默认值还在不在**——它会点一次问卷页的「完成」再读存档；注意只换 hash 是同文档导航，应用不会重读 localStorage，得真重新加载）、`probe-headings.mjs`（各档下把页面里每个 h1/h2/h3 的字号 / 行高 / 字重 / 字距 / 颜色 / 下边距列出来，用来比「同层标题是不是同款」——比肉眼看截图靠谱）、`probe-link.mjs`（页脚那两条链接：行宽是不是整栏、平时和悬停各是什么颜色 / 有没有下划线 / 底色透不透明，顺带把参考站 book.kemya.net 的页脚一起量了对照；末尾还会真点一下「返回主页」，看 hash 与页面有没有回到首页）——探针默认打 `dist/index.html`，免得吃 dev server 的旧模块；要故意打 dev server 就加 `PROBE_ORIGIN=http://localhost:5173/`（这时 localStorage 也是那个来源的，跟 `file://` 那份不互通）。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次（一个脚本跑完就 `ws.close()`，否则下一次会报「Maximum number of active sessions」，那就得重启 Firefox）。**该数个数的地方要数一遍**，别只量位置：只有一份的东西（`h1`、`footer`）漏出第二份时，位置照样是对的——2026-09 最终页上就并排渲染过两个页脚（一次编辑补上了新行、忘了删旧行，typecheck 与 build 都看不出来，机器看页面也只觉得「页脚矮一点」），所以 `probe-gap.mjs` 顺手报 `h1` / `footer` 的个数
 - 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
 - **headless Firefox 里 `(hover: hover)` 是 false**（`pointer: fine` 也是），而 Tailwind 的 `hover:` 一律编译进 `@media (hover: hover)`——所以**探针量不到我们自己的悬停效果**：`probe-link.mjs` 里悬停前后一模一样不等于没生效（参考站那种裸 `:hover` 才量得到，一量就有）。要验悬停就查编译产物里那条规则在不在，比如 `grep -o '[^;{}]*text-underline-offset:[^;}]*' dist/index.html`，别把「探针没变化」当成 bug 去改代码
