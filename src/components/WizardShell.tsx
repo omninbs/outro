@@ -27,14 +27,16 @@ export function WizardShell({
 	// 这一层会按内容宽度收缩，而不是像块级布局那样先占满再用 max-w 截住
 	return (
 		<div class="mx-auto w-full max-w-360 px-6 py-8">
-			<header class="mb-6 flex items-start justify-between gap-4">
-				<div>
+			<header class="mb-6 flex items-center justify-between gap-4">
+				<div class="min-w-0">
 					<h1 class="text-lg font-semibold">结尾页生成器</h1>
 					<p class="mt-1 text-base text-ctp-subtext0">
 						按步骤填写内容，右侧实时确认已填信息，最后生成结尾页
 					</p>
 				</div>
-				<Button onClick={onHome}>返回首页</Button>
+				<Button class="shrink-0" onClick={onHome}>
+					返回首页
+				</Button>
 			</header>
 
 			<Stepper steps={steps} current={current} onSelect={onSelect} />
