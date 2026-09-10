@@ -14,7 +14,7 @@ import { Panel, SUB_TEXT } from './ui';
 export function HomePage({ onPick }: { onPick: (survey: Survey) => void }) {
 	return (
 		<div>
-			<PageHeader title={COPY.brand} description="选一种开始方式" />
+			<PageHeader title={COPY.brand} description="选一种编辑向导" />
 
 			<div class="flex flex-col gap-6">
 				{SURVEYS.map((survey) => (
