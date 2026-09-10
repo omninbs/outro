@@ -57,12 +57,13 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 /**
  * 页脚：左边「返回编辑」（打印时隐藏），右边署名。
  *
- * 窄屏 / 中档按一维的流上下排，`wide:` 才左右分列——跟向导的 `PageFooter` 同一条规矩。
- * 不靠 `flex-wrap` 让内容自己挤：那是一种没写下来的判断，看的人不知道它什么时候会换行。
+ * 两端各只有一段短字，中档一行放得下，所以只在**最窄那一档**折起来（`max-narrow:flex-col`）。
+ * 折与不折由档位写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
+ * （向导那份页脚内容多，中档就放不下了，所以它是反过来写的：`wide:` 才左右分列。）
  */
 function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
 	return (
-		<footer class="mt-16 flex flex-col gap-1 text-base tracking-wide text-ctp-overlay0 wide:flex-row wide:justify-between wide:gap-x-8">
+		<footer class="mt-16 flex justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
 			<span>
 				{onExit && (
 					<button type="button" onClick={onExit} class="cursor-pointer hover:underline print:hidden">
