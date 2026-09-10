@@ -107,10 +107,22 @@ export function BareTextArea({
 	);
 }
 
-/** 多行版：问卷里「一段话」这类题目用它；同样是「框 + 裸控件」 */
-export function TextArea(props: { value: string; onInput: (value: string) => void; placeholder?: string }) {
+/**
+ * 多行版：问卷里「一段话」这类题目用它；同样是「框 + 裸控件」。
+ * `action` 跟单行版是同一个意思（行尾退回预设的 ×）——带预设的多行题也有自定义形态。
+ */
+export function TextArea({
+	action,
+	...props
+}: {
+	value: string;
+	onInput: (value: string) => void;
+	placeholder?: string;
+	/** 行尾的动作，比如退回选项的 × */
+	action?: ComponentChildren;
+}) {
 	return (
-		<BareRow>
+		<BareRow action={action}>
 			<BareTextArea {...props} />
 		</BareRow>
 	);

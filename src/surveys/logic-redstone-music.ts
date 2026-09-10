@@ -17,6 +17,9 @@ import type { Survey } from '../lib/survey/types';
  *   许可放宽是作者自己的事，反过来替人放宽可没人兜得住
  * - 两道文本块题（「特别说明」「尾注」）内容留空：不写 `default`，写了才印出来，
  *   两块按题目顺序自上而下排，所以「尾注」永远在最下面
+ * - 「尾注」那两条预设是 demo（`options`）：段落题的预设竖着排成整宽的一块块，
+ *   点一条就整段填进多行框，想写别的就点「自定义」；预设不是 `default`，
+ *   所以进来时框里还是空的——预设要人点一下才算数
  */
 export const logicRedstoneMusicSurvey: Survey = {
 	id: 'logic-redstone-music',
@@ -98,6 +101,8 @@ export const logicRedstoneMusicSurvey: Survey = {
 			id: 'colophon',
 			label: '尾注',
 			kind: 'long',
+			// demo 用的两条：真实问卷照这一份改写就行
+			options: ['存档与结构图见视频简介，可直接取用', '原曲版权归原作者所有\n本作品仅为技术演示'],
 		},
 	],
 };
