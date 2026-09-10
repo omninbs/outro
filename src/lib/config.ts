@@ -24,8 +24,16 @@ export const NOTICE_TEMPLATES = [
 	},
 ];
 
-/** 默认就带上的元数据条目 */
-const DEFAULT_META_LABELS = ['原歌曲作者', 'NBS 作者', '结构设计者'];
+/** 默认就带上的元数据条目，前面的偏工程信息，后面的是作者署名 */
+const DEFAULT_META_LABELS = [
+	'适用版本',
+	'状态空间',
+	'建造要求',
+	'基岩版兼容',
+	'原歌曲作者',
+	'NBS 作者',
+	'结构设计者',
+];
 
 export const DEFAULT_TITLE = '作品标题';
 export const DEFAULT_NOTICE_LABEL = '版权声明';
