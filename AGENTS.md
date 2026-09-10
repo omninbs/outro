@@ -17,7 +17,7 @@
 - 每做完一件事提交一次，不攒着
 - 信息只有一行：`<type>: <description>`——英文、祈使句、≤50 字符、不带标点
 - `type` 取 `feat` / `fix` / `docs` / `style` / `refactor` / `test` / `chore`
-- **不 push**，除非明确要求。真要 push 时用 `GIT_SSH_COMMAND="ssh -F /dev/null" git push`（本机 ssh 配置有一处权限问题）
+- **不 push**，除非明确要求。真要 push 时用 `GIT_SSH_COMMAND="ssh -F /dev/null" git push`（本机 ssh 配置有一处权限问题）。push 完**不要**再去验线上（`curl` 比字节、翻 Actions 都算白花 token）：发布是自动的，要确认也是用户自己看
 - 构建产物不入库：`dist/` 在 `.gitignore` 里；页面由 GitHub Actions 构建，push 到 main 自动发布
 - `vite build` 会清空 `dist/`：临时工具别放那儿，放 `.git/` 下（git status 看不见，build 也清不掉）
 
@@ -40,7 +40,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
 - 比字节用 `wc -c`：`$(...)` 会吃掉末尾换行（差 1 字节），JS 的 `.length` 是字符数不是字节数
 - 装依赖用 `npm ci --cache /tmp/npm-cache`（沙箱里默认缓存目录只读）
-- 产物是自包含的单个 HTML，验线上就是 `curl` 下来比字节数、grep 字样
+- 产物是自包含的单个 HTML：`dist/outro.html` 发给别人、`file://` 直接打开就能用（**不用**在 push 后去比对线上那一版）
 
 ## 代码约定
 
