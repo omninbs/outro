@@ -33,7 +33,10 @@ export function WizardShell({
 
 			<Stepper steps={steps} current={current} onSelect={onSelect} />
 
-			<div class="mt-6 grid items-start gap-6 wide:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+			{/* 列模板必须显式写：只写 grid 的话，中屏走的是隐式列，而隐式列按 auto（内容 max-content）算、
+			   不会收缩——输入框天生的固有宽度（那个裸输入框有 400px 出头）会把整列顶出屏幕。
+			   grid-cols-1 就是 minmax(0,1fr)，可收缩 */}
+			<div class="mt-6 grid grid-cols-1 items-start gap-6 wide:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 				<div>{children}</div>
 
 				{/* top-12 跟 PageShell 的 py-12 对齐，滚动时清单顶部与容器顶部同高 */}

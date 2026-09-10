@@ -47,6 +47,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 窄屏**边距内化**：容器不再提供横向留白（`max-narrow:px-0`），面横向贴边并去掉侧边描边与圆角（`rounded-none border-x-0`），横向留白由文字 / 控件自己带一次 `px-inset`（`@theme` 的 `--spacing-inset`，全应用只有这 16px 一个数）。裸控件在窄屏不带横向内边距（`BARE_INPUT` 的 `max-narrow:px-0`），否则框一道、控件一道叠成两道。于是整页的文字落在同一条竖线上，窄屏就是一条一维的流
 - 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
 - 判断一律交给 Tailwind 编译成 CSS，不留 JS：没有 `matchMedia`、没有 `ResizeObserver`，代码里也不出现宽度数字
+- 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
 - 路由用 hash（`#form`、`#outro`、`#<入口 id>`）：构建产物要能直接 `file://` 打开
 
 ## 环境
