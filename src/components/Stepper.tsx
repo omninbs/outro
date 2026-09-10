@@ -39,7 +39,8 @@ export function Stepper({
 							>
 								{done ? '✓' : index + 1}
 							</span>
-							{step.label}
+							{/* 窄屏（宽 ≤ 高）只留序号：未选中的步骤不显示名称，省得步骤条换行 */}
+							<span class={active ? '' : 'hidden portrait:inline'}>{step.label}</span>
 						</button>
 						{index < steps.length - 1 && <span class="h-px w-4 bg-ctp-surface1" />}
 					</li>
