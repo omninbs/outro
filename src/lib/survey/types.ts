@@ -66,7 +66,7 @@ export interface Survey {
 	description: string;
 	/**
 	 * 题目。空数组是合法且有用的一种：那就是「空预设」——
-	 * 最自由的一份问卷，没有引导，点进去直接进表单从零填。
+	 * 最自由的一份问卷，没有引导，点进去直接进表单自己填。
 	 */
 	questions: Question[];
 	/**

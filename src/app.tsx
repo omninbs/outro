@@ -22,19 +22,24 @@ export function App() {
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 回到表单、以及重置数据，都从第一步重新开始：这两件事之后停在中间某一步没有道理
+	// 回到表单从第一步开始：从结尾页退回来时停在中间某一步没有道理
 	const backToStart = () => {
 		setStep(0);
 		navigate('form');
 	};
+	// 重置是唯一会丢内容的动作，所以它有三步确认（第三步的 ConfirmButton）
 	const handleReset = () => {
 		reset();
 		setStep(0);
 	};
 
-	// 从首页选一份问卷。空预设就是 questions 为空的问卷：没有题可答，直接进表单从零填
+	// 从首页选一份问卷：有题的进问卷页，空预设（questions 为空）没有题可答，直接进表单。
+	//
+	// 这里**一个字都不动内容**。碰内容的地方只有两个：答完问卷（整份替换）、
+	// 以及在第三步点「重置」（有二次确认）。从前是「点开卡片就先清空」，
+	// 于是从表单退回首页、再点任何一张卡回来，辛苦填的东西就没了——
+	// 内容会丢这种事，只能发生在用户明确按下去的那一刻
 	const startSurvey = (survey: Survey) => {
-		reset();
 		if (survey.questions.length === 0) {
 			setStep(0);
 			navigate('form');
