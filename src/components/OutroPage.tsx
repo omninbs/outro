@@ -89,11 +89,15 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 	return (
 		<div class="flex flex-1 flex-col justify-center-safe">
 			{/* 这一层就是版面本身：宽度上限、页边距、纵向那点最小留白都在这里。
+			    宽度是「一行」的宽：中档单栏 `24rem`，宽档 `wide:48rem` —— 正好一倍，
+			    因为宽档把那两栏并排（左元数据 1.2 : 右文本块 1），一栏就还是这一行的宽。
+			    窄屏不另给数：它本来就比 24rem 窄，于是自然全宽 + `px-inset`，384–480 之间
+			    则是这两条内边距（16 / 24）之差，行宽始终不变。
 			    下面比上面多留 56px（`pb-26` = 6.5rem = 上面的 3rem + 3.5rem）：整块重心因此上移 28px，
 			    也就是原来那个 `-translate-y-7` 光学补偿（一个标题的行高 = text-xl = 1.75rem）。
 			    这里改用内边距拿，是因为它**真占布局**：内容比屏幕高时退回顶部排，标题还剩 pt 那点边距；
 			    换成 translate 时实测只剩 4px（2026-09 探针量到的）。窄屏的 56px 差照旧（pt-8 / pb-22） */}
-			<div class="mx-auto w-full max-w-[48rem] px-6 pt-12 pb-26 max-narrow:px-inset max-narrow:pt-8 max-narrow:pb-22">
+			<div class="mx-auto w-full max-w-[24rem] px-6 pt-12 pb-26 wide:max-w-[48rem] max-narrow:px-inset max-narrow:pt-8 max-narrow:pb-22">
 				<OutroHeader title={title} />
 
 				{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏。
