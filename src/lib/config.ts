@@ -24,8 +24,8 @@ export const NOTICE_TEMPLATES = [
 	},
 ];
 
-/** 常用元数据条目，也就是默认就填上的那几条；删掉之后还能在摘要里点回来 */
-export const DEFAULT_META_LABELS = ['原歌曲作者', 'NBS 作者', '结构设计者'];
+/** 默认就带上的元数据条目 */
+const DEFAULT_META_LABELS = ['原歌曲作者', 'NBS 作者', '结构设计者'];
 
 export const DEFAULT_TITLE = '作品标题';
 export const DEFAULT_NOTICE_LABEL = '版权声明';
