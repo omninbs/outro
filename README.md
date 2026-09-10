@@ -1,6 +1,6 @@
 # outro
 
-一个生成「视频结尾信息页」的小工具：填三页表单，得到一个适合全屏截图当片尾用的页面。内容不限——制作信息、署名、说明、鸣谢、联系方式都行。
+一个生成「视频结尾信息页」的小工具：答一份问卷或填三页表单，得到一个适合全屏截图当片尾用的页面。内容不限——制作信息、署名、说明、鸣谢、联系方式都行。
 
 > This is a project generated entirely by AI
 
@@ -8,9 +8,10 @@
 
 - `npm run dev` 开发预览（http://localhost:5173）
 - `npm run build` 产出单个自包含的 `dist/index.html`，双击用 `file://` 打开即可
-- 首页选开始方式：空预设（自己从空白表单写）或问卷（还没做，入口先占位）
-- 空预设表单三步：摘要 → 描述 → 生成。当前页面记在 hash 里：空 hash 是首页、`#form` 是表单、
-  `#outro` 是结尾页，刷新与前进后退都能回到原处——也正是因为要支持 `file://`，这里不用路径路由
+- 首页列出一份份问卷（第一份是「空预设」）：点进某份问卷答题，右侧实时预览，答完直接进结尾页
+- 「空预设」就是 `questions` 为空的那份问卷：没有题可答，直接进表单从零填，三步：摘要 → 描述 → 生成
+- 当前页面记在 hash 里：空 hash 是首页、`#form` 是表单、`#survey/<id>` 是某份问卷、`#outro` 是结尾页，
+  刷新与前进后退都能回到原处——也正是因为要支持 `file://`，这里不用路径路由
 - 结尾页按 F11 全屏后自行截图，工具本身不导出图片
 
 ## 约定
@@ -25,11 +26,25 @@
   - `types` 数据结构 · `config` 初始内容与占位文案 · `layout` 页面容器宽度 · `card` 条目构造与增删改
   - `outro` 结尾页视图模型（过滤与兜底只在这一处，清单也用它）· `persist` 存档读写与旧版迁移
   - `store` 内容状态 · `router` hash 路由 · `id` 主键
+  - `survey/` 问卷：`types` 数据形状 · `build` 答案→内容 · `registry` 问卷清单（加一份问卷只改这一处）
 - `src/components/`
-  - `ui/` 基础原子（Panel / Field / TextInput / Button / ConfirmButton / AddButton / IconButton / EmptyHint）
+  - `ui/` 基础原子（Panel / Field / TextInput / TextArea / Button / ConfirmButton / AddButton / IconButton / EmptyHint）
   - `PageShell` 页面外壳 · `HomePage` 首页 · `WizardShell` 向导骨架 · `PageFooter` 页脚 · `OutroPage` 结尾页 · `FilledList` 清单
-  - `MetaEditor` / `BlockEditor` 两个列表编辑器 · `Stepper` 步骤条
+  - `SurveyPage` 问卷页 · `QuestionInput` 一道题 · `MetaEditor` / `BlockEditor` 两个列表编辑器 · `Stepper` 步骤条
 - `src/steps/` 三个步骤组件 + `registry.tsx` 步骤表（加一步只改这一处）
+
+## 加一份问卷
+
+问卷是数据不是代码：在 `src/lib/survey/registry.ts` 的 `SURVEYS` 里加一条即可，组件一行都不用动。
+
+- `id` 直接进 hash（`#survey/<id>`），用小写 ASCII，别带斜杠
+- `questions[].kind`：`text` 单行 · `long` 多行（`rows`，默认 5）· `choice` 单选（配 `options`）
+- `questions[].into`：答案落到结尾页哪里——`title` / `footer` / `meta`（左栏一行，配 `label`）/
+  `block`（右栏一块，配 `label`）；不写就只给 `build` 用，自己不出现在内容里
+- 空白答案整条丢掉：没答的题不会在结尾页留一行空标签
+- 要拼接、要算标题，就给这份问卷写 `build(answers)`，覆盖默认搬运（`buildCard`）
+- 答案 → 内容是纯函数（`buildFrom`），问卷页拿它算实时预览，所以预览与结尾页永远一致
+- 内容是整份替换的：问卷是从头开始的一条路，答完就覆盖当前内容
 
 ## 排版约定
 

@@ -32,3 +32,28 @@ export function TextInput({
 		/>
 	);
 }
+
+/** 多行版：问卷里「一段话」这类题目用它，纵向下拉可调 */
+export function TextArea({
+	value,
+	onInput,
+	placeholder,
+	rows = 5,
+	class: cls,
+}: {
+	value: string;
+	onInput: (value: string) => void;
+	placeholder?: string;
+	rows?: number;
+	class?: string;
+}) {
+	return (
+		<textarea
+			value={value}
+			rows={rows}
+			placeholder={placeholder}
+			class={`${INPUT} resize-y leading-relaxed ${cls ?? ''}`}
+			onInput={(e) => onInput(e.currentTarget.value)}
+		/>
+	);
+}

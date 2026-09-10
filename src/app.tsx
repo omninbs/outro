@@ -4,16 +4,20 @@ import { OutroPage } from './components/OutroPage';
 import { FilledList } from './components/FilledList';
 import { HomePage } from './components/HomePage';
 import { PageShell } from './components/PageShell';
+import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
-import { Button } from './components/ui';
+import { Button, Panel } from './components/ui';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
+import { buildFrom } from './lib/survey/build';
+import { findSurvey } from './lib/survey/registry';
+import type { Answers, Survey } from './lib/survey/types';
 import { STEPS, type StepContext } from './steps/registry';
 
-/** 三个页面：首页、表单、最终页。哪一步显示什么由 steps/registry 决定，这里只管分派 */
+/** 四个页面：首页、表单、问卷、最终页。步骤表在 steps/registry，问卷表在 lib/survey/registry，这里只管分派 */
 export function App() {
 	const { data, patch, reset } = useCard();
-	const { view, navigate } = useRouter();
+	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
 	// 回到表单、以及重置数据，都从第一步重新开始：这两件事之后停在中间某一步没有道理
@@ -26,10 +30,56 @@ export function App() {
 		setStep(0);
 	};
 
+	// 从首页选一份问卷。空预设就是 questions 为空的问卷：没有题可答，直接进表单从零填
+	const startSurvey = (survey: Survey) => {
+		reset();
+		if (survey.questions.length === 0) {
+			setStep(0);
+			navigate('form');
+			return;
+		}
+		navigate('survey', survey.id);
+	};
+
+	// 答完问卷：答案搬成内容，整份替换当前内容，然后直接看结尾页。
+	// 问卷和表单是同一件事的两条路——都只是把内容填出来，所以终点也一样
+	const finishSurvey = (survey: Survey, answers: Answers) => {
+		patch(buildFrom(survey, answers));
+		setStep(0);
+		navigate('outro');
+	};
+
 	if (view === 'home') {
 		return (
 			<PageShell width="medium">
-				<HomePage />
+				<HomePage onPick={startSurvey} />
+			</PageShell>
+		);
+	}
+
+	if (view === 'survey') {
+		const survey = surveyId ? findSurvey(surveyId) : undefined;
+
+		// 认不出的 id（手写的地址、改名后的旧链接）不留空白页，给一句话和页脚那个出口
+		if (!survey) {
+			return (
+				<PageShell width="medium">
+					<Panel title="没有这份问卷">
+						<p class="text-base leading-relaxed text-ctp-subtext0">
+							地址里的问卷 id 认不出来，回首页重新选一份。
+						</p>
+					</Panel>
+				</PageShell>
+			);
+		}
+
+		return (
+			<PageShell>
+				<SurveyPage
+					survey={survey}
+					onFinish={(answers) => finishSurvey(survey, answers)}
+					onExit={() => navigate('home')}
+				/>
 			</PageShell>
 		);
 	}
