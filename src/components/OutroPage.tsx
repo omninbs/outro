@@ -79,7 +79,7 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 		<div class="flex flex-1 flex-col">
 			{/* 版面宽度就是一条直线：max-width = 25vw + 30rem（含左右各 3rem 内边距，所以
 			    measure = 25vw + 24rem）。没有断点也没有 clamp，留白斜率恒定（单侧 0.375）：
-			    1024 时 measure 640（两栏 257/335 不挤），1920 时 864，正好等于原来的「一半宽」，
+			    1024 时 measure 640（两栏 269/323 不挤），1920 时 864，正好等于原来的「一半宽」，
 			    更宽就沿同一条线继续长。想更平缓就把 25vw 调大，两端会跟着移动 */}
 			{/* 这一层的框就是屏幕：flex-1 撑满，除了左右留着防贴边的内边距，纵向不给 padding。
 			    纵向的空隙全部来自剩余空间，由 justify-center-safe 分给内容上下 */}
@@ -89,8 +89,10 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 				<div class="-translate-y-7">
 					<OutroHeader title={title} />
 
-					{/* 宽屏就是比例 > 1（宽 > 高）：分两栏并排。竖屏、方形比例的窗口一律单栏顺读 */}
-					<main class="mt-12 grid grid-cols-1 items-start gap-12 landscape:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+					{/* 宽屏就是比例 > 1（宽 > 高）：分两栏并排。竖屏、方形比例的窗口一律单栏顺读。
+					    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，
+					    行数多、每行都要放得下值，块那边是整段文字，窄一点反而更好读 */}
+					<main class="mt-12 grid grid-cols-1 items-start gap-12 landscape:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
 						<MetaList meta={meta} />
 						<BlockList blocks={blocks} />
 					</main>
