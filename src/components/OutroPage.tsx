@@ -20,7 +20,7 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		/* 分栏时才需要 landscape:pt-1 这个补偿：右栏第一条是「描述」标题，笔画细、视觉重量轻，
 		   跟左栏成片的元数据顶对齐会显得它飘在上面，把左栏压下去一点才平。
 		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效 */
-		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 landscape:pt-1">
+		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 landscape:pt-1">
 			{meta.map((item) => (
 				<Fragment key={item.id}>
 					<dt class={SUB_TEXT}>{item.label}</dt>
