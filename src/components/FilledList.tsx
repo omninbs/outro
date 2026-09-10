@@ -48,11 +48,11 @@ export function FilledList({ data }: { data: CardData }) {
 		<Panel title={COPY.section.list}>
 			{/* 窄屏卡片横向贴边、不给留白，所以**有内容**的每个分支各自带一次 inset；
 			    没内容时换成 `EmptyHint`，那个框自己带（它就是框本身，再叠一层就窄一圈） */}
-			<div class="space-y-5">
+			<div class="flex flex-col gap-5">
 				{/* 标题也能留空：没填就不印这一行，跟最终页一致 */}
 				<Group text={COPY.step.summary} count={(title ? 1 : 0) + meta.length}>
 					{title || meta.length ? (
-						<dl class="space-y-1.5 max-narrow:px-inset">
+						<dl class="flex flex-col gap-1.5 max-narrow:px-inset">
 							{title && <Row label={COPY.field.title} value={title} />}
 							{meta.map((item) => (
 								<Row key={item.id} label={item.label} value={item.value} />
@@ -65,7 +65,7 @@ export function FilledList({ data }: { data: CardData }) {
 
 				<Group text={COPY.step.describe} count={blocks.length}>
 					{blocks.length ? (
-						<div class="space-y-3 max-narrow:px-inset">
+						<div class="flex flex-col gap-3 max-narrow:px-inset">
 							{blocks.map((block) => (
 								<div key={block.id}>
 									{block.label && (

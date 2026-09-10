@@ -12,7 +12,7 @@ export function BlockEditor({
 	onChange: (blocks: TextBlock[]) => void;
 }) {
 	return (
-		<div class="space-y-3">
+		<div class="flex flex-col gap-3">
 			{blocks.length === 0 && <EmptyHint>还没有文本块，点下方按钮添加</EmptyHint>}
 
 			{blocks.map((block) => (

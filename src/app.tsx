@@ -130,7 +130,7 @@ export function App() {
 			>
 				{/* key 用步骤 id：换一步就是换一个节点，于是那一步的内容是淡进来的（RISE），
 				    而不是原地把字全换掉 */}
-				<div key={current.id} class={`space-y-6 ${RISE}`}>
+				<div key={current.id} class={`flex flex-col gap-6 ${RISE}`}>
 					{current.body(ctx)}
 				</div>
 

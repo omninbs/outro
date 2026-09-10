@@ -16,7 +16,7 @@ export function HomePage({ onPick }: { onPick: (survey: Survey) => void }) {
 		<div>
 			<PageHeader title={COPY.brand} description="选一种开始方式" />
 
-			<div class="space-y-6">
+			<div class="flex flex-col gap-6">
 				{SURVEYS.map((survey) => (
 					<Panel key={survey.id} title={survey.title} onClick={() => onPick(survey)}>
 						<p class={`max-narrow:px-inset ${SUB_TEXT}`}>{survey.description}</p>

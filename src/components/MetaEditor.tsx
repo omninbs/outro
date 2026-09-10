@@ -12,7 +12,7 @@ export function MetaEditor({
 	onChange: (items: MetaItem[]) => void;
 }) {
 	return (
-		<div class="space-y-2">
+		<div class="flex flex-col gap-2">
 			{items.length === 0 && <EmptyHint>还没有元数据，点下方按钮添加</EmptyHint>}
 
 			{items.map((item) => (

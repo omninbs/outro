@@ -37,9 +37,9 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 /** 文本块（宽档下是右边那一栏），小标题留空时就只印正文 */
 function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 	return (
-		<div class="space-y-8">
+		<div class="flex flex-col gap-8">
 			{blocks.map((block) => (
-				<section key={block.id} class="space-y-3">
+				<section key={block.id} class="flex flex-col gap-3">
 					{block.label && (
 						<h2 class="text-base leading-none font-bold tracking-widest text-ctp-mauve">
 							{block.label}
