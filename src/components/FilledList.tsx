@@ -3,7 +3,7 @@ import type { ComponentChildren } from 'preact';
 import { COPY } from '../lib/copy';
 import { resolveOutro } from '../lib/outro';
 import type { CardData } from '../lib/types';
-import { Panel, SUB_TEXT } from './ui';
+import { Panel, SUB_TEXT, EmptyHint } from './ui';
 
 /** 分组标题：摘要 / 描述 / 页脚。每组上面一条细线，第一组也不例外，免得跟面板标题粘在一起 */
 const Group = ({ text, count, children }: { text: string; count: number; children: ComponentChildren }) => (
@@ -38,27 +38,34 @@ const Row = ({ label, value }: { label: string; value: string }) => (
  * 所见即最终页会印出来的东西——名称没写就空着，跟最终页一样，清单不自作主张补字。
  * 宽档（`wide:`）在表单旁边常驻；中档及以下没有那一条栏，
  * 改在第三步「生成」前显示一次，作最后的确认。
+ * 哪一组空着就在那一组里放一个虚线提示（`COPY.empty`）：清单是预览，「空着」的后果
+ * （结尾页上那块不印）得写出来，不能让人自己推。
  */
 export function FilledList({ data }: { data: CardData }) {
 	const { title, meta, blocks, footer } = resolveOutro(data);
 
 	return (
 		<Panel title={COPY.section.list}>
-			{/* 窄屏卡片已经横向贴边（不给横向留白），所以里面的内容自己带一次 inset */}
-			<div class="space-y-5 max-narrow:px-inset">
+			{/* 窄屏卡片横向贴边、不给留白，所以**有内容**的每个分支各自带一次 inset；
+			    没内容时换成 `EmptyHint`，那个框自己带（它就是框本身，再叠一层就窄一圈） */}
+			<div class="space-y-5">
 				{/* 标题也能留空：没填就不印这一行，跟最终页一致 */}
 				<Group text={COPY.step.summary} count={(title ? 1 : 0) + meta.length}>
-					<dl class="space-y-1.5">
-						{title && <Row label={COPY.field.title} value={title} />}
-						{meta.map((item) => (
-							<Row key={item.id} label={item.label} value={item.value} />
-						))}
-					</dl>
+					{title || meta.length ? (
+						<dl class="space-y-1.5 max-narrow:px-inset">
+							{title && <Row label={COPY.field.title} value={title} />}
+							{meta.map((item) => (
+								<Row key={item.id} label={item.label} value={item.value} />
+							))}
+						</dl>
+					) : (
+						<EmptyHint>{COPY.empty}</EmptyHint>
+					)}
 				</Group>
 
 				<Group text={COPY.step.describe} count={blocks.length}>
 					{blocks.length ? (
-						<div class="space-y-3">
+						<div class="space-y-3 max-narrow:px-inset">
 							{blocks.map((block) => (
 								<div key={block.id}>
 									{block.label && (
@@ -70,11 +77,17 @@ export function FilledList({ data }: { data: CardData }) {
 								</div>
 							))}
 						</div>
-					) : null}
+					) : (
+						<EmptyHint>{COPY.empty}</EmptyHint>
+					)}
 				</Group>
 
 				<Group text={COPY.section.footer} count={footer ? 1 : 0}>
-					{footer ? <p class={`break-words ${SUB_TEXT}`}>{footer}</p> : null}
+					{footer ? (
+						<p class={`break-words max-narrow:px-inset ${SUB_TEXT}`}>{footer}</p>
+					) : (
+						<EmptyHint>{COPY.empty}</EmptyHint>
+					)}
 				</Group>
 			</div>
 		</Panel>
