@@ -78,7 +78,8 @@ export function QuestionInput({
 	}
 
 	return (
-		<Field label={question.label}>
+		/* 摆着一排预设时里面是「一组选项」，不是一个控件（见 `Field` 的 `group`） */
+		<Field label={question.label} group={!custom}>
 			{custom ? (
 				answerBox(
 					'自己写',
