@@ -22,6 +22,7 @@ export function PageFooter() {
 			>
 				<div class="landscape:flex-[7]">
 					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">结尾页生成器</h2>
+					<p class="text-base leading-relaxed text-ctp-subtext0">一个生成视频结尾信息页的小工具</p>
 				</div>
 
 				<nav class="landscape:flex-[5]">
