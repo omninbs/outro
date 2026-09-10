@@ -123,31 +123,15 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
 	);
 }
 
-const CHIP_TONES = {
-	plain: 'border-ctp-surface1 text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve',
-	done: 'border-ctp-green/40 text-ctp-green',
-} as const;
-
-/** 常用条目的小圆按钮：一种还能点，一种已经加进列表 */
-export function Chip({
-	tone = 'plain',
-	disabled,
-	onClick,
-	children,
-}: {
-	tone?: keyof typeof CHIP_TONES;
-	disabled?: boolean;
-	onClick: () => void;
-	children: ComponentChildren;
-}) {
+/** 常用条目的小圆按钮 */
+export function Chip({ onClick, children }: { onClick: () => void; children: ComponentChildren }) {
 	// 描边用 2px：比 1px 立得住，而且 24 + 12 + 4 正好 40px，
 	// 与 Button 的四种变体等高，跟别的控件并排时上下边是一条线
 	return (
 		<button
 			type="button"
-			disabled={disabled}
 			onClick={onClick}
-			class={`rounded-full border-2 px-3 py-1.5 text-base transition ${CHIP_TONES[tone]}`}
+			class="rounded-full border-2 border-ctp-surface1 px-3 py-1.5 text-base text-ctp-subtext0 transition hover:border-ctp-mauve hover:text-ctp-mauve"
 		>
 			{children}
 		</button>
