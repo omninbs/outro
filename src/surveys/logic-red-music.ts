@@ -32,7 +32,7 @@ export const logicRedMusicSurvey: Survey = {
 		},
 		{
 			id: 'stateSpace',
-			label: '状体空间',
+			label: '状态空间',
 			kind: 'choice',
 			options: ['无分歧', '有状态编码', '有限动力系统', '流式状态机'],
 			default: '无分歧',
