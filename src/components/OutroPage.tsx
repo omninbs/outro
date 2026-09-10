@@ -82,7 +82,7 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 			    更宽就沿同一条线继续长。想更平缓就把 25vw 调大，两端会跟着移动 */}
 			{/* 这一层的框就是屏幕：flex-1 撑满，除了左右留着防贴边的内边距，纵向不给 padding。
 			    纵向的空隙全部来自剩余空间，由 justify-center-safe 分给内容上下 */}
-			<div class="mx-auto flex w-full max-w-[calc(25vw_+_30rem)] flex-1 flex-col justify-center-safe px-8 sm:px-12">
+			<div class="mx-auto flex w-full max-w-[calc(25vw_+_30rem)] flex-1 flex-col justify-center-safe px-8 landscape:px-12">
 				{/* 整体上移一个标题的行高（text-xl = 1.75rem = 28px）。用 translate 而不是内边距差：
 				    它是独立的一个数，不占布局、不影响居中，内容再高也不会把这 28px 吃掉 */}
 				<div class="-translate-y-7">

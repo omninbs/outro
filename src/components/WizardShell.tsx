@@ -3,8 +3,9 @@ import type { ComponentChildren } from 'preact';
 import { Stepper, type StepDef } from './Stepper';
 
 /**
- * 向导骨架：标题、步骤条、两栏。横屏且够宽时右侧常驻清单；
- * 其余情况单栏顺读，需要清单的步骤自己把它放到表单下面。
+ * 向导骨架：标题、步骤条、两栏。窗口宽 > 高时右侧常驻清单；
+ * 否则单栏顺读，需要清单的步骤自己把它放到表单下面。
+ * 分栏只看窗口宽高比（`landscape:`），不写 px 断点——断点在横屏窄窗口里会误判。
  * 骨架不关心当前是哪一步，步骤内容由调用方作为 children 传进来。
  * 容器宽度与内边距由 PageShell 给，这里不再写 max-w 与 px。
  */
@@ -32,11 +33,11 @@ export function WizardShell({
 
 			<Stepper steps={steps} current={current} onSelect={onSelect} />
 
-			<div class="mt-6 grid items-start gap-6 lg:landscape:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+			<div class="mt-6 grid items-start gap-6 landscape:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 				<div>{children}</div>
 
 				{/* top-12 跟 PageShell 的 py-12 对齐，滚动时清单顶部与容器顶部同高 */}
-				<div class="hidden lg:landscape:sticky lg:landscape:top-12 lg:landscape:block">{sideList}</div>
+				<div class="hidden landscape:sticky landscape:top-12 landscape:block">{sideList}</div>
 			</div>
 		</div>
 	);

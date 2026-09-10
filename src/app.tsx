@@ -61,7 +61,7 @@ export function App() {
 				<div class="space-y-6">{current.body(ctx)}</div>
 
 				{current.listBelow && (
-					<div class="mt-6 lg:landscape:hidden">
+					<div class="mt-6 landscape:hidden">
 						<FilledList data={data} />
 					</div>
 				)}
