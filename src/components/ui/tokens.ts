@@ -9,6 +9,19 @@
 export const SUB_TEXT = 'text-base leading-relaxed text-ctp-subtext0';
 
 /**
+ * 标题的字样：页面标题（`PageHeader` 的 h1）与页脚那两栏的标题共用。
+ *
+ * 页脚两栏是**并排**的两个标题，谁也不比谁高：原来品牌是 `h2 + text-lg`、链接是
+ * `h3 + text-base`，看着像一个管着另一个；2026-09 按「跟页面标题同款」统一到这一档
+ * （`text-lg` 加粗，正文的颜色、字距照默认）。抄成三份，所以它不再是排版细节。
+ *
+ * 另一档是**印在卡片里的**标题：面板标题（`Panel` 的 h2）与清单的分组标题（`FilledList`
+ * 的 h3），它们靠 `tracking-wide` 和淡一档的颜色（subtext1）跟正文分开，各只有一处，
+ * 所以留在各自组件里，等第三处出现再往这儿收。
+ */
+export const HEADING = 'text-lg font-semibold';
+
+/**
  * 动效全应用只有这一份定义，下面三个都长在它上面，各处的类名一律从这儿取——
  * 散着写 `transition-*` 就会出现「这个 200ms 那个 300ms」，一动起来就露馅。
  *

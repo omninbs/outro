@@ -1,7 +1,7 @@
 import { COPY } from '../lib/copy';
 import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
 import { useRouter } from '../lib/router';
-import { SUB_TEXT, HOVER } from './ui';
+import { HEADING, SUB_TEXT, HOVER } from './ui';
 
 /** 链接的统一样式：正文色，悬停转 blue 并加下划线（下划线那两笔参数见下面的注释） */
 const LINK = `block cursor-pointer py-1 text-ctp-text hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em] ${HOVER}`;
@@ -18,6 +18,11 @@ const REPO_URL = 'https://github.com/omninbs/outro';
  * 版式照 Catppuccin 那套来：mantle 底色、surface0 顶边、`3rem 0 1.5rem` 的内边距，
  * 里面分两栏（品牌 : 链接 = 7 : 5），大屏才并排，中型及以下上下排。
  * 两栏内容一律贴顶排：最小高度撑出来的余量留在下方，位置不随内容多寡浮动。
+ *
+ * 两栏的标题（品牌名、「链接」）是**并排的两个标题**，谁也不从属谁：都用 `HEADING`、都写 `h2`，
+ * 也就是跟页面标题同一款字样——原来品牌是 `h2 + text-lg`、链接是 `h3 + text-base`，
+ * 看着像一个管着另一个（2026-09 统一，原来还试过把两个都压到卡片小标题那一档，太轻了）。
+ *
  * 链接默认用正文色，悬停转 blue 并加下划线——下划线加粗到 0.1em、下沉 0.25em，
  * 这两笔是参考站的做法，少了会显得糙。
  */
@@ -30,12 +35,12 @@ export function PageFooter() {
 				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 max-narrow:px-inset wide:flex-row wide:items-start wide:justify-between`}
 			>
 				<div class="wide:flex-[7]">
-					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">{COPY.brand}</h2>
+					<h2 class={`mb-2 ${HEADING}`}>{COPY.brand}</h2>
 					<p class={SUB_TEXT}>一个生成视频结尾信息页的小工具</p>
 				</div>
 
 				<nav class="wide:flex-[5]">
-					<h3 class="mb-2 text-base font-semibold tracking-wide text-ctp-subtext1">链接</h3>
+					<h2 class={`mb-2 ${HEADING}`}>链接</h2>
 					<ul>
 						<li>
 							<button type="button" onClick={() => navigate('home')} class={LINK}>
