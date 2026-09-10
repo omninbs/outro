@@ -41,7 +41,7 @@ export function App() {
 
 				<Stepper steps={STEPS} current={step} onSelect={setStep} />
 
-				<div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+				<div class="mt-6 grid items-start gap-6 lg:landscape:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 					<div>
 						<div class="space-y-6">
 							{step === 0 && <SummaryStep data={data} patch={patch} />}
@@ -50,6 +50,12 @@ export function App() {
 								<GenerateStep onReset={reset} onGenerate={() => navigate('colophon')} />
 							)}
 						</div>
+
+						{step === 2 && (
+							<div class="mt-6 lg:landscape:hidden">
+								<FilledList data={data} />
+							</div>
+						)}
 
 						<div class="mt-6 flex items-center justify-between">
 							<Button disabled={step === 0} onClick={() => setStep(step - 1)}>
@@ -63,7 +69,7 @@ export function App() {
 						</div>
 					</div>
 
-					<div class="lg:sticky lg:top-8">
+					<div class="hidden lg:landscape:sticky lg:landscape:top-8 lg:landscape:block">
 						<FilledList data={data} />
 					</div>
 				</div>
