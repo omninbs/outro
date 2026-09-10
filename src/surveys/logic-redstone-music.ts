@@ -1,7 +1,10 @@
 import type { Survey } from '../lib/survey/types';
 
 /**
- * 逻辑红乐：这个类别作品的问卷。
+ * 逻辑红石音乐：这个类别作品的问卷。
+ *
+ * 名字不简写：标题、说明、id 都写全「逻辑红石音乐」——「逻辑红乐」是简称，
+ * 地址和首页卡片上都用全称，认得出、也搜得到。
  *
  * 几处约定（看 `lib/survey/types.ts` 里 `Question` 的注释）：
  * - 「默认：作品名称 / 通用 / 无分歧」这类是**预填值**（`default`）：答题框里一开始就写着，
@@ -11,10 +14,10 @@ import type { Survey } from '../lib/survey/types';
  * - 三道单选题都写了 `default`，所以一进问卷就是「无分歧 / 无要求 / 无差异」，
  *   想换就点别的选项，或在下方的输入框里自己写
  */
-export const logicRedMusicSurvey: Survey = {
-	id: 'logic-red-music',
-	title: '逻辑红乐',
-	description: '适用于逻辑红乐类别作品的问卷',
+export const logicRedstoneMusicSurvey: Survey = {
+	id: 'logic-redstone-music',
+	title: '逻辑红石音乐',
+	description: '适用于逻辑红石音乐类别作品的问卷',
 	questions: [
 		{
 			id: 'title',
