@@ -30,30 +30,51 @@ npm run typecheck   # tsc --noEmit
 npm run build       # vite build，产出单文件 dist/index.html
 ```
 
-- dev server 在 http://localhost:5173（常年有一个后台任务跑着，**不要另起一个**）；改完文件 Vite 自己热更新
+- dev server 在 http://localhost:5173（`npm run dev`，常年有一个后台任务跑着，**不要另起一个**）；改完文件 Vite 自己热更新
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转
-- 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）
-- 反过来，判断「代码对不对」不要靠浏览器里的现象，用产物或真机量：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询，或用 headless Firefox 的 BiDi 口（`--remote-debugging-port`）读元素的计算样式
+- 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
+- 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
+- **探针**（`.git/` 下，不入库）：先 `firefox --headless --no-remote --profile dist/ffprof --remote-debugging-port=9222 about:blank`，再 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）或 `node .git/probe-motion.mjs`（跨断点时连续采样，看是不是真在过渡）。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
+- 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
+- 沙箱里 `ss` 看得到端口、却看不到别人的 PID：**杀不掉你终端里那个 dev server**，要重启得请你来
+- 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
+- 比字节用 `wc -c`：`$(...)` 会吃掉末尾换行（差 1 字节），JS 的 `.length` 是字符数不是字节数
 - 装依赖用 `npm ci --cache /tmp/npm-cache`（沙箱里默认缓存目录只读）
 - 产物是自包含的单个 HTML，验线上就是 `curl` 下来比字节数、grep 字样
 
 ## 代码约定
 
-- **一个知识只有一个定义**。界面文案集中在 `src/lib/copy.ts`（只收两处以上用到的，值相同不等于同一条知识）；内容长什么样由 `src/lib/outro.ts` 的 `resolveOutro` 一处决定
+- **一个知识只有一个定义**：界面文案集中在 `src/lib/copy.ts`（只收两处以上用到的，值相同不等于同一条知识）；内容长什么样由 `src/lib/outro.ts` 的 `resolveOutro` 一处决定；框的外观是 `ui/inputs.tsx` 的 `BOX` / `BARE_INPUT` / `BareRow`；排版与动效片段在 `ui/tokens.ts`
 - 目录表叫 `_registry.ts(x)`：`src/surveys/` 是首页那些入口（全是数据，加一份 = 加一个文件 + 加一行）、`src/steps/` 是向导三步
+- 问卷是数据不是代码：题目写 `into` 决定答案落到结尾页哪里（`meta` / `block` / `title` / `footer`），需要加工才写 `build`；加一份问卷不用碰组件
 - 注释写中文，写「为什么这么做」，不写「这行在做什么」
-- 不写自定义 CSS：Tailwind v4 + catppuccin 的 `ctp-*` token 够用了
+- 不写自定义 CSS：Tailwind v4 + catppuccin 的 `ctp-*` token 够用。唯一的例外是 `style.css` 里那条 `.safe-area`——它要读 `env(safe-area-inset-*)`，没有别的写法
 - 入口是根目录的 `index.html`（Vite 的约定，它只是模板，产物是 `dist/index.html`）；里面的 `<title>` 是品牌名唯一一处没走 `COPY.brand` 的地方
-- **响应式只有三个模式，只看宽度**（三个数定在 `src/style.css` 的 `@theme`）：窄 `< 30rem`（480px，`max-narrow:`）、中 `30rem–64rem`（就是不加变体的默认样子：页面留白 + 卡片 + 单栏）、大 `≥ 64rem`（`wide:`：分栏 + 右侧清单常驻）。**比例那套（`landscape:` / `portrait:`）已经不用了**——它在「窄而横」的窗口上会误分栏
-- 窄屏**边距内化**：容器不再提供横向留白（`max-narrow:px-0`），面横向贴边并去掉侧边描边与圆角（`rounded-none border-x-0`），横向留白由文字 / 控件自己带一次 `px-inset`（`@theme` 的 `--spacing-inset`，全应用只有这 16px 一个数）。裸控件在窄屏不带横向内边距（`BARE_INPUT` 的 `max-narrow:px-0`），否则框一道、控件一道叠成两道。于是整页的文字落在同一条竖线上，窄屏就是一条一维的流
-- 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
-- 判断一律交给 Tailwind 编译成 CSS，不留 JS：没有 `matchMedia`、没有 `ResizeObserver`，代码里也不出现宽度数字
-- 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
-- 动效只从 `src/components/ui/tokens.ts` 的 `MORPH` / `FADE` / `RISE` / `TAP` 里挑，别在组件里散着写 `transition-*`：一个元素只能有一份 `transition-property`，所以属性清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹 / 位移不过一两个像素（目标是「别硬蹦」，不是「炫」），`motion-reduce` 下完全不动；只给**能插值**的属性配过渡，`flex-direction`、列数变化那类只能用 `FADE` 淡一下遮住
 - 路由用 hash（`#form`、`#outro`、`#<入口 id>`）：构建产物要能直接 `file://` 打开
+
+## 响应式
+
+- **只有三个模式，只看宽度**（三个数定在 `src/style.css` 的 `@theme`；判断交给 Tailwind 编译成 CSS，代码里不出现宽度数字，也没有 `matchMedia` / `ResizeObserver`）：窄 `< 30rem`（480px，`max-narrow:`）、中 `30rem–64rem`（不加变体的默认样子：页面留白 + 卡片 + 单栏）、大 `≥ 64rem`（`wide:`：分栏 + 右侧清单常驻）
+- **比例那套（`landscape:` / `portrait:`）已经不用了**；容器查询（`@container` / `@max-sm`）只在元数据那行试过一轮也收掉了——一个页面里并存两套判断迟早长歪。要加响应式行为，先问「它属于窄 / 中 / 大哪一档」
+- 窄屏是**一维的流**（边距内化）：容器不再提供横向留白（`max-narrow:px-0`），面横向贴边并去掉侧边描边与圆角（`rounded-none border-x-0`），横向留白由文字 / 控件自己带一次 `px-inset`（`@theme` 的 `--spacing-inset`，全应用只有这 16px 一个数）。裸控件在窄屏不带横向内边距（`BARE_INPUT` 的 `max-narrow:px-0`），否则框一道、控件一道叠成两道
+- 推论：**贴边的面没法再给内容留边**，所以卡片里凡是裸文字 / 裸列表都得自己写 `max-narrow:px-inset`（`Field` 的标签、`FilledList` 的内容、首页卡片的说明、`GenerateStep` 的正文都是这么办的）
+- 元数据行（`MetaEditor`）窄屏上下排——它算窄模式的一种样式变体，不按自己的容器宽度单独判
+- 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
+- **动效**只从 `ui/tokens.ts` 的 `MORPH` / `FADE` / `RISE` / `TAP` 里挑，别在组件里散着写 `transition-*`：一个元素只能有一份 `transition-property`，所以属性清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹 / 位移不过一两个像素（目标是「别硬蹦」不是「炫」），`motion-reduce` 下完全不动；只给**能插值**的属性配过渡，`flex-direction`、列数变化那类只能用 `FADE` 淡一下遮住
+- 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
+
+## 内容与文案
+
+- 类别名写全，不缩写（「逻辑红石音乐」不写成「逻辑红乐」）——标题、地址、首页卡片一律全称
+- 选项表是常用值不是全集：长一点的单选都要留「自定义」的口子，自己写的那一句也要能进结尾页
+- × 要**看起来**嵌在框里：靠组合拿到（`BareRow` 多传一个 `action`），不是塞进 `<input>` 里
+- 预填值（`default`）与占位提示（`placeholder`）是两件事：前者是真答了、会印到结尾页；后者只是灰字。「不填就不显示」用不写 `default` + 占位写「不显示」表达
+- 空答案整条丢掉：没填的题不在结尾页留一个空标签
 
 ## 环境
 
 - 技术栈：Vite + Preact + TypeScript（strict）+ Tailwind v4 + `vite-plugin-singlefile`
 - 仓库：`omninbs/outro`，公开；线上 https://omninbs.github.io/outro/
-- 数据存在浏览器 localStorage（`outro.card.v2`），不经过任何后端
+- 数据存在浏览器 localStorage（`outro.card.v2`；旧键 `colophon.card.*` 会被迁移过来），不经过任何后端
+- 发布：`.github/workflows/deploy.yml`，push 到 main 自动跑（node 22 + configure-pages@v6 / upload-pages-artifact@v5 / deploy-pages@v5）。注意 `concurrency: pages` 且 `cancel-in-progress: false`——**卡住的 run 会挡住后面的**，得去 Actions 页面把它取消
+- 要发一份给别人：`cp dist/index.html dist/outro.html`，自包含、`file://` 直接打开，对方的数据只存在他自己浏览器里
