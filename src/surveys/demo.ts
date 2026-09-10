@@ -4,7 +4,7 @@ import type { Survey } from '../lib/survey/types';
  * 示例问卷：三种题型各一道，用来试通路。
  *
  * 真实问卷照这个形状写；这份跑通之后就可以删——
- * 记得同时在 `index.ts` 里删掉它那一行。
+ * 记得同时在 `_registry.ts` 里删掉它那一行。
  */
 export const demoSurvey: Survey = {
 	id: 'demo',

@@ -23,24 +23,25 @@
 
 ## 结构
 
-- 目录里的 `index` 是该目录的清单/入口，和内容文件平级分开：
-  `steps/index.tsx` 步骤表 · `surveys/index.ts` 问卷清单 · `components/ui/index.ts` 原子导出
+- 目录里 `_` 开头的是这张清单/入口：`steps/_registry.tsx` 步骤表 · `surveys/_registry.ts` 问卷清单 ·
+  `components/ui/index.ts` 原子导出。前缀是为了在文件管理器里排到字母前面、不和内容文件混在一起——
+  大小写混排的排序下 `index` 会夹在 `DescribeStep` 与 `SummaryStep` 中间，等于没分开
 - `src/lib/` 数据与纯逻辑
   - `types` 数据结构 · `config` 初始内容与占位文案 · `layout` 页面容器宽度 · `card` 条目构造与增删改
   - `outro` 结尾页视图模型（过滤与兜底只在这一处，清单也用它）· `persist` 存档读写与旧版迁移
   - `store` 内容状态 · `router` hash 路由 · `id` 主键
   - `survey/` 问卷引擎：`types` 数据形状 · `build` 答案→内容
-- `src/surveys/` 各领域问卷的数据：一份问卷一个文件（`blank` / `demo` …），`index.ts` 是清单
+- `src/surveys/` 各领域问卷的数据：一份问卷一个文件（`blank` / `demo` …），`_registry.ts` 是清单
 - `src/components/`
   - `ui/` 基础原子（Panel / Field / TextInput / TextArea / Button / ConfirmButton / AddButton / IconButton / EmptyHint）
   - `PageShell` 页面外壳 · `HomePage` 首页 · `WizardShell` 向导骨架 · `PageFooter` 页脚 · `OutroPage` 结尾页 · `FilledList` 清单
   - `SurveyPage` 问卷页 · `QuestionInput` 一道题 · `MetaEditor` / `BlockEditor` 两个列表编辑器 · `Stepper` 步骤条
-- `src/steps/` 三个步骤组件 + `index.tsx` 步骤表（加一步只改这一处）
+- `src/steps/` 三个步骤组件 + `_registry.tsx` 步骤表（加一步只改这一处）
 
 ## 加一份问卷
 
 问卷是数据不是代码：在 `src/surveys/` 新写一个文件、导出一份 `Survey`，
-再到 `src/surveys/index.ts` 的 `SURVEYS` 里加一行，组件一行都不用动。
+再到 `src/surveys/_registry.ts` 的 `SURVEYS` 里加一行，组件一行都不用动。
 
 - `id` 直接进 hash（`#survey/<id>`），用小写 ASCII，别带斜杠
 - `questions[].kind`：`text` 单行 · `long` 多行（`rows`，默认 5）· `choice` 单选（配 `options`）

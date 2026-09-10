@@ -10,11 +10,11 @@ import { Button, Panel } from './components/ui';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
 import { buildFrom } from './lib/survey/build';
-import { findSurvey } from './surveys';
+import { findSurvey } from './surveys/_registry';
 import type { Answers, Survey } from './lib/survey/types';
-import { STEPS, type StepContext } from './steps';
+import { STEPS, type StepContext } from './steps/_registry';
 
-/** 四个页面：首页、表单、问卷、最终页。步骤表在 steps，问卷表在 surveys，这里只管分派 */
+/** 四个页面：首页、表单、问卷、最终页。步骤表在 steps/_registry，问卷表在 surveys/_registry，这里只管分派 */
 export function App() {
 	const { data, patch, reset } = useCard();
 	const { view, surveyId, navigate } = useRouter();
