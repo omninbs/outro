@@ -126,8 +126,6 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 				</div>
 
 				<OutroFooter footer={footer} onExit={onExit} />
-
-				<OutroFooter footer={footer} onExit={onExit} />
 			</div>
 		</div>
 	);
