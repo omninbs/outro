@@ -6,7 +6,8 @@
  */
 export function PageHeader({ title, description }: { title: string; description: string }) {
 	return (
-		<header class="mb-6">
+		/* 窄屏外面那层页面容器已经横向贴边（见 layout 的 container），所以标题块自己带一次 inset */
+		<header class="mb-6 max-narrow:px-inset">
 			<h1 class="text-lg font-semibold">{title}</h1>
 			<p class="mt-1 text-base text-ctp-subtext0">{description}</p>
 		</header>

@@ -16,7 +16,11 @@ export function BlockEditor({
 			{blocks.length === 0 && <EmptyHint>还没有文本块，点下方按钮添加</EmptyHint>}
 
 			{blocks.map((block) => (
-				<div key={block.id} class={`${BOX} p-2`}>
+				/* 窄屏跟 BareRow 一个待遇：横向贴边、去侧边描边与圆角，横向留白自己带一次 */
+				<div
+					key={block.id}
+					class={`${BOX} p-2 max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset`}
+				>
 					<div class="flex items-center gap-2">
 						<input
 							type="text"

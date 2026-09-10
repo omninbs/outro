@@ -12,9 +12,7 @@ export function MetaEditor({
 	onChange: (items: MetaItem[]) => void;
 }) {
 	return (
-		/* 清单自己就是查询容器：一行放不放得下，取决于这一栏有多宽——两栏布局里窗口再宽，
-		   分给表单的那一栏也可能很窄，所以问它自己，不问窗口。 */
-		<div class="@container space-y-2">
+		<div class="space-y-2">
 			{items.length === 0 && <EmptyHint>还没有元数据，点下方按钮添加</EmptyHint>}
 
 			{items.map((item) => (
@@ -26,23 +24,23 @@ export function MetaEditor({
 						</IconButton>
 					}
 				>
-					{/* 宽了就并排，窄了就上下排：名称框固定 144px 不让位，值那栏在窄容器里只剩几十像素，
-					    与其硬撑不如换行。384px 是这条线——并排时值还有 178px 可用，比它窄就改成名称一行、值一行。
-					    名称与值都在同一个 BareRow 里、× 在右边纵向居中，所以「一条元数据 = 一个框」没变。 */}
-					<div class="flex min-w-0 flex-1 items-center gap-2 @max-sm:flex-col @max-sm:items-stretch">
+					{/* 窄屏上下排：名称框固定 144px 且不让位，跟值硬挤在一行里，值那栏就只剩几十像素。
+					    窄屏本来就是一条竖着的流，名称一行、值一行反而顺；× 在右边纵向居中，
+					    所以「一条元数据 = 一个框」这件事没变。 */}
+					<div class="flex min-w-0 flex-1 items-center gap-2 max-narrow:flex-col max-narrow:items-stretch">
 						<input
 							type="text"
 							value={item.label}
 							placeholder={COPY.field.metaLabel}
-							class={`w-36 shrink-0 font-medium text-ctp-mauve @max-sm:w-full ${BARE_INPUT}`}
+							class={`w-36 shrink-0 font-medium text-ctp-mauve max-narrow:w-full ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(items, item.id, { label: e.currentTarget.value }))}
 						/>
-						{/* 上下排时 flex-1 管的是「竖着分」，会把值压成零高，所以窄容器里换成 flex-none 交给宽度定 */}
+						{/* 上下排时 flex-1 管的是「竖着分」，会把值压成零高，所以窄屏换成 flex-none 交给宽度定 */}
 						<input
 							type="text"
 							value={item.value}
 							placeholder={COPY.field.metaValue}
-							class={`min-w-0 flex-1 text-ctp-text @max-sm:w-full @max-sm:flex-none ${BARE_INPUT}`}
+							class={`min-w-0 flex-1 text-ctp-text max-narrow:w-full max-narrow:flex-none ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(items, item.id, { value: e.currentTarget.value }))}
 						/>
 					</div>

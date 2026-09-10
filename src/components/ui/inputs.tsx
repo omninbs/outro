@@ -3,9 +3,12 @@ import type { ComponentChildren } from 'preact';
 /**
  * 裸控件的外观：无边框、无底色，撑在框里。
  * 宽度、flex、文字色由调用方补，所以导出常量而不是组件。
+ *
+ * 窄屏（`max-narrow:px-0`）它不带横向内边距：那一道归外面的框（`BareRow`、块编辑器的外框）。
+ * 框一道、控件一道就会叠成两道，文字也就落不到那条统一的竖线上。
  */
 export const BARE_INPUT =
-	'rounded border-none bg-transparent px-2 py-1.5 text-base ' +
+	'rounded border-none bg-transparent px-2 py-1.5 text-base max-narrow:px-0 ' +
 	'placeholder:text-ctp-overlay0 focus:outline-none';
 
 /**
@@ -23,10 +26,15 @@ export const BOX = 'rounded-md border border-ctp-surface0 bg-ctp-crust';
  * 加描边 2px = 50px；32px 的 × 一定矮于它，撑不出第二个高度。
  *
  * 块编辑器的外框不是它：那层框里还套着正文，是「一列」不是「一行」，只共用 `BOX`。
+ *
+ * 窄屏（`max-narrow`）它横向贴边、去掉侧边描边与圆角，变成横跨整屏的一条「带」，
+ * 横向留白改由它自己带一次 `px-inset`——于是框里的文字跟页面上别处的文字同一条竖线。
  */
 export function BareRow({ children, action }: { children: ComponentChildren; action?: ComponentChildren }) {
 	return (
-		<div class={`${BOX} flex items-center gap-2 p-1.5 focus-within:border-ctp-mauve`}>
+		<div
+			class={`${BOX} flex items-center gap-2 p-1.5 focus-within:border-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset`}
+		>
 			{children}
 			{action}
 		</div>

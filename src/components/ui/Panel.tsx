@@ -1,6 +1,16 @@
 import type { ComponentChildren } from 'preact';
 
-const CARD = 'rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5';
+/**
+ * 卡片外观。窄屏（`max-narrow`）它不再是一张「卡片」：横向贴边、去掉侧边描边与圆角，
+ * 变成横跨整屏的一条「带」；横向留白改由里面的文字自己带一次（`px-inset`）。
+ *
+ * 注意「里面的文字自己带」这件事：贴边的面没法再给内容留边，
+ * 所以卡片里凡是裸文字 / 裸列表，都得自己写 `max-narrow:px-inset`
+ * （`Field` 的标签、`FilledList` 的内容、首页卡片的说明、`GenerateStep` 的正文都是这么办的）。
+ */
+const CARD =
+	'rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5 ' +
+	'max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-0';
 
 /**
  * 步骤里的一块内容：标题 + 圆角卡片。
@@ -17,7 +27,9 @@ export function Panel({
 	onClick?: () => void;
 	children: ComponentChildren;
 }) {
-	const head = title && <h2 class="mb-4 text-lg font-semibold tracking-wide text-ctp-subtext1">{title}</h2>;
+	const head = title && (
+		<h2 class="mb-4 text-lg font-semibold tracking-wide text-ctp-subtext1 max-narrow:px-inset">{title}</h2>
+	);
 
 	if (!onClick) {
 		return (

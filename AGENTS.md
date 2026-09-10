@@ -41,7 +41,10 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注释写中文，写「为什么这么做」，不写「这行在做什么」
 - 不写自定义 CSS：Tailwind v4 + catppuccin 的 `ctp-*` token 够用了
 - 入口是根目录的 `index.html`（Vite 的约定，它只是模板，产物是 `dist/index.html`）；里面的 `<title>` 是品牌名唯一一处没走 `COPY.brand` 的地方
-- 响应式分两种问法，各问各的对象：**页面怎么分栏**看窗口比例（`landscape:` / `portrait:`）；**一行里放不放得下**看它自己的容器宽度（父级挂 `@container`，子级用 `@max-sm:`，见 `MetaEditor`）。两边都不用窗口像素断点（`md:` 那类）——两栏布局里窗口再宽，分给表单的那一栏也可能很窄
+- **响应式只有三个模式，只看宽度**（三个数定在 `src/style.css` 的 `@theme`）：窄 `< 48rem`（`max-narrow:`）、中 `48rem–64rem`（就是不加变体的默认样子：页面留白 + 卡片 + 单栏）、大 `≥ 64rem`（`wide:`：分栏 + 右侧清单常驻）。**比例那套（`landscape:` / `portrait:`）已经不用了**——它在「窄而横」的窗口上会误分栏
+- 窄屏**边距内化**：容器不再提供横向留白（`max-narrow:px-0`），面横向贴边并去掉侧边描边与圆角（`rounded-none border-x-0`），横向留白由文字 / 控件自己带一次 `px-inset`（`@theme` 的 `--spacing-inset`，全应用只有这 16px 一个数）。裸控件在窄屏不带横向内边距（`BARE_INPUT` 的 `max-narrow:px-0`），否则框一道、控件一道叠成两道。于是整页的文字落在同一条竖线上，窄屏就是一条一维的流
+- 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
+- 判断一律交给 Tailwind 编译成 CSS，不留 JS：没有 `matchMedia`、没有 `ResizeObserver`，代码里也不出现宽度数字
 - 路由用 hash（`#form`、`#outro`、`#<入口 id>`）：构建产物要能直接 `file://` 打开
 
 ## 环境

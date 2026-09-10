@@ -78,7 +78,8 @@ export function QuestionInput({
 						}
 					/>
 				) : (
-					<div class="flex flex-wrap gap-2">
+					/* 窄屏外面那层卡片已经横向贴边，这一排选项自己带一次 inset，才跟题面同一竖线 */
+					<div class="flex flex-wrap gap-2 max-narrow:px-inset">
 						{options.map((option) => {
 							const active = value === option;
 							return (

@@ -13,7 +13,7 @@ export function Stepper({
 	onSelect: (index: number) => void;
 }) {
 	return (
-		<ol class="flex flex-wrap items-center gap-x-2 gap-y-2">
+		<ol class="flex flex-wrap items-center gap-x-2 gap-y-2 max-narrow:px-inset">
 			{steps.map((step, index) => {
 				const active = index === current;
 				const done = index < current;
@@ -39,8 +39,8 @@ export function Stepper({
 							>
 								{done ? '✓' : index + 1}
 							</span>
-							{/* 窄屏（宽 ≤ 高）只留序号：未选中的步骤不显示名称，省得步骤条换行 */}
-							<span class={active ? '' : 'portrait:hidden'}>{step.label}</span>
+							{/* 窄屏只留序号：未选中的步骤不显示名称，省得步骤条换行 */}
+							<span class={active ? '' : 'max-narrow:hidden'}>{step.label}</span>
 						</button>
 						{index < steps.length - 1 && <span class="h-px w-4 bg-ctp-surface1" />}
 					</li>

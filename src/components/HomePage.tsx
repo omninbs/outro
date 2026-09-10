@@ -19,7 +19,7 @@ export function HomePage({ onPick }: { onPick: (survey: Survey) => void }) {
 			<div class="space-y-6">
 				{SURVEYS.map((survey) => (
 					<Panel key={survey.id} title={survey.title} onClick={() => onPick(survey)}>
-						<p class={SUB_TEXT}>{survey.description}</p>
+						<p class={`max-narrow:px-inset ${SUB_TEXT}`}>{survey.description}</p>
 					</Panel>
 				))}
 			</div>

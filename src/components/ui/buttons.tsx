@@ -110,13 +110,13 @@ export function IconButton({
 	);
 }
 
-/** 列表末尾的虚线添加按钮 */
+/** 列表末尾的虚线添加按钮。窄屏跟列表里的条目一个待遇：贴边、去侧边描边与圆角 */
 export function AddButton({ onClick, children }: { onClick: () => void; children: ComponentChildren }) {
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			class="w-full rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 transition hover:border-ctp-mauve hover:text-ctp-mauve"
+			class="w-full rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 transition hover:border-ctp-mauve hover:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset"
 		>
 			＋ {children}
 		</button>

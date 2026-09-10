@@ -17,7 +17,7 @@ const REPO_URL = 'https://github.com/omninbs/outro';
  * 不收 props、也不跟所在页面的容器走——首页列窄、表单页列宽，页脚要是跟着走就会一页一个样。
  *
  * 版式照 Catppuccin 那套来：mantle 底色、surface0 顶边、`3rem 0 1.5rem` 的内边距，
- * 里面分两栏（品牌 : 链接 = 7 : 5），窄屏自动改成上下排。
+ * 里面分两栏（品牌 : 链接 = 7 : 5），大屏才并排，中型及以下上下排。
  * 两栏内容一律贴顶排：最小高度撑出来的余量留在下方，位置不随内容多寡浮动。
  * 链接默认用正文色，悬停转 blue 并加下划线——下划线加粗到 0.1em、下沉 0.25em，
  * 这两笔是参考站的做法，少了会显得糙。
@@ -28,14 +28,14 @@ export function PageFooter() {
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
-				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:items-start landscape:justify-between`}
+				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 max-narrow:px-inset wide:flex-row wide:items-start wide:justify-between`}
 			>
-				<div class="landscape:flex-[7]">
+				<div class="wide:flex-[7]">
 					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">{COPY.brand}</h2>
 					<p class={SUB_TEXT}>一个生成视频结尾信息页的小工具</p>
 				</div>
 
-				<nav class="landscape:flex-[5]">
+				<nav class="wide:flex-[5]">
 					<h3 class="mb-2 text-base font-semibold tracking-wide text-ctp-subtext1">链接</h3>
 					<ul>
 						<li>

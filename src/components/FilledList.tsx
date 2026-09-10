@@ -35,7 +35,8 @@ export function FilledList({ data }: { data: CardData }) {
 
 	return (
 		<Panel title={COPY.section.list}>
-			<div class="space-y-5">
+			{/* 窄屏卡片已经横向贴边（不给横向留白），所以里面的内容自己带一次 inset */}
+			<div class="space-y-5 max-narrow:px-inset">
 				{/* 标题不是可选项：没填也会用默认文案，跟最终页一致，所以标题这一行永远在 */}
 				<Group text={COPY.step.summary} count={1 + meta.length}>
 					<dl class="space-y-1.5">
