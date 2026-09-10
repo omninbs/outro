@@ -122,18 +122,3 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
 		</button>
 	);
 }
-
-/** 常用条目的小圆按钮 */
-export function Chip({ onClick, children }: { onClick: () => void; children: ComponentChildren }) {
-	// 描边用 2px：比 1px 立得住，而且 24 + 12 + 4 正好 40px，
-	// 与 Button 的四种变体等高，跟别的控件并排时上下边是一条线
-	return (
-		<button
-			type="button"
-			onClick={onClick}
-			class="rounded-full border-2 border-ctp-surface1 px-3 py-1.5 text-base text-ctp-subtext0 transition hover:border-ctp-mauve hover:text-ctp-mauve"
-		>
-			{children}
-		</button>
-	);
-}

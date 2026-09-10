@@ -25,9 +25,9 @@ export function WizardShell({
 	return (
 		<div class="mx-auto w-full max-w-360 px-6 py-8">
 			<header class="mb-6">
-				<h1 class="text-lg font-semibold">版权页生成器</h1>
+				<h1 class="text-lg font-semibold">结尾页生成器</h1>
 				<p class="mt-1 text-base text-ctp-subtext0">
-					按步骤填写内容，右侧实时确认已填信息，最后生成版权页
+					按步骤填写内容，右侧实时确认已填信息，最后生成结尾页
 				</p>
 			</header>
 

@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import { resolveColophon } from '../lib/colophon';
+import { resolveOutro } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { Panel } from './ui';
 
@@ -24,13 +24,13 @@ const Row = ({ label, value }: { label: string; value: string }) => (
 );
 
 /**
- * 清单：按填写步骤分成摘要、描述、页脚三组，内容一律取自最终的版权页（resolveColophon），
+ * 清单：按填写步骤分成摘要、描述、页脚三组，内容一律取自最终的结尾页（resolveOutro），
  * 所见即最终页会印出来的东西。
  * 横屏且够宽时固定在右侧随时可见；竖屏（高 > 宽）放不下右侧栏，
  * 改在第三步「生成」前显示一次，作最后的确认。
  */
 export function FilledList({ data }: { data: CardData }) {
-	const { title, meta, blocks, footer } = resolveColophon(data);
+	const { title, meta, blocks, footer } = resolveOutro(data);
 
 	return (
 		<Panel title="清单">

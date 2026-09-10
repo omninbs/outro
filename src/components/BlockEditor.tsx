@@ -31,7 +31,7 @@ export function BlockEditor({
 					<textarea
 						value={block.text}
 						rows={5}
-						placeholder="正文，例如版权声明"
+						placeholder="正文"
 						class={`mt-1 w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
 						onInput={(e) => onChange(updateById(blocks, block.id, { text: e.currentTarget.value }))}
 					/>

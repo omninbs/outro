@@ -2,23 +2,23 @@ import { DEFAULT_FOOTER, DEFAULT_TITLE } from './config';
 import type { CardData } from './types';
 
 /** 最终页左栏的一行：名称已去空白，值保证非空 */
-export interface ColophonMeta {
+export interface OutroMeta {
 	id: string;
 	label: string;
 	value: string;
 }
 
 /** 最终页右栏的一块：正文保证非空 */
-export interface ColophonBlock {
+export interface OutroBlock {
 	id: string;
 	label: string;
 	text: string;
 }
 
-export interface ColophonContent {
+export interface OutroContent {
 	title: string;
-	meta: ColophonMeta[];
-	blocks: ColophonBlock[];
+	meta: OutroMeta[];
+	blocks: OutroBlock[];
 	footer: string;
 }
 
@@ -28,7 +28,7 @@ export interface ColophonContent {
  * 最终页和向导里的清单都从这里取数——清单就是最终页的预览，
  * 两边各写一套过滤和兜底迟早会长歪。
  */
-export function resolveColophon(data: CardData): ColophonContent {
+export function resolveOutro(data: CardData): OutroContent {
 	return {
 		title: data.title.trim() || DEFAULT_TITLE,
 		meta: data.meta

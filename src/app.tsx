@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks';
 
-import { ColophonPage } from './components/ColophonPage';
+import { OutroPage } from './components/OutroPage';
 import { FilledList } from './components/FilledList';
 import { PageShell } from './components/PageShell';
 import { WizardShell } from './components/WizardShell';
@@ -25,10 +25,10 @@ export function App() {
 		setStep(0);
 	};
 
-	if (view === 'colophon') {
+	if (view === 'outro') {
 		return (
 			<PageShell theme="latte">
-				<ColophonPage data={data} onExit={backToStart} />
+				<OutroPage data={data} onExit={backToStart} />
 			</PageShell>
 		);
 	}
@@ -37,7 +37,7 @@ export function App() {
 		data,
 		patch,
 		onReset: handleReset,
-		onGenerate: () => navigate('colophon'),
+		onGenerate: () => navigate('outro'),
 	};
 	const current = STEPS[step];
 

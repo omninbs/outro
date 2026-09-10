@@ -1,10 +1,10 @@
 import { Fragment } from 'preact';
 
-import { resolveColophon, type ColophonBlock, type ColophonMeta } from '../lib/colophon';
+import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
 
 /** 页首：标题 + 一条短横线 */
-function ColophonHeader({ title }: { title: string }) {
+function OutroHeader({ title }: { title: string }) {
 	return (
 		<header>
 			<h1 class="text-xl leading-none font-semibold tracking-wide">{title}</h1>
@@ -14,7 +14,7 @@ function ColophonHeader({ title }: { title: string }) {
 }
 
 /** 左栏：元数据表。名称列宽由内容决定，值列吃掉剩下的宽度 */
-function MetaList({ meta }: { meta: ColophonMeta[] }) {
+function MetaList({ meta }: { meta: OutroMeta[] }) {
 	return (
 		/* 分栏时才需要 landscape:pt-1 这个补偿：右栏第一条是「描述」标题，笔画细、视觉重量轻，
 		   跟左栏成片的元数据顶对齐会显得它飘在上面，把左栏压下去一点才平。
@@ -31,7 +31,7 @@ function MetaList({ meta }: { meta: ColophonMeta[] }) {
 }
 
 /** 右栏：文本块，小标题留空时就只印正文 */
-function BlockList({ blocks }: { blocks: ColophonBlock[] }) {
+function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 	return (
 		<div class="space-y-8">
 			{blocks.map((block) => (
@@ -51,7 +51,7 @@ function BlockList({ blocks }: { blocks: ColophonBlock[] }) {
 }
 
 /** 页脚：左边「返回编辑」（打印时隐藏），右边署名 */
-function ColophonFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
+function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
 	return (
 		<footer class="mt-16 flex justify-between gap-8 text-base tracking-wide text-ctp-overlay0">
 			<span>
@@ -67,12 +67,12 @@ function ColophonFooter({ footer, onExit }: { footer: string; onExit?: () => voi
 }
 
 /**
- * 版权页：上标题、中主体（左元数据 / 右文本块）、下页脚。
- * 只排版，不判断该显示什么——哪些行该印出来由 resolveColophon 决定，
+ * 结尾页：上标题、中主体（左元数据 / 右文本块）、下页脚。
+ * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，
  * 所以清单与最终页永远一致。配色用 Catppuccin 标准的 Latte，由外层 PageShell 挂上。
  */
-export function ColophonPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
-	const { title, meta, blocks, footer } = resolveColophon(data);
+export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
+	const { title, meta, blocks, footer } = resolveOutro(data);
 
 	return (
 		<div class="flex flex-1 flex-col">
@@ -86,7 +86,7 @@ export function ColophonPage({ data, onExit }: { data: CardData; onExit?: () => 
 				{/* 整体上移一个标题的行高（text-xl = 1.75rem = 28px）。用 translate 而不是内边距差：
 				    它是独立的一个数，不占布局、不影响居中，内容再高也不会把这 28px 吃掉 */}
 				<div class="-translate-y-7">
-					<ColophonHeader title={title} />
+					<OutroHeader title={title} />
 
 					{/* 宽屏就是比例 > 1（宽 > 高）：分两栏并排。竖屏、方形比例的窗口一律单栏顺读 */}
 					<main class="mt-12 grid grid-cols-1 items-start gap-12 landscape:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
@@ -94,7 +94,7 @@ export function ColophonPage({ data, onExit }: { data: CardData; onExit?: () => 
 						<BlockList blocks={blocks} />
 					</main>
 
-					<ColophonFooter footer={footer} onExit={onExit} />
+					<OutroFooter footer={footer} onExit={onExit} />
 				</div>
 			</div>
 		</div>

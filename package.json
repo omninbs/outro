@@ -1,4 +1,5 @@
 {
+	"name": "outro",
 	"private": true,
 	"type": "module",
 	"scripts": {
