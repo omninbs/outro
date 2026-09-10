@@ -24,40 +24,6 @@
 	/* 窄屏唯一的那条横向内边距。取 16px：它跟现在输入框文字的实际落点（15px）几乎一样，
 	   换过去观感不会突然变松；也是手机上通用的缩进 */
 	--spacing-inset: 1rem;
-
-	/*
-	 * 换档（窄 / 中 / 宽之间）时整页淡一次。
-	 *
-	 * 形状的变化没有中间状态可言——几何量一概不插值（见 `components/ui/tokens.ts`），
-	 * 卡片该在哪一刻变成贴边的带就在哪一刻，所以「看得出来在换档」只能靠渐变来表达：
-	 * 新样子淡进来，一个像素都不挪。
-	 *
-	 * 为什么是 `animation` 而不是 `transition`：媒体查询只让规则生效 / 失效，
-	 * 而 `transition` 只在属性值变化时走——档与档之间没有任何一个属性值在变，
-	 * 过渡根本不会被触发。`animation` 才是跟着规则一起上来的那个。
-	 *
-	 * 为什么三个名字、三段一模一样的关键帧：浏览器**只在 `animation-name` 变化时**
-	 * 重播动画，三个档共用一个名字的话，跨线时计算值没变、动画不会重来。
-	 * 这是机制要求的重复，不是同一件事写了两遍。
-	 */
-	--animate-shift-narrow: shift-narrow 150ms ease-out;
-	--animate-shift-mid: shift-mid 150ms ease-out;
-	--animate-shift-wide: shift-wide 150ms ease-out;
-	@keyframes shift-narrow {
-		from {
-			opacity: 0.6;
-		}
-	}
-	@keyframes shift-mid {
-		from {
-			opacity: 0.6;
-		}
-	}
-	@keyframes shift-wide {
-		from {
-			opacity: 0.6;
-		}
-	}
 }
 
 /*

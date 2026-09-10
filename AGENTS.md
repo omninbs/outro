@@ -34,7 +34,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转。这条真栽过：一次批量改完之后 dev server 一直喂「import 已删、`${MORPH}` 还在」的半成品，浏览器报 `ReferenceError: MORPH is not defined`。判断办法是 `curl -s http://localhost:5173/src/…` 直接看它喂的是什么，`touch` 掉那几个文件再 curl 一遍确认——**别让人去刷新猜**
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
-- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）、`probe-shift.mjs`（跨档采样不透明度，应当 0.6 → 1 地淡一次，同时 padding 第一帧就已经跳到位）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
+- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）或 `probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
 - 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
 - 沙箱里 `ss` 看得到端口、却看不到别人的 PID：**杀不掉你终端里那个 dev server**，要重启得请你来
 - 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
@@ -62,8 +62,8 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
 - **动效**只有渐变：`ui/tokens.ts` 的 `FADE` / `RISE` / `HOVER` 都长在同一份清单上（`opacity` / 文字色 / 底色 / 描边色 / `display`），别在组件里散着写 `transition-*`——一个元素只能有一份 `transition-property`，所以清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹（目标是「别硬蹦」不是「炫」），`motion-reduce` 下完全不动；`flex-direction`、列数变化这类插不了值的只能用 `FADE` 淡一下遮住
 - **几何量一概不插值**：内边距 / 描边宽度 / 圆角 / 位移 / 缩放都不在清单里——按下不缩放，跨窄屏线时零件不收放，形状变化直接跳。理由是插值出来的是「在动」，页面里一有东西在动，观者就得跟着重新找位置；2026-09 为此收掉两轮（选项按钮按下缩 2%、整页跨窄屏线一起收放），**别再加回来**。反馈一律靠颜色
+- **跨档不做任何动画，连整体淡一下都不要**：试过用 `animation` 让整页在换档时淡进来（机制：媒体查询不会重播 `transition`，只有 `animation-name` 变化才重播，所以三个档得配三个名字），结果看起来不是「两个状态在换」而是「整页消失又重现」，比硬跳更差，已收掉。跨档想让人看得见，只能靠颜色或内容本身的变化
 - 悬停的反馈是**元素自己**变色，不位移也不换形状；贴在框里的图标按钮（×）连淡底都不给——浮出一块底色看着像框里又长出一个按钮
-- **换档时整页淡一次**：三个档各挂一个 `animate-shift-*`（定在 `style.css` 的 `@theme`，三段关键帧内容一样——浏览器只在 `animation-name` 变化时才重播动画，所以名字必须分开），挂在 `layout.ts` 的 `container` 上（页面容器 + 页脚容器，同帧开始），最终页不套容器所以不参与。淡的只有透明度（0.6 → 1，150ms）：形状该跳还是跳，这一下只表达「新样子出来了」，不是让卡片慢慢长成带。`motion-reduce:animate-none!` 的 `!` 不能省——Tailwind 把 reduced-motion 那条排在档位 `@media` 前面，同权重时后面的赢
 - 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
 
 ## 内容与文案
