@@ -1,11 +1,11 @@
 import { useRouter } from '../lib/router';
-import { Button, Panel } from './ui';
+import { Panel } from './ui';
 
 /**
  * 首页：只做一件事——选从哪条路开始。
  *
- * 「空预设」就是表单页本身（`#form`）；「问卷」还没做，先把入口摆在这里，
- * 按钮置灰，免得看着像坏了。
+ * 整块卡片就是入口，没有按钮：「空预设」进表单页（`#form`）；
+ * 「问卷」还没做，所以那张卡片不可点，免得看着像坏了。
  */
 export function HomePage() {
 	const { navigate } = useRouter();
@@ -18,20 +18,16 @@ export function HomePage() {
 			</header>
 
 			<div class="space-y-6">
-				<Panel title="空预设">
-					<p class="mb-4 text-base leading-relaxed text-ctp-subtext0">
+				<Panel title="空预设" onClick={() => navigate('form')}>
+					<p class="text-base leading-relaxed text-ctp-subtext0">
 						从一张白纸开始：标题、元数据、文本块都由你自己写。
 					</p>
-					<Button variant="primary" onClick={() => navigate('form')}>
-						开始填写
-					</Button>
 				</Panel>
 
 				<Panel title="问卷">
-					<p class="mb-4 text-base leading-relaxed text-ctp-subtext0">
+					<p class="text-base leading-relaxed text-ctp-subtext0">
 						按问题回答，由工具整理成结尾页内容。这个还没做，入口先留着。
 					</p>
-					<Button disabled>开始问卷</Button>
 				</Panel>
 			</div>
 		</div>
