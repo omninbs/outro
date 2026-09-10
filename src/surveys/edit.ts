@@ -11,6 +11,6 @@ import type { Survey } from '../lib/survey/types';
 export const editSurvey: Survey = {
 	id: 'edit',
 	title: '编辑表单',
-	description: '不使用预设，直接编辑现有的表单。',
+	description: '不使用预设，直接编辑当前表单',
 	questions: [],
 };
