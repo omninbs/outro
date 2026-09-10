@@ -28,7 +28,7 @@ export function App() {
 
 	if (view === 'home') {
 		return (
-			<PageShell>
+			<PageShell width="narrow">
 				<HomePage />
 			</PageShell>
 		);
@@ -36,7 +36,7 @@ export function App() {
 
 	if (view === 'outro') {
 		return (
-			<PageShell theme="latte" footer={false}>
+			<PageShell theme="latte" width={null} footer={false}>
 				<OutroPage data={data} onExit={backToStart} />
 			</PageShell>
 		);

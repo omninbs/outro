@@ -6,12 +6,13 @@ import { Panel } from './ui';
  *
  * 整块卡片就是入口，没有按钮：「空预设」进表单页（`#form`）；
  * 「问卷」还没做，所以那张卡片不可点，免得看着像坏了。
+ * 容器宽度由 PageShell 给（首页传 width="narrow"），这里不写 max-w。
  */
 export function HomePage() {
 	const { navigate } = useRouter();
 
 	return (
-		<div class="mx-auto flex w-full max-w-2xl flex-1 flex-col px-6 py-12">
+		<div>
 			<header class="mb-6">
 				<h1 class="text-lg font-semibold">结尾页生成器</h1>
 				<p class="mt-1 text-base text-ctp-subtext0">选一种开始方式</p>

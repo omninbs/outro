@@ -1,23 +1,28 @@
 import type { ComponentChildren } from 'preact';
 
+import { pageContainer, type PageWidth } from '../lib/layout';
 import { PageFooter } from './PageFooter';
 
 /**
- * 页面外壳：撑满一屏、上色、挂页脚，并且只在这里挂一次安全区。
+ * 页面外壳：撑满一屏、上色、套页面容器、挂页脚，并且只在这里挂一次安全区。
+ *
+ * 容器宽度由这里统一决定并发给内容和页脚，页面自己不再写 max-w 与左右内边距，
+ * 页脚因此永远和它上面那一页的内容对齐。
  *
  * 向导不指定调色板类，跟随系统：@catppuccin 的 mocha.css 里 `:root` 默认是 latte（亮色），
  * 只有系统偏好暗色时才切成 mocha，所以 color-scheme 也交给系统（scheme-light-dark），
  * 否则会出现「亮色页面配暗色滚动条」。最终页永远传 theme="latte"，固定亮色。
  *
- * 页脚是这个外壳的一部分，页面不用自己写；最终页要整屏截图，传 footer={false} 去掉。
- * 各页内容根节点都得是 `flex-1`，页脚的 mt-auto 才顶得到窗口底部。
+ * 最终页自己排版，传 width={null} 不套容器，并且 footer={false} 去掉页脚（要整屏截图）。
  */
 export function PageShell({
 	theme,
+	width = 'wide',
 	footer = true,
 	children,
 }: {
 	theme?: 'latte';
+	width?: PageWidth | null;
 	footer?: boolean;
 	children: ComponentChildren;
 }) {
@@ -27,8 +32,12 @@ export function PageShell({
 				theme === 'latte' ? 'latte scheme-light' : 'scheme-light-dark'
 			}`}
 		>
-			{children}
-			{footer && <PageFooter />}
+			{width === null ? (
+				children
+			) : (
+				<div class={`${pageContainer(width)} flex flex-1 flex-col py-12`}>{children}</div>
+			)}
+			{footer && width !== null && <PageFooter width={width} />}
 		</div>
 	);
 }

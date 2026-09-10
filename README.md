@@ -22,7 +22,7 @@
 ## 结构
 
 - `src/lib/` 数据与纯逻辑
-  - `types` 数据结构 · `config` 初始内容与占位文案 · `card` 条目构造与增删改
+  - `types` 数据结构 · `config` 初始内容与占位文案 · `layout` 页面容器宽度 · `card` 条目构造与增删改
   - `outro` 结尾页视图模型（过滤与兜底只在这一处，清单也用它）· `persist` 存档读写与旧版迁移
   - `store` 内容状态 · `router` hash 路由 · `id` 主键
 - `src/components/`
