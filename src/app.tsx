@@ -6,7 +6,7 @@ import { HomePage } from './components/HomePage';
 import { PageShell } from './components/PageShell';
 import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
-import { Button, Panel } from './components/ui';
+import { Button } from './components/ui';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
 import { buildFrom } from './lib/survey/build';
@@ -60,15 +60,17 @@ export function App() {
 	if (view === 'survey') {
 		const survey = surveyId ? findSurvey(surveyId) : undefined;
 
-		// 认不出的 id（手写的地址、改名后的旧链接）不留空白页，给一句话和页脚那个出口
+		// 认不出的 id（手写的地址、改名后的旧链接）不留空白页。
+		// 用页面自己的标题块，不套卡片：404 没有内容，套一层框反而像「这里本该有东西」
 		if (!survey) {
 			return (
 				<PageShell width="standard">
-					<Panel title="没有这份问卷">
-						<p class="text-base leading-relaxed text-ctp-subtext0">
+					<header>
+						<h1 class="text-lg font-semibold">没有这份问卷</h1>
+						<p class="mt-1 text-base text-ctp-subtext0">
 							地址里的问卷 id 认不出来，回首页重新选一份。
 						</p>
-					</Panel>
+					</header>
 				</PageShell>
 			);
 		}
