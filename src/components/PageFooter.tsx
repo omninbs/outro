@@ -1,4 +1,4 @@
-import { footerContainer } from '../lib/layout';
+import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
 import { useRouter } from '../lib/router';
 
 /**
@@ -18,7 +18,7 @@ export function PageFooter() {
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
-				class={`${footerContainer()} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:justify-between`}
+				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:justify-between`}
 			>
 				<div class="landscape:flex-[7]">
 					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">结尾页生成器</h2>
