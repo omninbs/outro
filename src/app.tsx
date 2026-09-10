@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import { OutroPage } from './components/OutroPage';
 import { FilledList } from './components/FilledList';
@@ -8,7 +8,6 @@ import { PageShell } from './components/PageShell';
 import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
 import { Button, ActionRow } from './components/ui';
-import { hasContent } from './lib/card';
 import { COPY } from './lib/copy';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
@@ -23,8 +22,7 @@ export function App() {
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 回到表单，从第一步开始：结尾页退回来、首页点「继续编辑」都走这里；
-	// 停在中间某一步没有道理
+	// 回到表单，从第一步开始：从结尾页退回来时停在中间某一步没有道理
 	const backToStart = () => {
 		setStep(0);
 		navigate('form');
@@ -35,21 +33,29 @@ export function App() {
 		setStep(0);
 	};
 
-	// 从首页选一份问卷：有题的进问卷页，空预设（questions 为空）没有题可答，直接进表单。
-	//
-	// 清空只发生在问卷自己声明了 `resetOnStart` 的时候（现在只有空预设）——
-	// 「从一张白纸开始」就是它的语义。有引导的问卷一个字都不动已有内容：
-	// 进问卷页只是看看、中途退出来，不该把已经填好的东西弄丢，它们答完的那一刻整份替换。
-	// 首页在内容非空时铺一张「继续编辑」，想接着写的人有明路，不用去猜哪张卡是安全的
-	const startSurvey = (survey: Survey) => {
+	// 进表单：没有题可答的预设（空预设、继续编辑）都走这里。
+	// 清不清空由预设自己回答（`resetOnStart`）——空预设答「清」，继续编辑答「不清」
+	const enterForm = (survey: Survey) => {
 		if (survey.resetOnStart) reset();
-		if (survey.questions.length === 0) {
-			setStep(0);
-			navigate('form');
-			return;
-		}
-		navigate('survey', survey.id);
+		setStep(0);
+		navigate('form');
 	};
+
+	// 从首页选一份预设：有题的进问卷页；没有题的没有页可看，直接进表单。
+	// 有题的问卷一个字都不动已有内容：进问卷页只是看看、中途退出来，
+	// 不该把已经填好的东西弄丢，它们答完的那一刻整份替换内容
+	const startSurvey = (survey: Survey) => {
+		if (survey.questions.length === 0) enterForm(survey);
+		else navigate('survey', survey.id);
+	};
+
+	// 地址里直接写 #blank / #resume（书签、别人给的链接）跟点那张卡是一回事。
+	// 放 effect 里是因为渲染期间不能改状态；地址换掉之后 view 就不是 survey 了，不会重复触发
+	useEffect(() => {
+		if (view !== 'survey' || !surveyId) return;
+		const survey = findSurvey(surveyId);
+		if (survey && survey.questions.length === 0) enterForm(survey);
+	}, [view, surveyId]);
 
 	// 答完问卷：答案搬成内容，整份替换当前内容，然后回到表单的第一步（摘要）。
 	// 回第一步而不是推到最后一步，是留给用户按需要再编辑的余地——问卷只把常见的问题问完，
@@ -63,7 +69,7 @@ export function App() {
 	if (view === 'home') {
 		return (
 			<PageShell width="standard">
-				<HomePage hasDraft={hasContent(data)} onPick={startSurvey} onResume={backToStart} />
+				<HomePage data={data} onPick={startSurvey} />
 			</PageShell>
 		);
 	}
@@ -84,15 +90,19 @@ export function App() {
 			);
 		}
 
-		return (
-			<PageShell width="standard">
-				<SurveyPage
-					survey={survey}
-					onFinish={(answers) => finishSurvey(survey, answers)}
-					onExit={() => navigate('home')}
-				/>
-			</PageShell>
-		);
+		// 没有题可答的预设没有问卷页：落到下面的表单去（地址由上面的 effect 收拾）。
+		// 空问卷页上那个「完成」点下去等于把内容换成空的
+		if (survey.questions.length > 0) {
+			return (
+				<PageShell width="standard">
+					<SurveyPage
+						survey={survey}
+						onFinish={(answers) => finishSurvey(survey, answers)}
+						onExit={() => navigate('home')}
+					/>
+				</PageShell>
+			);
+		}
 	}
 
 	if (view === 'outro') {

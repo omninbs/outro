@@ -21,8 +21,8 @@ export function removeById<T extends { id: string }>(items: T[], id: string): T[
  * 内容里有没有用户写过的东西：标题、页脚、任一条元数据 / 文本块，有一处就不算空。
  *
  * 空白项不算——空元数据、空文本块印不到最终页上（同一把尺子在 `resolveOutro` 里）。
- * 首页用它决定要不要铺「继续编辑」：只点过「添加元数据」却没写字的草稿，
- * 不该被当成一份没写完的内容。
+ * 「继续编辑」那份预设拿它当出现条件（`Survey.when`）：只点过「添加元数据」
+ * 却没写字的草稿，不该被当成一份没写完的内容。
  */
 export function hasContent(data: CardData): boolean {
 	return (
