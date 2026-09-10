@@ -6,8 +6,8 @@ import { PageFooter } from './PageFooter';
 /**
  * 页面外壳：撑满一屏、上色、套页面容器、挂页脚，并且只在这里挂一次安全区。
  *
- * 容器宽度由这里统一决定并发给内容和页脚，页面自己不再写 max-w 与左右内边距，
- * 页脚因此永远和它上面那一页的内容对齐。
+ * 页面容器宽度由这里统一决定（内容按 width 定宽），页面自己不再写 max-w 与左右内边距。
+ * 页脚是固定件，宽度自己管，跟所在页面的容器无关。
  *
  * 向导不指定调色板类，跟随系统：@catppuccin 的 mocha.css 里 `:root` 默认是 latte（亮色），
  * 只有系统偏好暗色时才切成 mocha，所以 color-scheme 也交给系统（scheme-light-dark），
@@ -37,7 +37,7 @@ export function PageShell({
 			) : (
 				<div class={`${pageContainer(width)} flex flex-1 flex-col py-12`}>{children}</div>
 			)}
-			{footer && width !== null && <PageFooter width={width} />}
+			{footer && width !== null && <PageFooter />}
 		</div>
 	);
 }

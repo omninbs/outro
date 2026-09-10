@@ -1,22 +1,24 @@
-import { pageContainer, type PageWidth } from '../lib/layout';
+import { footerContainer } from '../lib/layout';
 import { useRouter } from '../lib/router';
 
 /**
- * 页脚：标准页面件，由 PageShell 统一挂，页面自己不用管（最终页除外）。
+ * 页脚：固定页面件，由 PageShell 统一挂，页面自己不用管（最终页除外）。
  *
- * 版式照 Catppuccin 官网那套来：mantle 底色、surface0 顶边、`3rem 0 1.5rem` 的内边距，
+ * 宽度写死在 layout 的 FOOTER_WIDTH（60rem，参考站页脚容器就是这一个数），
+ * 不收 props、也不跟所在页面的容器走——首页列窄、表单页列宽，页脚要是跟着走就会一页一个样。
+ *
+ * 版式照 Catppuccin 那套来：mantle 底色、surface0 顶边、`3rem 0 1.5rem` 的内边距，
  * 里面分两栏（品牌 : 链接 = 7 : 5），窄屏自动改成上下排。
  * 链接默认用正文色，悬停转 blue 并加下划线——下划线加粗到 0.1em、下沉 0.25em，
  * 这两笔是参考站的做法，少了会显得糙。
- * 容器宽度由 PageShell 传进来，跟同页内容用同一个 pageContainer，不会比内容宽或窄。
  */
-export function PageFooter({ width }: { width: PageWidth }) {
+export function PageFooter() {
 	const { navigate } = useRouter();
 
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
-				class={`${pageContainer(width)} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:justify-between`}
+				class={`${footerContainer()} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:justify-between`}
 			>
 				<div class="landscape:flex-[7]">
 					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">结尾页生成器</h2>
