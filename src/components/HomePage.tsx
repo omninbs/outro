@@ -6,7 +6,7 @@ import { Panel } from './ui';
  *
  * 整块卡片就是入口，没有按钮：「空预设」进表单页（`#form`）；
  * 「问卷」还没做，所以那张卡片不可点，免得看着像坏了。
- * 容器宽度由 PageShell 给（首页传 width="narrow"），这里不写 max-w。
+ * 容器宽度由 PageShell 给（首页传 width="medium"，与页脚同宽），这里不写 max-w。
  */
 export function HomePage() {
 	const { navigate } = useRouter();
