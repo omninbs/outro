@@ -39,15 +39,14 @@ export function FilledList({ data }: { data: CardData }) {
 	return (
 		<Panel title="清单">
 			<div class="space-y-5">
-				<Group text="摘要" count={(cardTitle ? 1 : 0) + meta.length}>
-					{cardTitle || meta.length ? (
-						<dl class="space-y-1.5">
-							<Row label="标题" value={cardTitle || DEFAULT_TITLE} />
-							{meta.map((item) => (
-								<Row key={item.id} label={item.label.trim() || '未命名'} value={item.value.trim()} />
-							))}
-						</dl>
-					) : null}
+				{/* 标题不是可选项：没填也会用默认文案，跟最终页一致，所以标题这一行永远在 */}
+				<Group text="摘要" count={1 + meta.length}>
+					<dl class="space-y-1.5">
+						<Row label="标题" value={cardTitle || DEFAULT_TITLE} />
+						{meta.map((item) => (
+							<Row key={item.id} label={item.label.trim() || '未命名'} value={item.value.trim()} />
+						))}
+					</dl>
 				</Group>
 
 				<Group text="描述" count={blocks.length}>
