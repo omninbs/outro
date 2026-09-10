@@ -16,7 +16,7 @@ export function DescribeStep({ data, patch }: { data: CardData; patch: Patch }) 
 					<TextInput
 						value={data.footerText}
 						onInput={(footerText) => patch({ footerText })}
-						placeholder={COPY.fallback.footer}
+						placeholder={COPY.placeholder}
 					/>
 				</Field>
 			</Panel>

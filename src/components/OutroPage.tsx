@@ -4,7 +4,7 @@ import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { SUB_TEXT } from './ui';
 
-/** 页首：标题 + 一条短横线 */
+/** 页首：标题 + 一条短横线。标题空着就整块不渲染——留空没有兜底文案，横线也跟着走 */
 function OutroHeader({ title }: { title: string }) {
 	return (
 		<header>
@@ -71,7 +71,9 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
 					</button>
 				)}
 			</span>
-			<span>{footer}</span>
+			{/* 署名留空就只剩「返回编辑」那一个子项，`justify-between` 把它放回左边；
+			    打印时它本来就被 `print:hidden` 藏掉，于是空页脚整行不占东西 */}
+			{footer && <span>{footer}</span>}
 		</footer>
 	);
 }
@@ -107,7 +109,7 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 			    这里改用内边距拿，是因为它**真占布局**：内容比屏幕高时退回顶部排，标题还剩 pt 那点边距；
 			    换成 translate 时实测只剩 4px（2026-09 探针量到的）。窄屏的 56px 差照旧（pt-8 / pb-22） */}
 			<div class="mx-auto w-full max-w-[24rem] px-6 pt-12 pb-26 wide:max-w-[48rem] max-narrow:px-inset max-narrow:pt-8 max-narrow:pb-22">
-				<OutroHeader title={title} />
+				{title && <OutroHeader title={title} />}
 
 				{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏。
 				    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，

@@ -46,10 +46,10 @@ export function FilledList({ data }: { data: CardData }) {
 		<Panel title={COPY.section.list}>
 			{/* 窄屏卡片已经横向贴边（不给横向留白），所以里面的内容自己带一次 inset */}
 			<div class="space-y-5 max-narrow:px-inset">
-				{/* 标题不是可选项：没填也会用默认文案，跟最终页一致，所以标题这一行永远在 */}
-				<Group text={COPY.step.summary} count={1 + meta.length}>
+				{/* 标题也能留空：没填就不印这一行，跟最终页一致 */}
+				<Group text={COPY.step.summary} count={(title ? 1 : 0) + meta.length}>
 					<dl class="space-y-1.5">
-						<Row label={COPY.field.title} value={title} />
+						{title && <Row label={COPY.field.title} value={title} />}
 						{meta.map((item) => (
 							<Row key={item.id} label={item.label} value={item.value} />
 						))}
@@ -73,8 +73,8 @@ export function FilledList({ data }: { data: CardData }) {
 					) : null}
 				</Group>
 
-				<Group text={COPY.section.footer} count={1}>
-					<p class={`break-words ${SUB_TEXT}`}>{footer}</p>
+				<Group text={COPY.section.footer} count={footer ? 1 : 0}>
+					{footer ? <p class={`break-words ${SUB_TEXT}`}>{footer}</p> : null}
 				</Group>
 			</div>
 		</Panel>

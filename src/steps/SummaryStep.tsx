@@ -12,7 +12,7 @@ export function SummaryStep({ data, patch }: { data: CardData; patch: Patch }) {
 					<TextInput
 						value={data.title}
 						onInput={(title) => patch({ title })}
-						placeholder={COPY.fallback.title}
+						placeholder={COPY.placeholder}
 					/>
 				</Field>
 			</Panel>

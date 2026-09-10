@@ -34,7 +34,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转。这条真栽过：一次批量改完之后 dev server 一直喂「import 已删、`${MORPH}` 还在」的半成品，浏览器报 `ReferenceError: MORPH is not defined`。判断办法是 `curl -s http://localhost:5173/src/…` 直接看它喂的是什么，`touch` 掉那几个文件再 curl 一遍确认——**别让人去刷新猜**
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
-- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）或 `probe-outro.mjs`（最终页版面：量宽度上限 / 居中 / 分栏条件 / 有没有溢出，自带一份种进 localStorage 的存档，种完要**重新加载**才生效）、`probe-back.mjs`（点结尾页的「返回编辑」，看落在第几步）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次（一个脚本跑完就 `ws.close()`，否则下一次会报「Maximum number of active sessions」，那就得重启 Firefox）
+- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）或 `probe-outro.mjs`（最终页版面：量宽度上限 / 居中 / 分栏条件 / 有没有溢出，自带一份种进 localStorage 的存档，种完要**重新加载**才生效）、`probe-back.mjs`（点结尾页的「返回编辑」，看落在第几步）、`probe-empty.mjs`（标题 / 页脚留空时，结尾页与清单各该消失什么；注意只换 hash 是同文档导航，应用不会重读 localStorage，得真重新加载）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次（一个脚本跑完就 `ws.close()`，否则下一次会报「Maximum number of active sessions」，那就得重启 Firefox）
 - 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
 - 沙箱里 `ss` 看得到端口、却看不到别人的 PID：**杀不掉你终端里那个 dev server**，要重启得请你来
 - 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
@@ -74,7 +74,8 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 类别名写全，不缩写（「逻辑红石音乐」不写成「逻辑红乐」）——标题、地址、首页卡片一律全称
 - 选项表是常用值不是全集：长一点的单选都要留「自定义」的口子，自己写的那一句也要能进结尾页
 - × 要**看起来**嵌在框里：靠组合拿到（`BareRow` 多传一个 `action`），不是塞进 `<input>` 里
-- 预填值（`default`）与占位提示（`placeholder`）是两件事：前者是真答了、会印到结尾页；后者只是灰字。「不填就不显示」用不写 `default` + 占位写「不显示」表达
+- **没有兜底文案**（2026-09 收掉）：留空就是不印——标题空着，标题块（连下面那根横线）整个不渲染；页脚空着，署名那行不渲染（「返回编辑」还在）。占位提示也不是数据：全站只有 `COPY.placeholder` 一句「不显示」，所有空框是同一个意思
+- 预填值（`default`）是**真值**：框里一开始就写着，会一路印到结尾页；「默认不显示这一行」用**不写 `default`** 表达，而不是预填一句「不显示」。页脚那份初始值（`config.ts` 的 `DEFAULT_CARD.footerText`）也是真值，删掉就真没有。问卷数据里因此没有 `placeholder` / `rows` 这类只管控件长相的字段，多行框的行数写死在 `TextArea`
 - 空答案整条丢掉：没填的题不在结尾页留一个空标签
 - 不用 `truncate` 之类截断内容：名称 / 值写长了就让它换行（`FilledList` 的标签列曾经是 `truncate`，会悄悄丢字）。清单是给人最后确认用的，宁可它高一点
 - **文案不为某一档定制，也就不写方位、不暗示结构**：一句话得在这个页面的**每一档**都成立。向导页那句「按步骤填写内容，**右侧**实时确认已填信息」把宽档的分栏当成了全局事实——右栏只有宽档有，中窄档连「有清单」都只发生在某几步；「页脚**左侧**的返回编辑」在窄档是上下两行。要指位置就只用**不随档位变**的粗说法（「下方按钮」「页脚里」），拿不准就别提；同理不写「第 N 步」「点右边那个」，步骤数、档位结构都会变。文案里出现方位词，先问它在窄档还成不成立

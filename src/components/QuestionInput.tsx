@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks';
 
+import { COPY } from '../lib/copy';
 import type { Question } from '../lib/survey/types';
 import { Field, FADE, IconButton, HOVER, TextArea, TextInput } from './ui';
 
@@ -28,6 +29,8 @@ const CUSTOM_BUTTON =
  * 那个输入框不是另做一个带 × 的框，就是 `TextInput` 多给了一个 `action`：
  * × 看起来在框里，框的内边距、高度跟问卷里别的输入框天生一样。
  * 预填值（`question.default`）不在这里处理，它由问卷页初始化答案时给。
+ * 空框里的灰字也不来自题目数据：一律是 `COPY.placeholder`（「不显示」），
+ * 因为不管哪道题，空答案的去处都是「不印出来」——同一件事不该每题写一遍。
  */
 export function QuestionInput({
 	question,
@@ -47,12 +50,7 @@ export function QuestionInput({
 	if (question.kind === 'long') {
 		return (
 			<Field label={question.label}>
-				<TextArea
-					value={value}
-					onInput={onChange}
-					placeholder={question.placeholder}
-					rows={question.rows ?? 5}
-				/>
+				<TextArea value={value} onInput={onChange} placeholder={COPY.placeholder} />
 			</Field>
 		);
 	}
@@ -113,7 +111,7 @@ export function QuestionInput({
 
 	return (
 		<Field label={question.label}>
-			<TextInput value={value} onInput={onChange} placeholder={question.placeholder} />
+			<TextInput value={value} onInput={onChange} placeholder={COPY.placeholder} />
 		</Field>
 	);
 }
