@@ -16,11 +16,20 @@ const Group = ({ text, count, children }: { text: string; count: number; childre
 	</section>
 );
 
-/** 摘要里的一行元数据，标题也是其中一行 */
+/**
+ * 摘要里的一行元数据，标题也是其中一行。
+ *
+ * 名称列固定 96px 且不让位——每一行都是独立的 flex，只有定宽才能让各行的名称对齐
+ * （跟 `MetaEditor` 那个 `w-36` 是同一个道理）。**不截断**：名称写长了就换行，
+ * 截断会丢字，而这是给人「最后确认」用的清单，宁可它高一点。
+ *
+ * 窄屏上下排（跟所有别处的元数据行一样）；这时 `flex-1` 管的是「竖着分」，
+ * 会把值压成零高，所以窄屏换成 `flex-none` 交给宽度定。
+ */
 const Row = ({ label, value }: { label: string; value: string }) => (
-	<div class="flex gap-3 text-base leading-relaxed">
-		<dt class="w-24 shrink-0 truncate text-ctp-subtext0">{label}</dt>
-		<dd class="min-w-0 flex-1 break-words text-ctp-text">{value}</dd>
+	<div class="flex gap-3 text-base leading-relaxed max-narrow:flex-col max-narrow:gap-1">
+		<dt class="w-24 shrink-0 text-ctp-subtext0 max-narrow:w-full">{label}</dt>
+		<dd class="min-w-0 flex-1 break-words text-ctp-text max-narrow:flex-none">{value}</dd>
 	</div>
 );
 

@@ -17,10 +17,13 @@ function OutroHeader({ title }: { title: string }) {
 /** 左栏：元数据表。名称列宽由内容决定，值列吃掉剩下的宽度 */
 function MetaList({ meta }: { meta: OutroMeta[] }) {
 	return (
-		/* 分栏时才需要 wide:pt-1 这个补偿：右栏第一条是「描述」标题，笔画细、视觉重量轻，
+		/* 中间那条线以上是分栏时才要的：右栏第一条是「描述」标题，笔画细、视觉重量轻，
 		   跟左栏成片的元数据顶对齐会显得它飘在上面，把左栏压下去一点才平。
-		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效 */
-		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 wide:pt-1">
+		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效。
+
+		   窄屏（`max-narrow:grid-cols-1`）上下排成「名称一行、值一行」，跟编辑态的 `MetaEditor`
+		   是同一条规矩——窄屏是一维的流，一行里塞两列不是这一档该有的样子 */
+		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 max-narrow:grid-cols-1 wide:pt-1">
 			{meta.map((item) => (
 				<Fragment key={item.id}>
 					<dt class={SUB_TEXT}>{item.label}</dt>
@@ -51,10 +54,15 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 	);
 }
 
-/** 页脚：左边「返回编辑」（打印时隐藏），右边署名。窄屏放不下就上下落，不硬挤一行 */
+/**
+ * 页脚：左边「返回编辑」（打印时隐藏），右边署名。
+ *
+ * 窄屏 / 中档按一维的流上下排，`wide:` 才左右分列——跟向导的 `PageFooter` 同一条规矩。
+ * 不靠 `flex-wrap` 让内容自己挤：那是一种没写下来的判断，看的人不知道它什么时候会换行。
+ */
 function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
 	return (
-		<footer class="mt-16 flex flex-wrap justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0">
+		<footer class="mt-16 flex flex-col gap-1 text-base tracking-wide text-ctp-overlay0 wide:flex-row wide:justify-between wide:gap-x-8">
 			<span>
 				{onExit && (
 					<button type="button" onClick={onExit} class="cursor-pointer hover:underline print:hidden">
