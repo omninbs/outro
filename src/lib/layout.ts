@@ -5,7 +5,7 @@
 const STANDARD = 'max-w-[60rem]';
 
 /** 页面容器的定宽：单栏页面用标准宽，只有分栏页面（表单的两栏加常驻清单）才要更宽 */
-export const PAGE_WIDTHS = { standard: STANDARD, wide: 'max-w-360' } as const;
+const PAGE_WIDTHS = { standard: STANDARD, wide: 'max-w-360' } as const;
 
 export type PageWidth = keyof typeof PAGE_WIDTHS;
 
