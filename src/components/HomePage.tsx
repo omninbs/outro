@@ -1,4 +1,5 @@
 import { useRouter } from '../lib/router';
+import { PageFooter } from './PageFooter';
 import { Panel } from './ui';
 
 /**
@@ -11,7 +12,7 @@ export function HomePage() {
 	const { navigate } = useRouter();
 
 	return (
-		<div class="mx-auto w-full max-w-2xl px-6 py-12">
+		<div class="mx-auto flex w-full max-w-2xl flex-1 flex-col px-6 py-12">
 			<header class="mb-6">
 				<h1 class="text-lg font-semibold">结尾页生成器</h1>
 				<p class="mt-1 text-base text-ctp-subtext0">选一种开始方式</p>
@@ -30,6 +31,8 @@ export function HomePage() {
 					</p>
 				</Panel>
 			</div>
+
+			<PageFooter />
 		</div>
 	);
 }

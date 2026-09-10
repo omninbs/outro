@@ -43,11 +43,7 @@ export function WizardShell({
 				<div class="hidden lg:landscape:sticky lg:landscape:top-12 lg:landscape:block">{sideList}</div>
 			</div>
 
-			<PageFooter>
-				<button type="button" onClick={onHome} class="cursor-pointer hover:underline">
-					返回主页
-				</button>
-			</PageFooter>
+			<PageFooter links={[{ label: '返回主页', onClick: onHome }]} />
 		</div>
 	);
 }
