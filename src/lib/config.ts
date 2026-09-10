@@ -24,8 +24,12 @@ export const NOTICE_TEMPLATES = [
 	},
 ];
 
-/** 摘要步骤里的常用元数据条目 */
+/** 默认就带上的元数据条目 */
+const DEFAULT_META_LABELS = ['原歌曲作者', 'NBS 作者', '结构设计者'];
+
+/** 摘要步骤里的常用元数据条目：默认就有的那几条排在最前，删掉之后还能点回来 */
 export const QUICK_META = [
+	...DEFAULT_META_LABELS,
 	'原曲链接',
 	'扒谱日期',
 	'工程版本',
@@ -33,7 +37,7 @@ export const QUICK_META = [
 	'参与人员',
 ];
 
-export const DEFAULT_TITLE = '歌曲信息';
+export const DEFAULT_TITLE = '作品标题';
 export const DEFAULT_NOTICE_LABEL = '版权声明';
 export const DEFAULT_NOTICE = NOTICE_TEMPLATES[0].text;
 export const DEFAULT_FOOTER = '由 kemiamu/colophon 生成';
@@ -41,11 +45,7 @@ export const DEFAULT_FOOTER = '由 kemiamu/colophon 生成';
 /** 初始内容一律留空，默认文案只作占位提示，不预填 */
 export const DEFAULT_CARD: CardData = {
 	title: '',
-	meta: [
-		{ id: 'm1', label: '原歌曲作者', value: '' },
-		{ id: 'm2', label: 'NBS 作者', value: '' },
-		{ id: 'm3', label: '结构设计者', value: '' },
-	],
+	meta: DEFAULT_META_LABELS.map((label, i) => ({ id: `m${i + 1}`, label, value: '' })),
 	blocks: [],
 	footerText: '',
 };

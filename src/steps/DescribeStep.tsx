@@ -1,6 +1,6 @@
 import { BlockEditor, newBlock } from '../components/BlockEditor';
 import { Field, Panel, TextInput } from '../components/ui';
-import { DEFAULT_NOTICE_LABEL, NOTICE_TEMPLATES } from '../lib/config';
+import { DEFAULT_FOOTER, DEFAULT_NOTICE_LABEL, NOTICE_TEMPLATES } from '../lib/config';
 import type { CardData } from '../lib/types';
 
 /** 描述：主体右栏的文本块 + 页脚 */
@@ -34,11 +34,11 @@ export function DescribeStep({
 			</Panel>
 
 			<Panel title="页脚">
-				<Field label="页脚文字" hint="始终显示在页面底部右侧，左侧是「返回编辑」链接">
+				<Field label="页脚文字">
 					<TextInput
 						value={data.footerText}
 						onInput={(footerText) => patch({ footerText })}
-						placeholder="由 kemiamu/colophon 生成"
+						placeholder={DEFAULT_FOOTER}
 					/>
 				</Field>
 			</Panel>
