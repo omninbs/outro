@@ -22,8 +22,9 @@ export function App() {
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 回到表单，从第一步开始：从结尾页退回来时停在中间某一步没有道理
-	const backToStart = () => {
+	// 打开表单，从第一步开始：结尾页退回来、首页点「编辑表单」都走这里；
+	// 停在中间某一步没有道理
+	const openForm = () => {
 		setStep(0);
 		navigate('form');
 	};
@@ -33,28 +34,20 @@ export function App() {
 		setStep(0);
 	};
 
-	// 进表单：没有题可答的预设（空预设、继续编辑）都走这里。
-	// 清不清空由预设自己回答（`resetOnStart`）——空预设答「清」，继续编辑答「不清」
-	const enterForm = (survey: Survey) => {
-		if (survey.resetOnStart) reset();
-		setStep(0);
-		navigate('form');
-	};
-
-	// 从首页选一份预设：有题的进问卷页；没有题的没有页可看，直接进表单。
-	// 有题的问卷一个字都不动已有内容：进问卷页只是看看、中途退出来，
+	// 从首页选一个入口：有题的进问卷页，没有题的（「编辑表单」）没有页可看，直接进表单。
+	// 问卷一个字都不动已有内容：进问卷页只是看看、中途退出来，
 	// 不该把已经填好的东西弄丢，它们答完的那一刻整份替换内容
 	const startSurvey = (survey: Survey) => {
-		if (survey.questions.length === 0) enterForm(survey);
+		if (survey.questions.length === 0) openForm();
 		else navigate('survey', survey.id);
 	};
 
-	// 地址里直接写 #blank / #resume（书签、别人给的链接）跟点那张卡是一回事。
+	// 地址里直接写 #edit（书签、别人给的链接）跟点那张卡是一回事。
 	// 放 effect 里是因为渲染期间不能改状态；地址换掉之后 view 就不是 survey 了，不会重复触发
 	useEffect(() => {
 		if (view !== 'survey' || !surveyId) return;
 		const survey = findSurvey(surveyId);
-		if (survey && survey.questions.length === 0) enterForm(survey);
+		if (survey && survey.questions.length === 0) openForm();
 	}, [view, surveyId]);
 
 	// 答完问卷：答案搬成内容，整份替换当前内容，然后回到表单的第一步（摘要）。
@@ -69,7 +62,7 @@ export function App() {
 	if (view === 'home') {
 		return (
 			<PageShell width="standard">
-				<HomePage data={data} onPick={startSurvey} />
+				<HomePage onPick={startSurvey} />
 			</PageShell>
 		);
 	}
@@ -90,7 +83,7 @@ export function App() {
 			);
 		}
 
-		// 没有题可答的预设没有问卷页：落到下面的表单去（地址由上面的 effect 收拾）。
+		// 没有题的入口没有问卷页：落到下面的表单去（地址由上面的 effect 收拾）。
 		// 空问卷页上那个「完成」点下去等于把内容换成空的
 		if (survey.questions.length > 0) {
 			return (
@@ -108,7 +101,7 @@ export function App() {
 	if (view === 'outro') {
 		return (
 			<PageShell theme="latte" width={null} footer={false}>
-				<OutroPage data={data} onExit={backToStart} />
+				<OutroPage data={data} onExit={openForm} />
 			</PageShell>
 		);
 	}

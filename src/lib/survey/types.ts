@@ -52,11 +52,12 @@ export interface Question {
 export type Answers = Record<string, string>;
 
 /**
- * 一份问卷 = 一个入口。不同领域各写一份，首页按 `SURVEYS` 的顺序铺卡片。
+ * 一份问卷 = 一个入口。不同领域各写一份，首页按 `SURVEYS` 的顺序铺卡片；
+ * 第一份「编辑表单」的 `questions` 是空的，那是「不用预设、自己填」那条路。
  */
 export interface Survey {
 	/**
-	 * 问卷在地址里的名字（`#blank`、`#logic-redstone-music`），用小写 ASCII。
+	 * 问卷在地址里的名字（`#edit`、`#logic-redstone-music`），用小写 ASCII。
 	 * 不能占用保留名 `form` / `outro`；首页是空 hash，也用不了。
 	 */
 	id: string;
@@ -65,26 +66,10 @@ export interface Survey {
 	/** 首页卡片上的一句话说明 */
 	description: string;
 	/**
-	 * 这张卡什么时候铺出来。不写就是一直在。
-	 *
-	 * 「继续编辑」写它（条件就是「内容非空」）：没写过东西就没有「继续」可言，
-	 * 铺出来只是一张通往空表单的卡。
-	 */
-	when?: (data: CardData) => boolean;
-	/**
-	 * 题目。空数组是合法且有用的一种——那就是「没有问题」这类预设：
-	 * 空预设（从一张白纸开始）与继续编辑（接着写）都是这样，
-	 * 没有题可答，点进去直接进表单。
+	 * 题目。空数组是合法且有用的一种——那就是「编辑表单」：
+	 * 不用预设，点进去直接进表单自己填。
 	 */
 	questions: Question[];
-	/**
-	 * 进这份预设时先清空已有内容。
-	 *
-	 * 这是「要不要从白纸开始」的答案：空预设写 `true`，「继续编辑」不写（就是不清空）。
-	 * 有题的问卷也不写——进问卷页只是看看、中途退出来，不该把已经填好的东西弄丢；
-	 * 它们只在答完的那一刻整份替换内容。
-	 */
-	resetOnStart?: boolean;
 	/**
 	 * 答案 → 内容。默认按每道题的 `into` 搬运（见 `buildCard`）；
 	 * 需要拼接、算标题这类加工时，在这里写一个函数覆盖掉。
