@@ -7,6 +7,8 @@ import type { Survey } from '../lib/survey/types';
  * 地址和首页卡片上都用全称，认得出、也搜得到。
  *
  * 几处约定（看 `lib/survey/types.ts` 里 `Question` 的注释）：
+ * - 每道题**先写 `into`**：一份问卷是拿结尾页倒着写出来的，先说这块答案印到哪儿，
+ *   再是它的 id、题面、输入形态、预填值
  * - 「作品名称 / 通用 / 无分歧」这类是**预填值**（`default`）：答题框里一开始就写着，
  *   用户不想要就自己改；删空了就不印这一行（留空没有兜底文案）
  * - 四道单选题都写了 `default`，所以一进问卷就是「无分歧 / 无要求 / 无差异 / 禁止」，
@@ -22,80 +24,80 @@ export const logicRedstoneMusicSurvey: Survey = {
 	description: '适用于逻辑红石音乐类别作品的问卷',
 	questions: [
 		{
+			into: 'title',
 			id: 'title',
 			label: '页面标题',
 			kind: 'text',
 			default: '作品名称',
-			into: 'title',
 		},
 		{
+			into: 'meta',
 			id: 'version',
 			label: '适用版本',
 			kind: 'text',
 			default: '通用',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'stateSpace',
 			label: '状态空间',
 			kind: 'choice',
 			options: ['无分歧', '有状态编码', '有限动力系统', '流式状态机'],
 			default: '无分歧',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'buildRequirement',
 			label: '建造要求',
 			kind: 'choice',
 			options: ['无要求', '不建议跨区块'],
 			default: '无要求',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'bedrock',
 			label: '基岩版兼容',
 			kind: 'choice',
 			options: ['无差异', '需同步延时', '专版'],
 			default: '无差异',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'originalAuthor',
 			label: '原曲作者',
 			kind: 'text',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'scoreAuthor',
 			label: '乐谱作者',
 			kind: 'text',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'structureAuthor',
 			label: '结构作者',
 			kind: 'text',
-			into: 'meta',
 		},
 		{
+			into: 'meta',
 			id: 'license',
 			label: '转载和再制',
 			kind: 'choice',
 			options: ['禁止', '注明来源/非盈利', '注明来源'],
 			default: '禁止',
-			into: 'meta',
 		},
 		{
+			into: 'block',
 			id: 'notes',
 			label: '特别说明',
 			kind: 'long',
-			into: 'block',
 		},
 		{
+			into: 'block',
 			id: 'colophon',
 			label: '尾注',
 			kind: 'long',
-			into: 'block',
 		},
 	],
 };

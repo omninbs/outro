@@ -19,6 +19,14 @@ export type Placement = 'title' | 'footer' | 'meta' | 'block';
  * 加一份问卷只加数据，组件一行都不用改。
  */
 export interface Question {
+	/**
+	 * 答案落到结尾页的哪里。不写就是「只给 build 用」——
+	 * 比如用来算标题、拼一段说明的中间问题，自己不该出现在内容里。
+	 *
+	 * 写在**第一个**：一份问卷是拿结尾页倒着写出来的，先说这块答案印到哪儿，
+	 * 剩下的 id / 题面 / 形态 / 预填值都围着它转（数据里照这个顺序写）。
+	 */
+	into?: Placement;
 	/** 题目 id：既是答案的键，也是内容里那条元数据 / 文本块 id 的来源，一份问卷内不能重复 */
 	id: string;
 	/** 题面文字 */
@@ -33,11 +41,6 @@ export interface Question {
 	default?: string;
 	/** `kind: 'choice'` 的选项。选项只是常用的那几个，答题时点「自定义」照样能自己写 */
 	options?: string[];
-	/**
-	 * 答案落到结尾页的哪里。不写就是「只给 build 用」——
-	 * 比如用来算标题、拼一段说明的中间问题，自己不该出现在内容里。
-	 */
-	into?: Placement;
 }
 
 /** 一份问卷的答案：题目 id → 用户填的字 */

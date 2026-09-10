@@ -8,7 +8,7 @@ import { logicRedstoneMusicSurvey } from './logic-redstone-music';
  *
  * 一份入口一个文件，这里只负责把它们排成一列：
  * 加一份新入口 = 在 `src/surveys/` 新写一个文件 + 在这里加一行。
- * 题目怎么写（`kind` / `default` / `into` / `build`）见 `lib/survey/types.ts`。
+ * 题目怎么写（`into` / `kind` / `default` / `build`）见 `lib/survey/types.ts`。
  */
 export const SURVEYS: Survey[] = [editSurvey, logicRedstoneMusicSurvey];
 
