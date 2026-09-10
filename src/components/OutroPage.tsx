@@ -17,10 +17,10 @@ function OutroHeader({ title }: { title: string }) {
 /** 左栏：元数据表。名称列宽由内容决定，值列吃掉剩下的宽度 */
 function MetaList({ meta }: { meta: OutroMeta[] }) {
 	return (
-		/* 分栏时才需要 landscape:pt-1 这个补偿：右栏第一条是「描述」标题，笔画细、视觉重量轻，
+		/* 分栏时才需要 wide:pt-1 这个补偿：右栏第一条是「描述」标题，笔画细、视觉重量轻，
 		   跟左栏成片的元数据顶对齐会显得它飘在上面，把左栏压下去一点才平。
 		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效 */
-		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 landscape:pt-1">
+		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 wide:pt-1">
 			{meta.map((item) => (
 				<Fragment key={item.id}>
 					<dt class={SUB_TEXT}>{item.label}</dt>
@@ -51,10 +51,10 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 	);
 }
 
-/** 页脚：左边「返回编辑」（打印时隐藏），右边署名 */
+/** 页脚：左边「返回编辑」（打印时隐藏），右边署名。窄屏放不下就上下落，不硬挤一行 */
 function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
 	return (
-		<footer class="mt-16 flex justify-between gap-8 text-base tracking-wide text-ctp-overlay0">
+		<footer class="mt-16 flex flex-wrap justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0">
 			<span>
 				{onExit && (
 					<button type="button" onClick={onExit} class="cursor-pointer hover:underline print:hidden">
@@ -71,34 +71,40 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
  * 结尾页：上标题、中主体（左元数据 / 右文本块）、下页脚。
  * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，
  * 所以清单与最终页永远一致。配色用 Catppuccin 标准的 Latte，由外层 PageShell 挂上。
+ *
+ * 响应式跟别处**同一套**：只看宽度，窄 `< 30rem`（`max-narrow:`）一维的流、中档单栏加留白、
+ * `wide:`（≥ 64rem）分两栏。它是拿去截图的那一屏，所以跟向导只有两处不同：
+ *
+ * ① 版面只有一个宽度数（`max-w-[48rem]`），比向导的容器窄一档——行短了看着更紧，截图也更像一张版面；
+ * ② 整块在视口里**横竖都居中**：上下那点空隙不归内容，全部由剩余空间均分
+ *    （`justify-center-safe`：内容比屏幕高时退回从顶部排，不会被切掉上半截）。
+ *
+ * 它身上没有「面」——没有卡片、没有底色、没有描边，所以窄屏那套「边距内化」落到这里
+ * 就只是这条内边距本身：`px-6` 收到 `px-inset`（`max-narrow:px-inset`），文字仍落在
+ * 跟全站同一条竖线上。
  */
 export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
 	const { title, meta, blocks, footer } = resolveOutro(data);
 
 	return (
-		<div class="flex flex-1 flex-col">
-			{/* 版面宽度就是一条直线：max-width = 25vw + 30rem（含左右各 3rem 内边距，所以
-			    measure = 25vw + 24rem）。没有断点也没有 clamp，留白斜率恒定（单侧 0.375）：
-			    1024 时 measure 640（两栏 269/323 不挤），1920 时 864，正好等于原来的「一半宽」，
-			    更宽就沿同一条线继续长。想更平缓就把 25vw 调大，两端会跟着移动 */}
-			{/* 这一层的框就是屏幕：flex-1 撑满，除了左右留着防贴边的内边距，纵向不给 padding。
-			    纵向的空隙全部来自剩余空间，由 justify-center-safe 分给内容上下 */}
-			<div class="mx-auto flex w-full max-w-[calc(25vw_+_30rem)] flex-1 flex-col justify-center-safe px-8 landscape:px-12">
-				{/* 整体上移一个标题的行高（text-xl = 1.75rem = 28px）。用 translate 而不是内边距差：
-				    它是独立的一个数，不占布局、不影响居中，内容再高也不会把这 28px 吃掉 */}
-				<div class="-translate-y-7">
-					<OutroHeader title={title} />
+		<div class="flex flex-1 flex-col justify-center-safe">
+			{/* 这一层就是版面本身：宽度上限、页边距、纵向那点最小留白都在这里。
+			    下面比上面多留 56px（`pb-26` = 6.5rem = 上面的 3rem + 3.5rem）：整块重心因此上移 28px，
+			    也就是原来那个 `-translate-y-7` 光学补偿（一个标题的行高 = text-xl = 1.75rem）。
+			    这里改用内边距拿，是因为它**真占布局**：内容比屏幕高时退回顶部排，标题还剩 pt 那点边距；
+			    换成 translate 时实测只剩 4px（2026-09 探针量到的）。窄屏的 56px 差照旧（pt-8 / pb-22） */}
+			<div class="mx-auto w-full max-w-[48rem] px-6 pt-12 pb-26 max-narrow:px-inset max-narrow:pt-8 max-narrow:pb-22">
+				<OutroHeader title={title} />
 
-					{/* 宽屏就是比例 > 1（宽 > 高）：分两栏并排。竖屏、方形比例的窗口一律单栏顺读。
-					    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，
-					    行数多、每行都要放得下值，块那边是整段文字，窄一点反而更好读 */}
-					<main class="mt-12 grid grid-cols-1 items-start gap-12 landscape:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-						<MetaList meta={meta} />
-						<BlockList blocks={blocks} />
-					</main>
+				{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏。
+				    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，
+				    行数多、每行都要放得下值，块那边是整段文字，窄一点反而更好读 */}
+				<main class="mt-12 grid grid-cols-1 items-start gap-12 wide:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+					<MetaList meta={meta} />
+					<BlockList blocks={blocks} />
+				</main>
 
-					<OutroFooter footer={footer} onExit={onExit} />
-				</div>
+				<OutroFooter footer={footer} onExit={onExit} />
 			</div>
 		</div>
 	);

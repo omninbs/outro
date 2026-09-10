@@ -34,7 +34,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转。这条真栽过：一次批量改完之后 dev server 一直喂「import 已删、`${MORPH}` 还在」的半成品，浏览器报 `ReferenceError: MORPH is not defined`。判断办法是 `curl -s http://localhost:5173/src/…` 直接看它喂的是什么，`touch` 掉那几个文件再 curl 一遍确认——**别让人去刷新猜**
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
-- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）或 `probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
+- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）或 `probe-outro.mjs`（最终页版面：量宽度上限 / 居中 / 分栏条件 / 有没有溢出，自带一份种进 localStorage 的存档，种完要**重新加载**才生效）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次（一个脚本跑完就 `ws.close()`，否则下一次会报「Maximum number of active sessions」，那就得重启 Firefox）
 - 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
 - 沙箱里 `ss` 看得到端口、却看不到别人的 PID：**杀不掉你终端里那个 dev server**，要重启得请你来
 - 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
@@ -56,7 +56,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 ## 响应式
 
 - **只有三个模式，只看宽度**（三个数定在 `src/style.css` 的 `@theme`；判断交给 Tailwind 编译成 CSS，代码里不出现宽度数字，也没有 `matchMedia` / `ResizeObserver`）：窄 `< 30rem`（480px，`max-narrow:`）、中 `30rem–64rem`（不加变体的默认样子：页面留白 + 卡片 + 单栏）、大 `≥ 64rem`（`wide:`：分栏 + 右侧清单常驻）
-- **比例那套（`landscape:` / `portrait:`）已经不用了**；容器查询（`@container` / `@max-sm`）只在元数据那行试过一轮也收掉了——一个页面里并存两套判断迟早长歪。要加响应式行为，先问「它属于窄 / 中 / 大哪一档」
+- **比例那套（`landscape:` / `portrait:`）已经彻底退役**（2026-09 连最终页也换掉了，代码里再出现就是走回头路）；容器查询（`@container` / `@max-sm`）只在元数据那行试过一轮也收掉了——一个页面里并存两套判断迟早长歪。要加响应式行为，先问「它属于窄 / 中 / 大哪一档」
 - 窄屏是**一维的流**（边距内化）：容器不再提供横向留白（`max-narrow:px-0`），面横向贴边并去掉侧边描边与圆角（`rounded-none border-x-0`），横向留白由文字 / 控件自己带一次 `px-inset`（`@theme` 的 `--spacing-inset`，全应用只有这 16px 一个数）。裸控件在窄屏不带横向内边距（`BARE_INPUT` 的 `max-narrow:px-0`），否则框一道、控件一道叠成两道
 - 推论：**贴边的面没法再给内容留边**，所以卡片里凡是裸文字 / 裸列表都得自己写 `max-narrow:px-inset`（`Field` 的标签、`FilledList` 的内容、首页卡片的说明、`GenerateStep` 的正文都是这么办的）
 - 元数据行（`MetaEditor`）窄屏上下排——它算窄模式的一种样式变体，不按自己的容器宽度单独判
@@ -65,7 +65,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - **几何量一概不插值**：内边距 / 描边宽度 / 圆角 / 位移 / 缩放都不在清单里——按下不缩放，跨窄屏线时零件不收放，形状变化直接跳。理由是插值出来的是「在动」，页面里一有东西在动，观者就得跟着重新找位置；2026-09 为此收掉两轮（选项按钮按下缩 2%、整页跨窄屏线一起收放），**别再加回来**。反馈一律靠颜色
 - **跨档不做任何动画，连整体淡一下都不要**：试过用 `animation` 让整页在换档时淡进来（机制：媒体查询不会重播 `transition`，只有 `animation-name` 变化才重播，所以三个档得配三个名字），结果看起来不是「两个状态在换」而是「整页消失又重现」，比硬跳更差，已收掉。跨档想让人看得见，只能靠颜色或内容本身的变化
 - 悬停的反馈是**元素自己**变色，不位移也不换形状；贴在框里的图标按钮（×）连淡底都不给——浮出一块底色看着像框里又长出一个按钮
-- 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
+- **最终页（`OutroPage`）也跟这三档**，只是它是「拿去截图的那一屏」，有三处自己的排版细节：① 版面只有一个宽度数 `max-w-[48rem]`（比向导容器窄一档，行更短、更像一张版面）；② 整块**横竖都居中**（`justify-center-safe`，内容比屏幕高时退回顶部排，不会被切掉上半截）；③ 纵向那个「重心上移 28px」的光学补偿用**内边距**拿（`pb-26`，窄屏 `pb-22`：下面比上面多 56px），不用 `translate`——translate 在内容比屏幕高时会让标题只剩 4px 边距（探针量到过）。它身上没有「面」（无卡片 / 底色 / 描边），所以窄屏的边距内化落到这里就是 `px-6` 收到 `max-narrow:px-inset` 这一条；`wide:` 才分两栏（左元数据 1.2 : 右文本块 1）
 
 ## 内容与文案
 
