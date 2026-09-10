@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 
 import type { Question } from '../lib/survey/types';
-import { BARE_INPUT, BareRow, Field, IconButton, TextArea, TextInput } from './ui';
+import { Field, IconButton, TextArea, TextInput } from './ui';
 
 /** 选项按钮的外观：选中是主题色描边 + 淡底，未选中是普通描边 */
 const optionClass = (active: boolean) =>
@@ -25,8 +25,8 @@ const CUSTOM_BUTTON =
  * 单选有两个形态，靠「自定义」切换：默认是一排选项，点「自定义」整排换成输入框，
  * 叉掉输入框就退回选项。两态互斥是刻意的——选项和自由输入同时摆在眼前，
  * 会让人以为要两边都填。
- * 那个输入框用 `BareRow`（跟元数据编辑器里的一行同一个外形）：× 看起来在框里，
- * 挂在框外的话输入框右边会短一截，跟上下那些输入框对不齐。
+ * 那个输入框不是另做一个带 × 的框，就是 `TextInput` 多给了一个 `action`：
+ * × 看起来在框里，框的内边距、高度跟问卷里别的输入框天生一样。
  * 预填值（`question.default`）不在这里处理，它由问卷页初始化答案时给。
  */
 export function QuestionInput({
@@ -61,7 +61,10 @@ export function QuestionInput({
 		return (
 			<Field label={question.label}>
 				{custom ? (
-					<BareRow
+					<TextInput
+						value={value}
+						onInput={onChange}
+						placeholder="自己写"
 						action={
 							<IconButton
 								title="退回选项"
@@ -73,15 +76,7 @@ export function QuestionInput({
 								×
 							</IconButton>
 						}
-					>
-						<input
-							type="text"
-							value={value}
-							placeholder="自己写"
-							class={`min-w-0 flex-1 text-ctp-text ${BARE_INPUT}`}
-							onInput={(e) => onChange(e.currentTarget.value)}
-						/>
-					</BareRow>
+					/>
 				) : (
 					<div class="flex flex-wrap gap-2">
 						{options.map((option) => {

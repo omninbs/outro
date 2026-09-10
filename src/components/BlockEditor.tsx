@@ -1,7 +1,7 @@
 import { newBlock, removeById, updateById } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
-import { AddButton, BARE_INPUT, EmptyHint, IconButton } from './ui';
+import { AddButton, BARE_INPUT, BOX, EmptyHint, IconButton } from './ui';
 
 /** 文本块编辑器：一行小标题（可留空）+ 一段正文 */
 export function BlockEditor({
@@ -16,7 +16,7 @@ export function BlockEditor({
 			{blocks.length === 0 && <EmptyHint>还没有文本块，点下方按钮添加</EmptyHint>}
 
 			{blocks.map((block) => (
-				<div key={block.id} class="rounded-md border border-ctp-surface0 bg-ctp-crust p-2">
+				<div key={block.id} class={`${BOX} p-2`}>
 					<div class="flex items-center gap-2">
 						<input
 							type="text"
