@@ -28,7 +28,7 @@ export function App() {
 
 	if (view === 'home') {
 		return (
-			<PageShell width="narrow">
+			<PageShell width="medium">
 				<HomePage />
 			</PageShell>
 		);
