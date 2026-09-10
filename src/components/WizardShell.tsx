@@ -3,6 +3,7 @@ import type { ComponentChildren } from 'preact';
 import { COPY } from '../lib/copy';
 import { PageHeader } from './PageHeader';
 import { Stepper, type StepDef } from './Stepper';
+import { FADE } from './ui';
 
 /**
  * 向导骨架：标题、步骤条、两栏。大屏（`wide:`，宽 ≥ 64rem）右侧常驻清单；
@@ -39,8 +40,14 @@ export function WizardShell({
 			<div class="mt-6 grid grid-cols-1 items-start gap-6 wide:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 				<div>{children}</div>
 
-				{/* top-12 跟 PageShell 的 py-12 对齐，滚动时清单顶部与容器顶部同高 */}
-				<div class="hidden wide:sticky wide:top-12 wide:block">{sideList}</div>
+				{/* top-12 跟 PageShell 的 py-12 对齐，滚动时清单顶部与容器顶部同高。
+				    列数变化插不了值，所以它在中屏不摆着（opacity-0）、到大屏是淡进来的，
+				    退回去时也是淡出去的，不是硬蹦 */}
+				<div
+					class={`hidden opacity-0 wide:sticky wide:top-12 wide:block wide:opacity-100 wide:starting:opacity-0 ${FADE}`}
+				>
+					{sideList}
+				</div>
 			</div>
 		</div>
 	);

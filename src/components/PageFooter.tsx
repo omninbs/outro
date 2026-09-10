@@ -1,11 +1,10 @@
 import { COPY } from '../lib/copy';
 import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
 import { useRouter } from '../lib/router';
-import { SUB_TEXT } from './ui';
+import { SUB_TEXT, TAP } from './ui';
 
 /** 链接的统一样式：正文色，悬停转 blue 并加下划线（下划线那两笔参数见下面的注释） */
-const LINK =
-	'block cursor-pointer py-1 text-ctp-text transition hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em]';
+const LINK = `block cursor-pointer py-1 text-ctp-text hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em] ${TAP}`;
 
 /** 源代码仓库：页脚「链接」里的那条外链，地址就是本仓库 */
 const REPO_URL = 'https://github.com/omninbs/outro';

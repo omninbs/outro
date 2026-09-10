@@ -49,6 +49,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
 - 判断一律交给 Tailwind 编译成 CSS，不留 JS：没有 `matchMedia`、没有 `ResizeObserver`，代码里也不出现宽度数字
 - 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
+- 动效只从 `src/components/ui/tokens.ts` 的 `MORPH` / `FADE` / `RISE` / `TAP` 里挑，别在组件里散着写 `transition-*`：一个元素只能有一份 `transition-property`，所以属性清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹 / 位移不过一两个像素（目标是「别硬蹦」，不是「炫」），`motion-reduce` 下完全不动；只给**能插值**的属性配过渡，`flex-direction`、列数变化那类只能用 `FADE` 淡一下遮住
 - 路由用 hash（`#form`、`#outro`、`#<入口 id>`）：构建产物要能直接 `file://` 打开
 
 ## 环境

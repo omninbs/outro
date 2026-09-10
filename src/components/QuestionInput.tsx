@@ -1,11 +1,11 @@
 import { useState } from 'preact/hooks';
 
 import type { Question } from '../lib/survey/types';
-import { Field, IconButton, TextArea, TextInput } from './ui';
+import { Field, FADE, IconButton, TAP, TextArea, TextInput } from './ui';
 
 /** 选项按钮的外观：选中是主题色描边 + 淡底，未选中是普通描边 */
 const optionClass = (active: boolean) =>
-	`rounded-md border px-3 py-1.5 text-base transition ${
+	`rounded-md border px-3 py-1.5 text-base ${TAP} ${
 		active
 			? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
 			: 'border-ctp-surface1 text-ctp-subtext0 hover:text-ctp-text'
@@ -14,7 +14,7 @@ const optionClass = (active: boolean) =>
 /** 「自定义」按钮：虚线描边，跟实心的选项区分开——它不是选项，是另一种输入形态 */
 const CUSTOM_BUTTON =
 	'rounded-md border border-dashed border-ctp-surface1 px-3 py-1.5 text-base text-ctp-subtext0 ' +
-	'transition hover:border-ctp-mauve hover:text-ctp-mauve';
+	`${TAP} hover:border-ctp-mauve hover:text-ctp-mauve`;
 
 /**
  * 一道题的答题控件：按 `kind` 选题的形态。
@@ -78,8 +78,9 @@ export function QuestionInput({
 						}
 					/>
 				) : (
-					/* 窄屏外面那层卡片已经横向贴边，这一排选项自己带一次 inset，才跟题面同一竖线 */
-					<div class="flex flex-wrap gap-2 max-narrow:px-inset">
+					/* 窄屏外面那层卡片已经横向贴边，这一排选项自己带一次 inset，才跟题面同一竖线；
+					   从「自己写」退回选项时这一排是淡进来的（FADE） */
+					<div class={`flex flex-wrap gap-2 max-narrow:px-inset ${FADE}`}>
 						{options.map((option) => {
 							const active = value === option;
 							return (

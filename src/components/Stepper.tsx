@@ -1,8 +1,9 @@
+import { FADE, TAP } from './ui';
+
 export interface StepDef {
 	id: string;
 	label: string;
 }
-
 export function Stepper({
 	steps,
 	current,
@@ -22,7 +23,7 @@ export function Stepper({
 						<button
 							type="button"
 							onClick={() => onSelect(index)}
-							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base transition ${
+							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${TAP} ${
 								active
 									? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
 									: 'border-ctp-surface0 text-ctp-subtext0 hover:text-ctp-text'
@@ -39,8 +40,11 @@ export function Stepper({
 							>
 								{done ? '✓' : index + 1}
 							</span>
-							{/* 窄屏只留序号：未选中的步骤不显示名称，省得步骤条换行 */}
-							<span class={active ? '' : 'max-narrow:hidden'}>{step.label}</span>
+							{/* 窄屏只留序号：未选中的步骤不显示名称，省得步骤条换行。
+							    名称出现 / 消失是淡的（FADE），不是啪一下 */}
+							<span class={`${active ? '' : 'max-narrow:hidden max-narrow:opacity-0'} ${FADE}`}>
+								{step.label}
+							</span>
 						</button>
 						{index < steps.length - 1 && <span class="h-px w-4 bg-ctp-surface1" />}
 					</li>

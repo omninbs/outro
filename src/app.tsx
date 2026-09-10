@@ -7,7 +7,7 @@ import { PageHeader } from './components/PageHeader';
 import { PageShell } from './components/PageShell';
 import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
-import { Button, ActionRow } from './components/ui';
+import { Button, ActionRow, RISE } from './components/ui';
 import { COPY } from './lib/copy';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
@@ -122,7 +122,11 @@ export function App() {
 				onSelect={setStep}
 				sideList={<FilledList data={data} />}
 			>
-				<div class="space-y-6">{current.body(ctx)}</div>
+				{/* key 用步骤 id：换一步就是换一个节点，于是那一步的内容是淡进来的（RISE），
+				    而不是原地把字全换掉 */}
+				<div key={current.id} class={`space-y-6 ${RISE}`}>
+					{current.body(ctx)}
+				</div>
 
 				{current.listBelow && (
 					<div class="mt-6 wide:hidden">
