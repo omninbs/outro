@@ -135,12 +135,14 @@ export function Chip({
 	onClick: () => void;
 	children: ComponentChildren;
 }) {
+	// 描边用 2px：比 1px 立得住，而且 24 + 12 + 4 正好 40px，
+	// 与 Button 的四种变体等高，跟别的控件并排时上下边是一条线
 	return (
 		<button
 			type="button"
 			disabled={disabled}
 			onClick={onClick}
-			class={`rounded-full border px-3 py-1.5 text-base transition ${CHIP_TONES[tone]}`}
+			class={`rounded-full border-2 px-3 py-1.5 text-base transition ${CHIP_TONES[tone]}`}
 		>
 			{children}
 		</button>
