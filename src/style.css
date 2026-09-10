@@ -1,4 +1,13 @@
-@import "tailwindcss";
+/*
+ * 只扫源码，别扫整个仓库：Tailwind 会把文件里出现的「像类名的词」都当候选，
+ * 而 `AGENTS.md`、注释里的中文散文成天写着 `transition`、`rounded-none`、`px-inset`
+ * 这些东西——散在正文里的类名会被真的编译成规则，产物里就多出一批没人用的死代码
+ * （2026-09 发现：一份文档里写了 `` `transition` `` 三个字，产物里就多出两百来字节的 `.transition`）。
+ * 所以来源写死成 `src/` 与入口 html，加新目录时记得补一行。
+ */
+@import "tailwindcss" source(none);
+@source "../src";
+@source "../index.html";
 @import "@catppuccin/tailwindcss/mocha.css";
 
 /*

@@ -49,6 +49,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 问卷是数据不是代码：题目写 `into` 决定答案落到结尾页哪里（`meta` / `block` / `title` / `footer`），需要加工才写 `build`；加一份问卷不用碰组件
 - 注释写中文，写「为什么这么做」，不写「这行在做什么」
 - 不写自定义 CSS：Tailwind v4 + catppuccin 的 `ctp-*` token 够用。唯一的例外是 `style.css` 里那条 `.safe-area`——它要读 `env(safe-area-inset-*)`，没有别的写法
+- Tailwind 的扫描来源写死在 `style.css` 头上（`@import "tailwindcss" source(none)` + `@source "../src"` + `@source "../index.html"`）：默认它扫**整个仓库**，于是 `AGENTS.md` 里的中文散文（写着 `` `transition` ``、`` `rounded-none` `` 这种词）会被当成类名、真编译成规则——2026-09 实测产物里躺着 `.transition`、`.rounded-none`、`.contents`、`container` 这些没人用的死代码，删掉省了 700 来字节。以后加新目录（比如 `tools/`）要在这儿补一行 `@source`
 - 入口是根目录的 `index.html`（Vite 的约定，它只是模板，产物是 `dist/index.html`）；里面的 `<title>` 是品牌名唯一一处没走 `COPY.brand` 的地方
 - 路由用 hash（`#form`、`#outro`、`#<入口 id>`）：构建产物要能直接 `file://` 打开
 
