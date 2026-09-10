@@ -26,7 +26,7 @@ export function WizardShell({
 	// 这里的 w-full 不能省：外层 PageShell 是 flex 列容器，只有 mx-auto 的话，
 	// 这一层会按内容宽度收缩，而不是像块级布局那样先占满再用 max-w 截住
 	return (
-		<div class="mx-auto w-full max-w-360 px-6 py-8">
+		<div class="mx-auto w-full max-w-360 px-6 py-12">
 			<header class="mb-6 flex items-center justify-between gap-4">
 				<div class="min-w-0">
 					<h1 class="text-lg font-semibold">结尾页生成器</h1>
@@ -44,7 +44,7 @@ export function WizardShell({
 			<div class="mt-6 grid items-start gap-6 lg:landscape:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
 				<div>{children}</div>
 
-				<div class="hidden lg:landscape:sticky lg:landscape:top-8 lg:landscape:block">{sideList}</div>
+				<div class="hidden lg:landscape:sticky lg:landscape:top-12 lg:landscape:block">{sideList}</div>
 			</div>
 		</div>
 	);
