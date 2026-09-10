@@ -9,6 +9,8 @@ import { useRouter } from '../lib/router';
  *
  * 版式照 Catppuccin 那套来：mantle 底色、surface0 顶边、`3rem 0 1.5rem` 的内边距，
  * 里面分两栏（品牌 : 链接 = 7 : 5），窄屏自动改成上下排。
+ * 最小高度撑出来的余量靠 justify-center / items-center 平分到上下，
+ * 不然两栏内容全挤在顶上、底下空一片，比矮还别扭。
  * 链接默认用正文色，悬停转 blue 并加下划线——下划线加粗到 0.1em、下沉 0.25em，
  * 这两笔是参考站的做法，少了会显得糙。
  */
@@ -18,7 +20,7 @@ export function PageFooter() {
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
-				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:justify-between`}
+				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col justify-center gap-8 pt-12 pb-6 landscape:flex-row landscape:items-center landscape:justify-between`}
 			>
 				<div class="landscape:flex-[7]">
 					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">结尾页生成器</h2>

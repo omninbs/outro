@@ -7,7 +7,7 @@ export type PageWidth = keyof typeof PAGE_WIDTHS;
 export const FOOTER_WIDTH = 'max-w-[60rem]';
 
 /** 页脚最小高度：内容只有两栏几行，给个下限，免得夹在上下内边距里显得扁 */
-export const FOOTER_MIN_HEIGHT = 'min-h-40';
+export const FOOTER_MIN_HEIGHT = 'min-h-56';
 
 const container = (width: string) => `mx-auto w-full ${width} px-6`;
 
