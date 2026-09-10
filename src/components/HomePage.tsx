@@ -1,11 +1,11 @@
-import { SURVEYS } from '../surveys/registry';
+import { SURVEYS } from '../surveys';
 import type { Survey } from '../lib/survey/types';
 import { Panel } from './ui';
 
 /**
  * 首页：把问卷清单铺成一列卡片，整块可点。
  *
- * 清单是数据（registry 里的 `SURVEYS`），加一份问卷不用碰这里；
+ * 清单是数据（surveys/index.ts 里的 `SURVEYS`），加一份问卷不用碰这里；
  * 第一份固定是「空预设」——`questions` 为空的那份问卷。
  * 容器宽度由 PageShell 给（首页传 width="standard"，与页脚同宽），这里不写 max-w。
  */
