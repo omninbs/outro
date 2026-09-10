@@ -1,4 +1,4 @@
-import { Button, Panel } from '../components/ui';
+import { Button, ConfirmButton, Panel } from '../components/ui';
 
 export function GenerateStep({
 	onReset,
@@ -12,18 +12,13 @@ export function GenerateStep({
 			<p class="mb-4 text-base leading-relaxed text-ctp-subtext0">
 				点击后进入版权页。按 F11 全屏后自行截图即可，页脚左侧的「返回编辑」可以回到这里。
 			</p>
-			<div class="flex flex-wrap gap-2">
+			<div class="flex flex-wrap items-center gap-2">
 				<Button variant="primary" onClick={onGenerate}>
 					生成
 				</Button>
-				<Button
-					variant="danger"
-					onClick={() => {
-						if (confirm('确定恢复为默认内容吗？当前填写的内容会丢失。')) onReset();
-					}}
-				>
+				<ConfirmButton confirmLabel="确认重置" onConfirm={onReset}>
 					重置
-				</Button>
+				</ConfirmButton>
 			</div>
 		</Panel>
 	);

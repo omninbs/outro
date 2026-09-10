@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
 
 const INPUT =
 	'w-full rounded-md border border-ctp-surface1 bg-ctp-crust px-3 py-2 text-base text-ctp-text ' +
@@ -103,17 +104,23 @@ export function Select<T extends string | number>({
 	);
 }
 
-type ButtonVariant = 'primary' | 'ghost' | 'danger';
+type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
+/**
+ * 内边距写进变体里，是为了把描边宽度从内边距里扣掉：
+ * 文字行高 24px，四舍五入后四种变体的外部高度都是 40px，并排时严丝合缝。
+ */
 const VARIANTS: Record<ButtonVariant, string> = {
-	primary: 'bg-ctp-mauve text-ctp-crust hover:opacity-90',
-	ghost: 'border border-ctp-surface1 bg-ctp-surface0 text-ctp-text hover:bg-ctp-surface1',
-	danger: 'border border-ctp-surface1 text-ctp-subtext0 hover:border-ctp-red hover:text-ctp-red',
+	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust hover:opacity-90',
+	ghost: 'border border-ctp-surface1 bg-ctp-surface0 px-[15px] py-[7px] text-ctp-text hover:bg-ctp-surface1',
+	danger: 'border-2 border-ctp-red px-3.5 py-1.5 text-ctp-red hover:bg-ctp-red/10',
+	dangerSolid: 'bg-ctp-red px-4 py-2 text-ctp-crust hover:opacity-90',
 };
 
 export function Button({
 	children,
 	onClick,
+	onBlur,
 	href,
 	variant = 'ghost',
 	disabled,
@@ -121,12 +128,13 @@ export function Button({
 }: {
 	children: ComponentChildren;
 	onClick?: () => void;
+	onBlur?: () => void;
 	href?: string;
 	variant?: ButtonVariant;
 	disabled?: boolean;
 	class?: string;
 }) {
-	const base = `rounded-md px-4 py-2 text-base font-medium transition ${VARIANTS[variant]} ${cls ?? ''}`;
+	const base = `rounded-md text-base font-medium transition ${VARIANTS[variant]} ${cls ?? ''}`;
 
 	if (href) {
 		return (
@@ -140,10 +148,52 @@ export function Button({
 		<button
 			type="button"
 			onClick={onClick}
+			onBlur={onBlur}
 			disabled={disabled}
 			class={`disabled:cursor-not-allowed disabled:opacity-50 ${base}`}
 		>
 			{children}
 		</button>
+	);
+}
+
+/**
+ * 危险操作的二次确认按钮：第一下先把按钮变成实心红并换成确认文案，
+ * 再点一下才真的执行；失焦或超过 timeoutMs 没动作就自动收回。
+ */
+export function ConfirmButton({
+	children,
+	confirmLabel,
+	onConfirm,
+	timeoutMs = 1000,
+}: {
+	children: ComponentChildren;
+	confirmLabel: ComponentChildren;
+	onConfirm: () => void;
+	timeoutMs?: number;
+}) {
+	const [confirming, setConfirming] = useState(false);
+
+	useEffect(() => {
+		if (!confirming) return;
+		const timer = setTimeout(() => setConfirming(false), timeoutMs);
+		return () => clearTimeout(timer);
+	}, [confirming, timeoutMs]);
+
+	return (
+		<Button
+			variant={confirming ? 'dangerSolid' : 'danger'}
+			onClick={() => {
+				if (!confirming) {
+					setConfirming(true);
+					return;
+				}
+				setConfirming(false);
+				onConfirm();
+			}}
+			onBlur={() => setConfirming(false)}
+		>
+			{confirming ? confirmLabel : children}
+		</Button>
 	);
 }
