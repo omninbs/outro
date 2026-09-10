@@ -19,6 +19,7 @@
 - `type` 取 `feat` / `fix` / `docs` / `style` / `refactor` / `test` / `chore`
 - **不 push**，除非明确要求。真要 push 时用 `GIT_SSH_COMMAND="ssh -F /dev/null" git push`（本机 ssh 配置有一处权限问题）
 - 构建产物不入库：`dist/` 在 `.gitignore` 里；页面由 GitHub Actions 构建，push 到 main 自动发布
+- `vite build` 会清空 `dist/`：临时工具别放那儿，放 `.git/` 下（git status 看不见，build 也清不掉）
 
 ## 验证
 
