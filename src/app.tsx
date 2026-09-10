@@ -41,12 +41,12 @@ export function App() {
 		navigate('survey', survey.id);
 	};
 
-	// 答完问卷：答案搬成内容，整份替换当前内容，然后直接看结尾页。
-	// 问卷和表单是同一件事的两条路——都只是把内容填出来，所以终点也一样
+	// 答完问卷：答案搬成内容，整份替换当前内容，然后落到表单的最后一步（生成）。
+	// 问卷和表单是同一件事的两条路——问卷只是把前两步替你问完了，收尾仍在表单里
 	const finishSurvey = (survey: Survey, answers: Answers) => {
 		patch(buildFrom(survey, answers));
-		setStep(0);
-		navigate('outro');
+		setStep(STEPS.length - 1);
+		navigate('form');
 	};
 
 	if (view === 'home') {
@@ -74,7 +74,7 @@ export function App() {
 		}
 
 		return (
-			<PageShell>
+			<PageShell width="medium">
 				<SurveyPage
 					survey={survey}
 					onFinish={(answers) => finishSurvey(survey, answers)}
