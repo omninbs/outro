@@ -1,7 +1,7 @@
 import { newBlock, removeById, updateById } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
-import { AddButton, BARE_INPUT, BOX, EmptyHint, IconButton, RISE } from './ui';
+import { AddButton, BARE_INPUT, BOX, EmptyHint, IconButton, RISE, TEXTAREA_ROWS } from './ui';
 
 /** 文本块编辑器：一行小标题（可留空）+ 一段正文 */
 export function BlockEditor({
@@ -36,7 +36,7 @@ export function BlockEditor({
 					</div>
 					<textarea
 						value={block.text}
-						rows={5}
+						rows={TEXTAREA_ROWS}
 						placeholder={COPY.field.blockText}
 						class={`mt-1 w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
 						onInput={(e) => onChange(updateById(blocks, block.id, { text: e.currentTarget.value }))}

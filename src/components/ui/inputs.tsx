@@ -76,12 +76,15 @@ export function TextInput({
 	);
 }
 
+/** 多行框一律这么高：问卷的段落题和文本块的正文是同一件事，两处不能各写一个数 */
+export const TEXTAREA_ROWS = 3;
+
 /** 多行版：问卷里「一段话」这类题目用它，纵向下拉可调；同样是「框 + 裸控件」 */
 export function TextArea({
 	value,
 	onInput,
 	placeholder,
-	rows = 5,
+	rows = TEXTAREA_ROWS,
 }: {
 	value: string;
 	onInput: (value: string) => void;
