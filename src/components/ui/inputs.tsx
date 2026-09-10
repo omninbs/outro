@@ -66,10 +66,14 @@ export function TextArea({
  * 元数据那一行、问卷里「自己写」那个框都用它——「右边嵌着 × 的输入框」
  * 只有一个定义，两处的内边距、描边、圆角就不会各自漂移。
  * 块编辑器的外框不用它：那里一层框里还套着正文，× 跟小标题同一行，是另一种形状。
+ *
+ * 内边距是照高度凑的：裸输入框 24px 行高 + `py-1.5` 上下各 6px = 36px，
+ * 再上下各 2px、加描边 2px，正好 42px——跟 `TextInput`（`py-2` + 描边）一般高。
+ * 左右 4px 加裸输入框自己的 `px-2`，文字起点也正好是 `TextInput` 的 `px-3`。
  */
 export function BareRow({ children, action }: { children: ComponentChildren; action?: ComponentChildren }) {
 	return (
-		<div class="flex items-center gap-2 rounded-md border border-ctp-surface0 bg-ctp-crust p-1.5">
+		<div class="flex items-center gap-2 rounded-md border border-ctp-surface0 bg-ctp-crust px-1 py-0.5">
 			{children}
 			{action}
 		</div>
