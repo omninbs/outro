@@ -84,7 +84,7 @@ export const logicRedstoneMusicSurvey: Survey = {
 			id: 'license',
 			label: '转载和再制',
 			kind: 'choice',
-			options: ['禁止', '注明来源/非盈利', '注明来源'],
+			options: ['禁止', '注明来源&非盈利', '注明来源'],
 			default: '禁止',
 		},
 		{
