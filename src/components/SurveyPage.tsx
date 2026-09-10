@@ -21,7 +21,10 @@ export function SurveyPage({
 	onFinish: (answers: Answers) => void;
 	onExit: () => void;
 }) {
-	const [answers, setAnswers] = useState<Answers>({});
+	const [answers, setAnswers] = useState<Answers>(() =>
+		// 先铺一层预填值：写了 `default` 的题一进来就带着答案，不想要就自己改掉
+		Object.fromEntries(survey.questions.map((question) => [question.id, question.default ?? ''])),
+	);
 
 	const answer = (questionId: string, value: string) =>
 		setAnswers((prev) => ({ ...prev, [questionId]: value }));

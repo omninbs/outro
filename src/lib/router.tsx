@@ -6,7 +6,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/ho
  * 视图状态：应用有四个页面——首页（选开始方式）、表单（自己填）、问卷（照题答）、结尾页。
  *
  * 用 hash 记录当前视图：空 fragment 是首页，`#form` 是表单，`#outro` 是结尾页，
- * 其余的 hash 就是某份问卷的 id——`#blank`、`#demo`，问卷在地址里就是它自己的名字，
+ * 其余的 hash 就是某份问卷的 id——`#blank`、`#logic-red-music`，问卷在地址里就是它自己的名字，
  * 不再套 `survey/` 那一层。认不出的名字也当问卷 id，由问卷页告诉用户没有这一份。
  * 代价是问卷 id 不能占用保留名 `form` / `outro`。
  *
@@ -55,7 +55,7 @@ type RouterValue = {
 const RouterContext = createContext<RouterValue>({ view: 'home', surveyId: null, navigate: () => {} });
 
 export function RouterProvider({ children }: { children: ComponentChildren }) {
-	// 首屏直接读 hash：带着 `#form`、`#demo` 或 `#outro` 打开、刷新时就落在对应页面。
+	// 首屏直接读 hash：带着 `#form`、`#logic-red-music` 或 `#outro` 打开、刷新时就落在对应页面。
 	const [route, setRoute] = useState<Route>(readRoute);
 
 	// 前进 / 后退 / 手改地址栏都靠它同步回来。

@@ -6,14 +6,14 @@ export type QuestionKind = 'text' | 'long' | 'choice';
 /**
  * 答案的去处：结尾页上就这四块。
  *
- * `meta` / `block` 带 `label`，因为结尾页左栏每行、右栏每块都得有个名字；
- * 名字写在数据里，问卷作者不用去管渲染。
+ * `meta` / `block` 的 `label` 是结尾页上那一行 / 那一块的名字，**不写就取题面**
+ * （`Question.label`）——两者本来就常常是同一句话，只有在结尾页上要换个叫法时才写。
  */
 export type Placement =
 	| { kind: 'title' }
 	| { kind: 'footer' }
-	| { kind: 'meta'; label: string }
-	| { kind: 'block'; label: string };
+	| { kind: 'meta'; label?: string }
+	| { kind: 'block'; label?: string };
 
 /**
  * 一道题。
@@ -27,9 +27,17 @@ export interface Question {
 	/** 题面文字 */
 	label: string;
 	kind: QuestionKind;
+	/**
+	 * 预填的答案：答题框里一开始就写着它，用户想要别的就自己改掉。
+	 *
+	 * 它跟占位提示（`placeholder`）是两件事：占位提示只是灰字，不填仍然是空；
+	 * 预填值是真的答了，会一路走到结尾页上。「默认：不显示」这类需求不用预填值表达，
+	 * 而是不写 `default`、把 `placeholder` 写成「不显示」——空答案本来就不会印出来。
+	 */
+	default?: string;
 	/** 答题框里的占位提示 */
 	placeholder?: string;
-	/** `kind: 'choice'` 的选项 */
+	/** `kind: 'choice'` 的选项。选项只是常用的那几个，答题时照样可以自己写 */
 	options?: string[];
 	/** `kind: 'long'` 的行数，默认 5 */
 	rows?: number;
@@ -48,7 +56,7 @@ export type Answers = Record<string, string>;
  */
 export interface Survey {
 	/**
-	 * 问卷在地址里的名字（`#demo`），用小写 ASCII。
+	 * 问卷在地址里的名字（`#blank`、`#logic-red-music`），用小写 ASCII。
 	 * 不能占用保留名 `form` / `outro`；首页是空 hash，也用不了。
 	 */
 	id: string;

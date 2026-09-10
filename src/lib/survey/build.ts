@@ -15,6 +15,7 @@ const blockId = (question: Question) => `b-${question.id}`;
  * 按每道题的 `into` 把答案搬成内容——纯函数，不碰状态也不碰 DOM。
  *
  * 空白答案整条丢掉：没答的题不该在结尾页留一行空标签。
+ * `into` 没写 `label` 就用题面当标签（见 `Placement`）。
  * 同一去处写多次时后者覆盖前者（标题、页脚），元数据与文本块则按题目顺序堆叠。
  */
 export function buildCard(survey: Survey, answers: Answers): CardData {
@@ -33,10 +34,14 @@ export function buildCard(survey: Survey, answers: Answers): CardData {
 				card.footerText = value;
 				break;
 			case 'meta':
-				card.meta.push({ id: metaId(question), label: into.label, value });
+				card.meta.push({ id: metaId(question), label: into.label ?? question.label, value });
 				break;
 			case 'block':
-				card.blocks.push({ id: blockId(question), label: into.label, text: value });
+				card.blocks.push({
+					id: blockId(question),
+					label: into.label ?? question.label,
+					text: value,
+				});
 				break;
 		}
 	}
