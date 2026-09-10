@@ -1,4 +1,4 @@
-import { SURVEYS } from '../lib/survey/registry';
+import { SURVEYS } from '../surveys/registry';
 import type { Survey } from '../lib/survey/types';
 import { Panel } from './ui';
 

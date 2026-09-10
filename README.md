@@ -27,7 +27,8 @@
   - `types` 数据结构 · `config` 初始内容与占位文案 · `layout` 页面容器宽度 · `card` 条目构造与增删改
   - `outro` 结尾页视图模型（过滤与兜底只在这一处，清单也用它）· `persist` 存档读写与旧版迁移
   - `store` 内容状态 · `router` hash 路由 · `id` 主键
-  - `survey/` 问卷：`types` 数据形状 · `build` 答案→内容 · `registry` 问卷清单（加一份问卷只改这一处）
+  - `survey/` 问卷引擎：`types` 数据形状 · `build` 答案→内容
+- `src/surveys/` 各领域问卷的数据：一份问卷一个文件（`blank` / `demo` …），`registry.ts` 是清单
 - `src/components/`
   - `ui/` 基础原子（Panel / Field / TextInput / TextArea / Button / ConfirmButton / AddButton / IconButton / EmptyHint）
   - `PageShell` 页面外壳 · `HomePage` 首页 · `WizardShell` 向导骨架 · `PageFooter` 页脚 · `OutroPage` 结尾页 · `FilledList` 清单
@@ -36,7 +37,8 @@
 
 ## 加一份问卷
 
-问卷是数据不是代码：在 `src/lib/survey/registry.ts` 的 `SURVEYS` 里加一条即可，组件一行都不用动。
+问卷是数据不是代码：在 `src/surveys/` 新写一个文件、导出一份 `Survey`，
+再到 `src/surveys/registry.ts` 的 `SURVEYS` 里加一行，组件一行都不用动。
 
 - `id` 直接进 hash（`#survey/<id>`），用小写 ASCII，别带斜杠
 - `questions[].kind`：`text` 单行 · `long` 多行（`rows`，默认 5）· `choice` 单选（配 `options`）
