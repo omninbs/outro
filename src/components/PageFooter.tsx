@@ -3,6 +3,13 @@ import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
 import { useRouter } from '../lib/router';
 import { SUB_TEXT } from './ui';
 
+/** 链接的统一样式：正文色，悬停转 blue 并加下划线（下划线那两笔参数见下面的注释） */
+const LINK =
+	'block cursor-pointer py-1 text-ctp-text transition hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em]';
+
+/** 源代码仓库：页脚「链接」里的那条外链，地址就是本仓库 */
+const REPO_URL = 'https://github.com/omninbs/outro';
+
 /**
  * 页脚：固定页面件，由 PageShell 统一挂，页面自己不用管（最终页除外）。
  *
@@ -32,13 +39,15 @@ export function PageFooter() {
 					<h3 class="mb-2 text-base font-semibold tracking-wide text-ctp-subtext1">链接</h3>
 					<ul>
 						<li>
-							<button
-								type="button"
-								onClick={() => navigate('home')}
-								class="block cursor-pointer py-1 text-ctp-text transition hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em]"
-							>
+							<button type="button" onClick={() => navigate('home')} class={LINK}>
 								{COPY.action.backHome}
 							</button>
+						</li>
+						<li>
+							{/* 外链开新标签页：这个工具是拿来当片尾用的，中途跳走会丢掉正在填的内容 */}
+							<a href={REPO_URL} target="_blank" rel="noreferrer" class={LINK}>
+								源代码
+							</a>
 						</li>
 					</ul>
 				</nav>
