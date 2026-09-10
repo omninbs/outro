@@ -9,6 +9,7 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
+		"lucide-preact": "^1.44.0",
 		"preact": "^10.26.9"
 	},
 	"devDependencies": {

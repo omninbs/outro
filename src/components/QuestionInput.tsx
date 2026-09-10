@@ -89,9 +89,7 @@ export function QuestionInput({
 							onChange(revertTo);
 							setCustom(false);
 						}}
-					>
-						×
-					</IconButton>,
+					/>,
 				)
 			) : (
 				/* 窄屏外面那层卡片已经横向贴边，这一栏预设自己带一次 inset，才跟题面同一竖线；

@@ -30,9 +30,7 @@ export function BlockEditor({
 							class={`min-w-0 flex-1 font-medium text-ctp-mauve ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(blocks, block.id, { label: e.currentTarget.value }))}
 						/>
-						<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(blocks, block.id))}>
-							×
-						</IconButton>
+						<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(blocks, block.id))} />
 					</div>
 					<BareTextArea
 						value={block.text}

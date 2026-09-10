@@ -1,4 +1,4 @@
-import { FADE, HOVER } from './ui';
+import { FADE, HOVER, CheckIcon } from './ui';
 
 export interface StepDef {
 	id: string;
@@ -38,7 +38,7 @@ export function Stepper({
 											: 'bg-ctp-surface1 text-ctp-subtext0'
 								}`}
 							>
-								{done ? '✓' : index + 1}
+								{done ? <CheckIcon /> : index + 1}
 							</span>
 							{/* 窄屏只留序号：未选中的步骤不显示名称，省得步骤条换行。
 							    名称出现 / 消失是淡的（FADE），不是啪一下 */}

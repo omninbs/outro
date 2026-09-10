@@ -2,6 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { HOVER } from './tokens';
+import { CloseIcon, PlusIcon } from './icons';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
@@ -90,16 +91,8 @@ export function ConfirmButton({
 	);
 }
 
-/** 列表行尾的图标按钮，目前只有删除（×） */
-export function IconButton({
-	title,
-	onClick,
-	children,
-}: {
-	title: string;
-	onClick: () => void;
-	children: ComponentChildren;
-}) {
+/** 列表行尾的删除按钮（那颗叉）。图标由它自己带，调用点只说「点它干什么」 */
+export function IconButton({ title, onClick }: { title: string; onClick: () => void }) {
 	return (
 		<button
 			type="button"
@@ -108,7 +101,7 @@ export function IconButton({
 			// 悬停只变颜色，不给淡底：它贴在框里，浮出一块底色看着像框里又长出一个按钮
 			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 hover:text-ctp-red ${HOVER}`}
 		>
-			{children}
+			<CloseIcon />
 		</button>
 	);
 }
@@ -119,9 +112,12 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
 		<button
 			type="button"
 			onClick={onClick}
-			class={`w-full rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${HOVER}`}
+			// 图标与文字是「一行里的两样东西」，距离由 `gap` 给——原来那个 ＋ 是全角字符，
+			// 距离是拿一个空格凑的，换字体就变
+			class={`flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${HOVER}`}
 		>
-			＋ {children}
+			<PlusIcon />
+			{children}
 		</button>
 	);
 }
