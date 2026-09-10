@@ -16,7 +16,7 @@ export interface StepContext {
 }
 
 export interface StepEntry extends StepDef {
-	/** 单栏（竖屏）时把清单显示在这一步的表单下方，作最后的确认 */
+	/** 中档及以下（没有旁边那条栏）把清单显示在这一步的末尾，作最后的确认 */
 	listBelow?: boolean;
 	body: (ctx: StepContext) => ComponentChildren;
 }

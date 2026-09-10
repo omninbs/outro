@@ -36,7 +36,7 @@ const Row = ({ label, value }: { label: string; value: string }) => (
 /**
  * 清单：按填写步骤分成摘要、描述、页脚三组，内容一律取自最终的结尾页（resolveOutro），
  * 所见即最终页会印出来的东西——名称没写就空着，跟最终页一样，清单不自作主张补字。
- * 横屏且够宽时固定在右侧随时可见；竖屏（高 > 宽）放不下右侧栏，
+ * 宽档（`wide:`）在表单旁边常驻；中档及以下没有那一条栏，
  * 改在第三步「生成」前显示一次，作最后的确认。
  */
 export function FilledList({ data }: { data: CardData }) {

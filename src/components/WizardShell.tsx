@@ -29,7 +29,7 @@ export function WizardShell({
 		<div>
 			<PageHeader
 				title={COPY.brand}
-				description="按步骤填写内容，右侧实时确认已填信息，最后生成结尾页"
+				description="按步骤填写内容，最后生成结尾页"
 			/>
 
 			<Stepper steps={steps} current={current} onSelect={onSelect} />

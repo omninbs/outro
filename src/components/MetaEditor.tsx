@@ -3,7 +3,7 @@ import { COPY } from '../lib/copy';
 import type { MetaItem } from '../lib/types';
 import { AddButton, BARE_INPUT, BareRow, EmptyHint, IconButton } from './ui';
 
-/** 元数据编辑器：一行一条「名称 + 内容」，名称就是最终页左栏的标签 */
+/** 元数据编辑器：一行一条「名称 + 内容」，名称就是最终页上那一行的标签 */
 export function MetaEditor({
 	items,
 	onChange,

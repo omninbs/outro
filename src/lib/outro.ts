@@ -1,14 +1,14 @@
 import { COPY } from './copy';
 import type { CardData } from './types';
 
-/** 最终页左栏的一行：名称已去空白，值保证非空 */
+/** 最终页的一行元数据（宽档下在左边那一栏）：名称已去空白，值保证非空 */
 export interface OutroMeta {
 	id: string;
 	label: string;
 	value: string;
 }
 
-/** 最终页右栏的一块：正文保证非空 */
+/** 最终页的一块文本（宽档下在右边那一栏）：正文保证非空 */
 export interface OutroBlock {
 	id: string;
 	label: string;

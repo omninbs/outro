@@ -1,11 +1,11 @@
-/** 主体左栏的一条元数据 */
+/** 一条元数据（宽档下排在结尾页主体左边那一栏） */
 export interface MetaItem {
 	id: string;
 	label: string;
 	value: string;
 }
 
-/** 主体右栏的一块长文本 */
+/** 一块长文本（宽档下排在结尾页主体右边那一栏） */
 export interface TextBlock {
 	id: string;
 	label: string;

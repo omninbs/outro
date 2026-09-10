@@ -32,7 +32,7 @@ const MOTION =
 	'transition-[opacity,color,background-color,border-color,display] ' +
 	'duration-150 ease-out motion-reduce:transition-none';
 
-/** 出现 / 消失：右侧清单、步骤条名称这类。带上 display，硬切也能淡出来 */
+/** 出现 / 消失：按档位才有 / 才没有的东西（宽档旁边的清单、窄档的步骤名）。带上 display，硬切也能淡出来 */
 export const FADE = `${MOTION} transition-discrete`;
 
 /** 新挂上来的一行 / 一块：从透明淡进来，避免「啪」地出现 */

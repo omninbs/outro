@@ -3,7 +3,7 @@ import { Field, Panel, TextInput } from '../components/ui';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
 
-/** 摘要：页面标题 + 主体左栏的元数据 */
+/** 摘要：页面标题 + 元数据 */
 export function SummaryStep({ data, patch }: { data: CardData; patch: Patch }) {
 	return (
 		<>

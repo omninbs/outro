@@ -14,7 +14,7 @@ function OutroHeader({ title }: { title: string }) {
 	);
 }
 
-/** 左栏：元数据表。名称列宽由内容决定，值列吃掉剩下的宽度 */
+/** 元数据表（宽档下是左边那一栏）。名称列宽由内容决定，值列吃掉剩下的宽度 */
 function MetaList({ meta }: { meta: OutroMeta[] }) {
 	return (
 		/* 中间那条线以上是分栏时才要的：右栏第一条是「描述」标题，笔画细、视觉重量轻，
@@ -34,7 +34,7 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 	);
 }
 
-/** 右栏：文本块，小标题留空时就只印正文 */
+/** 文本块（宽档下是右边那一栏），小标题留空时就只印正文 */
 function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 	return (
 		<div class="space-y-8">
@@ -77,7 +77,7 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
 }
 
 /**
- * 结尾页：上标题、中主体（左元数据 / 右文本块）、下页脚。
+ * 结尾页：上标题、中主体（元数据 + 文本块）、下页脚。
  * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，
  * 所以清单与最终页永远一致。配色用 Catppuccin 标准的 Latte，由外层 PageShell 挂上。
  *
