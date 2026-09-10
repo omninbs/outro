@@ -1,0 +1,45 @@
+# 由 GitHub 自己构建并发布 Pages：main 上每次推送都跑一次 build，把 dist/index.html 传上去。
+# 仓库里不存构建产物，dist 照旧留在 .gitignore 里。
+# 一次性设置：仓库 Settings → Pages → Source 选 "GitHub Actions"（不选的话 deploy 那步会报错）。
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只跑一次部署，新推送排队等旧的跑完（不打断已在跑的，免得发布到一半被掐）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
