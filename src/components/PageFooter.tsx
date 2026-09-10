@@ -1,6 +1,6 @@
 import { COPY } from '../lib/copy';
 import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
-import { LinkRow, SUB_TEXT, HEADING } from './ui';
+import { LinkList, SUB_TEXT, HEADING } from './ui';
 
 /** 源代码仓库：页脚「链接」里的那条外链，地址就是本仓库 */
 const REPO_URL = 'https://github.com/omninbs/outro';
@@ -19,8 +19,9 @@ const REPO_URL = 'https://github.com/omninbs/outro';
  * 也就是跟页面标题同一款字样——原来品牌是 `h2 + text-lg`、链接是 `h3 + text-base`，
  * 看着像一个管着另一个（2026-09 统一，原来还试过把两个都压到卡片小标题那一档，太轻）。
  *
- * 两条链接都是 `LinkRow`（整行可点的透明选项），样式只有那一个定义；这里只管它们指向哪、
- * 叫什么名字——「返回主页」指应用内的首页（空 fragment 那个 `#`），「源代码」是外链。
+ * 两条链接交给 `LinkList`（整行可点的链接清单，含它自己的 `<ul>` / `<li>` 语义），
+ * 样式只有那一个定义；这里只管它们指向哪、叫什么名字——「返回主页」指应用内的首页，
+ * 「源代码」是外链。
  */
 export function PageFooter() {
 	return (
@@ -35,16 +36,13 @@ export function PageFooter() {
 
 				<nav class="wide:flex-[5]">
 					<h2 class={`mb-2 ${HEADING}`}>链接</h2>
-					<ul>
-						<li>
-							<LinkRow href="#">{COPY.action.backHome}</LinkRow>
-						</li>
-						<li>
-							<LinkRow href={REPO_URL} external>
-								源代码
-							</LinkRow>
-						</li>
-					</ul>
+					<LinkList
+						items={[
+							// 「返回主页」指应用内的首页，就是那个空 fragment 的 `#`；路由认它
+							{ text: COPY.action.backHome, href: '#' },
+							{ text: '源代码', href: REPO_URL, external: true },
+						]}
+					/>
 				</nav>
 			</div>
 		</footer>
