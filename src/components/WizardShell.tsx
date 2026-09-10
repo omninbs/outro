@@ -12,14 +12,12 @@ export function WizardShell({
 	steps,
 	current,
 	onSelect,
-	onHome,
 	sideList,
 	children,
 }: {
 	steps: StepDef[];
 	current: number;
 	onSelect: (index: number) => void;
-	onHome: () => void;
 	sideList: ComponentChildren;
 	children: ComponentChildren;
 }) {
@@ -43,7 +41,7 @@ export function WizardShell({
 				<div class="hidden lg:landscape:sticky lg:landscape:top-12 lg:landscape:block">{sideList}</div>
 			</div>
 
-			<PageFooter links={[{ label: '返回主页', onClick: onHome }]} />
+			<PageFooter />
 		</div>
 	);
 }
