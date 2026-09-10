@@ -46,8 +46,8 @@ export const logicRedstoneMusicSurvey: Survey = {
 			into: { kind: 'meta' },
 		},
 		{
-			id: 'buildHint',
-			label: '建造提示',
+			id: 'buildRequirement',
+			label: '建造要求',
 			kind: 'choice',
 			options: ['无要求', '不建议跨区块'],
 			default: '无要求',
