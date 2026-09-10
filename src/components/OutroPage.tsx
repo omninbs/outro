@@ -109,15 +109,23 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 			    这里改用内边距拿，是因为它**真占布局**：内容比屏幕高时退回顶部排，标题还剩 pt 那点边距；
 			    换成 translate 时实测只剩 4px（2026-09 探针量到的）。窄屏的 56px 差照旧（pt-8 / pb-22） */}
 			<div class="mx-auto w-full max-w-[24rem] px-6 pt-12 pb-26 wide:max-w-[48rem] max-narrow:px-inset max-narrow:pt-8 max-narrow:pb-22">
-				{title && <OutroHeader title={title} />}
+				{/* 标题与主体之间的 48px 由这一层的 `gap` 给，**只在两块都渲染时才存在**：
+				    原来那 48px 写在 `main` 的 `mt-12` 上，标题留空时它照旧占着，版面顶上凭空多一段
+				    （2026-09 探针量到：无标题时「版面顶 → 内容顶」96px，有标题时才是 48 + 标题 + 48）。
+				    页脚留在这层外面：它跟内容之间是 64px（`mt-16`），跟这里的 48px 不是一个数 */}
+				<div class="flex flex-col gap-12">
+					{title && <OutroHeader title={title} />}
 
-				{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏。
-				    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，
-				    行数多、每行都要放得下值，块那边是整段文字，窄一点反而更好读 */}
-				<main class="mt-12 grid grid-cols-1 items-start gap-12 wide:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-					<MetaList meta={meta} />
-					<BlockList blocks={blocks} />
-				</main>
+					{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏。
+					    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，
+					    行数多、每行都要放得下值，块那边是整段文字，窄一点反而更好读 */}
+					<main class="grid grid-cols-1 items-start gap-12 wide:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+						<MetaList meta={meta} />
+						<BlockList blocks={blocks} />
+					</main>
+				</div>
+
+				<OutroFooter footer={footer} onExit={onExit} />
 
 				<OutroFooter footer={footer} onExit={onExit} />
 			</div>
