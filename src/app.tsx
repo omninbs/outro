@@ -8,6 +8,7 @@ import { PageShell } from './components/PageShell';
 import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
 import { Button, ActionRow } from './components/ui';
+import { hasContent } from './lib/card';
 import { COPY } from './lib/copy';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
@@ -22,7 +23,8 @@ export function App() {
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 回到表单从第一步开始：从结尾页退回来时停在中间某一步没有道理
+	// 回到表单，从第一步开始：结尾页退回来、首页点「继续编辑」都走这里；
+	// 停在中间某一步没有道理
 	const backToStart = () => {
 		setStep(0);
 		navigate('form');
@@ -35,11 +37,12 @@ export function App() {
 
 	// 从首页选一份问卷：有题的进问卷页，空预设（questions 为空）没有题可答，直接进表单。
 	//
-	// 这里**一个字都不动内容**。碰内容的地方只有两个：答完问卷（整份替换）、
-	// 以及在第三步点「重置」（有二次确认）。从前是「点开卡片就先清空」，
-	// 于是从表单退回首页、再点任何一张卡回来，辛苦填的东西就没了——
-	// 内容会丢这种事，只能发生在用户明确按下去的那一刻
+	// 清空只发生在问卷自己声明了 `resetOnStart` 的时候（现在只有空预设）——
+	// 「从一张白纸开始」就是它的语义。有引导的问卷一个字都不动已有内容：
+	// 进问卷页只是看看、中途退出来，不该把已经填好的东西弄丢，它们答完的那一刻整份替换。
+	// 首页在内容非空时铺一张「继续编辑」，想接着写的人有明路，不用去猜哪张卡是安全的
 	const startSurvey = (survey: Survey) => {
+		if (survey.resetOnStart) reset();
 		if (survey.questions.length === 0) {
 			setStep(0);
 			navigate('form');
@@ -60,7 +63,7 @@ export function App() {
 	if (view === 'home') {
 		return (
 			<PageShell width="standard">
-				<HomePage onPick={startSurvey} />
+				<HomePage hasDraft={hasContent(data)} onPick={startSurvey} onResume={backToStart} />
 			</PageShell>
 		);
 	}

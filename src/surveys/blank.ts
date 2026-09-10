@@ -5,12 +5,13 @@ import type { Survey } from '../lib/survey/types';
  *
  * 它是一条正经的路，不是占位：没有引导就是它的引导——
  * 点进去直接进表单，标题、元数据、文本块都由自己写。
- * 它不碰已有内容（清空只发生在第三步的「重置」里），
- * 所以从表单退回首页、再点这张卡回来，填过的东西还在，可以接着改。
+ * 「从一张白纸开始」不是比喻，是靠 `resetOnStart` 兑现的：点它先清空内容。
+ * 想接着改没写完的那份，首页有「继续编辑」，不必从这张卡进去。
  */
 export const blankSurvey: Survey = {
 	id: 'blank',
 	title: '空预设',
-	description: '没有引导，直接进表单：标题、元数据、文本块都由你自己写。',
+	description: '从一张白纸开始：标题、元数据、文本块都由你自己写。',
 	questions: [],
+	resetOnStart: true,
 };
