@@ -15,6 +15,8 @@ import type { Survey } from '../lib/survey/types';
  *   想换就点别的选项，或点「自定义」自己写一句；再点一下已选中的项就取消，那一行也就不印
  * - 「转载和再制」的默认取最保守的那一项：作者不表态，就按「禁止」印，
  *   许可放宽是作者自己的事，反过来替人放宽可没人兜得住
+ * - 两道文本块题（「特别说明」「尾注」）内容留空：不写 `default`，写了才在结尾页右栏印出来，
+ *   两块按题目顺序自上而下排，所以「尾注」永远在最下面
  */
 export const logicRedstoneMusicSurvey: Survey = {
 	id: 'logic-redstone-music',
@@ -87,6 +89,20 @@ export const logicRedstoneMusicSurvey: Survey = {
 			options: ['禁止', '注明来源/非盈利', '注明来源'],
 			default: '禁止',
 			into: { kind: 'meta' },
+		},
+		{
+			id: 'notes',
+			label: '特别说明',
+			kind: 'long',
+			placeholder: '不显示',
+			into: { kind: 'block' },
+		},
+		{
+			id: 'colophon',
+			label: '尾注',
+			kind: 'long',
+			placeholder: '不显示',
+			into: { kind: 'block' },
 		},
 	],
 };
