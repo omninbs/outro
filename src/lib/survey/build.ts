@@ -1,4 +1,5 @@
-import type { CardData } from '../types';
+import { DEFAULT_CARD } from '../config';
+import type { CardData, MetaItem, TextBlock } from '../types';
 import type { Answers, Question, Survey } from './types';
 
 /**
@@ -14,41 +15,57 @@ const blockId = (question: Question) => `b-${question.id}`;
 /**
  * 按每道题的 `into` 把答案搬成内容——纯函数，不碰状态也不碰 DOM。
  *
- * 空白答案整条丢掉：没答的题不该在结尾页留一行空标签。
+ * 返回的是**局部**内容：只有问卷问到的去处才出现在结果里，没问到的（比如没有页脚题的问卷
+ * 就不该给出 `footerText`）留给 `buildFrom` 拿默认内容补上——「答完问卷」不等于「抹掉默认」。
+ *
+ * 问到却答空的标题 / 页脚写成空串：那是「这一块就是要空着」，跟「没问过」不是一回事。
+ * 元数据与文本块不同，空白答案整条丢掉——没答的题不该在结尾页留一行空标签。
  * `into` 没写 `label` 就用题面当标签（见 `Placement`）。
  * 同一去处写多次时后者覆盖前者（标题、页脚），元数据与文本块则按题目顺序堆叠。
  */
-export function buildCard(survey: Survey, answers: Answers): CardData {
-	const card: CardData = { title: '', meta: [], blocks: [], footerText: '' };
+export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
+	const meta: MetaItem[] = [];
+	const blocks: TextBlock[] = [];
+	const said: Partial<CardData> = { meta, blocks };
 
 	for (const question of survey.questions) {
 		const into = question.into;
+		if (!into) continue;
 		const value = (answers[question.id] ?? '').trim();
-		if (!into || !value) continue;
 
 		switch (into.kind) {
 			case 'title':
-				card.title = value;
+				said.title = value;
 				break;
 			case 'footer':
-				card.footerText = value;
+				said.footerText = value;
 				break;
 			case 'meta':
-				card.meta.push({ id: metaId(question), label: into.label ?? question.label, value });
+				if (value) meta.push({ id: metaId(question), label: into.label ?? question.label, value });
 				break;
 			case 'block':
-				card.blocks.push({
-					id: blockId(question),
-					label: into.label ?? question.label,
-					text: value,
-				});
+				if (value) {
+					blocks.push({
+						id: blockId(question),
+						label: into.label ?? question.label,
+						text: value,
+					});
+				}
 				break;
 		}
 	}
 
-	return card;
+	return said;
 }
 
-/** 问卷的答案 → 内容：问卷自带 `build` 就用它，否则按每道题的 `into` 搬运 */
-export const buildFrom = (survey: Survey, answers: Answers): CardData =>
-	survey.build ? survey.build(answers) : buildCard(survey, answers);
+/**
+ * 问卷的答案 → 内容：**以默认内容（`DEFAULT_CARD`）为底，问卷答到的部分盖在上面**。
+ *
+ * 「答完问卷」是换一份内容，不是清空内容：问卷没问到的去处保持默认值——没有页脚题的问卷
+ * 答完，那行署名还得在。（2026-09 修的就是这个：当年 `buildCard` 从全空字面量起步，
+ * 结果 `footerText` 被写成空串，默认署名白设了。）
+ */
+export function buildFrom(survey: Survey, answers: Answers): CardData {
+	const said = survey.build ? survey.build(answers) : buildCard(survey, answers);
+	return { ...structuredClone(DEFAULT_CARD), ...said };
+}

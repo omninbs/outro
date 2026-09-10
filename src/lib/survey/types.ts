@@ -68,6 +68,9 @@ export interface Survey {
 	/**
 	 * 答案 → 内容。默认按每道题的 `into` 搬运（见 `buildCard`）；
 	 * 需要拼接、算标题这类加工时，在这里写一个函数覆盖掉。
+	 *
+	 * 返回的是**局部**内容：没提到的字段保持默认值（`DEFAULT_CARD`），
+	 * 只有问卷问到的地方才盖上去——整份替换由 `buildFrom` 一处做。
 	 */
-	build?: (answers: Answers) => CardData;
+	build?: (answers: Answers) => Partial<CardData>;
 }
