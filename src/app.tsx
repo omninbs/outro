@@ -68,9 +68,12 @@ export function App() {
 				)}
 
 				<div class="mt-6 flex items-center justify-between">
-					<Button disabled={step === 0} onClick={() => setStep(step - 1)}>
-						上一步
-					</Button>
+					{step === 0 ? (
+						// 第一步没有「上一步」可退，这个位置改成退出表单
+						<Button onClick={() => navigate('home')}>返回首页</Button>
+					) : (
+						<Button onClick={() => setStep(step - 1)}>上一步</Button>
+					)}
 					{step < STEPS.length - 1 && (
 						<Button variant="primary" onClick={() => setStep(step + 1)}>
 							下一步
