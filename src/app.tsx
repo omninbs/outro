@@ -43,11 +43,12 @@ export function App() {
 		navigate('survey', survey.id);
 	};
 
-	// 答完问卷：答案搬成内容，整份替换当前内容，然后落到表单的最后一步（生成）。
-	// 问卷和表单是同一件事的两条路——问卷只是把前两步替你问完了，收尾仍在表单里
+	// 答完问卷：答案搬成内容，整份替换当前内容，然后回到表单的第一步（摘要）。
+	// 回第一步而不是推到最后一步，是留给用户按需要再编辑的余地——问卷只把常见的问题问完，
+	// 答案落进内容之后，标题、元数据这些还得让人过一眼、改一改；直接推到「生成」等于把这段路跳过去
 	const finishSurvey = (survey: Survey, answers: Answers) => {
 		patch(buildFrom(survey, answers));
-		setStep(STEPS.length - 1);
+		setStep(0);
 		navigate('form');
 	};
 
