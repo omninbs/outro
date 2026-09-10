@@ -13,8 +13,8 @@ import type { Survey } from '../lib/survey/types';
  *   空答案本来就不会印到结尾页，靠这一点表达「不问就不显示这一行」
  * - 三道单选题都写了 `default`，所以一进问卷就是「无分歧 / 无要求 / 无差异」，
  *   想换就点别的选项，或点「自定义」自己写一句
- * - 「授权意见」同样是单选题，但不写 `default`：它是可选的，不选就不印这一行。
- *   也正因为没有默认值——「禁止转载」是替作者去限制别人的话，不该由默认值代说
+ * - 「转载和再制」同样是单选题，但不写 `default`：它是可选的，不选就不印这一行。
+ *   也正因为没有默认值——「禁止」是替作者去限制别人的话，不该由默认值代说
  */
 export const logicRedstoneMusicSurvey: Survey = {
 	id: 'logic-redstone-music',
@@ -82,9 +82,9 @@ export const logicRedstoneMusicSurvey: Survey = {
 		},
 		{
 			id: 'license',
-			label: '授权意见',
+			label: '转载和再制',
 			kind: 'choice',
-			options: ['禁止转载', '允许转载及重置，注明来源且非盈利'],
+			options: ['禁止', '注明来源/非盈利', '注明来源'],
 			into: { kind: 'meta' },
 		},
 	],
