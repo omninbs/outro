@@ -8,7 +8,9 @@ import { Panel, SUB_TEXT, EmptyHint } from './ui';
 /** 分组标题：摘要 / 描述 / 页脚。每组上面一条细线，第一组也不例外，免得跟面板标题粘在一起 */
 const Group = ({ text, count, children }: { text: string; count: number; children: ComponentChildren }) => (
 	<section class="border-t border-ctp-surface0 pt-5">
-		<div class="mb-2 flex items-baseline justify-between gap-2">
+		{/* 窄屏卡片横向贴边，所以标题行也得自己带一次 inset，才跟下面的内容落在同一条竖线上
+		    （那条分隔线不用管：它属于「面」，贴边是刻意的） */}
+		<div class="mb-2 flex items-baseline justify-between gap-2 max-narrow:px-inset">
 			<h3 class="text-base font-semibold tracking-wide text-ctp-subtext1">{text}</h3>
 			<span class="text-base tabular-nums text-ctp-overlay0">{count}</span>
 		</div>
