@@ -51,7 +51,7 @@ export function App() {
 
 	if (view === 'home') {
 		return (
-			<PageShell width="medium">
+			<PageShell width="standard">
 				<HomePage onPick={startSurvey} />
 			</PageShell>
 		);
@@ -63,7 +63,7 @@ export function App() {
 		// 认不出的 id（手写的地址、改名后的旧链接）不留空白页，给一句话和页脚那个出口
 		if (!survey) {
 			return (
-				<PageShell width="medium">
+				<PageShell width="standard">
 					<Panel title="没有这份问卷">
 						<p class="text-base leading-relaxed text-ctp-subtext0">
 							地址里的问卷 id 认不出来，回首页重新选一份。
@@ -74,7 +74,7 @@ export function App() {
 		}
 
 		return (
-			<PageShell width="medium">
+			<PageShell width="standard">
 				<SurveyPage
 					survey={survey}
 					onFinish={(answers) => finishSurvey(survey, answers)}

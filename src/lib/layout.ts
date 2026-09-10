@@ -1,12 +1,16 @@
-/** 页面容器的定宽：中号给首页（和页脚同宽），宽号给表单页的两栏加常驻清单 */
-const MEDIUM = 'max-w-[60rem]';
+/**
+ * 没有分栏的页面的标准宽度：首页、问卷页都用它。
+ * 页脚也用同一个数，于是单栏页面从标题到页脚边线齐平。
+ */
+const STANDARD = 'max-w-[60rem]';
 
-export const PAGE_WIDTHS = { medium: MEDIUM, wide: 'max-w-360' } as const;
+/** 页面容器的定宽：单栏页面用标准宽，只有分栏页面（表单的两栏加常驻清单）才要更宽 */
+export const PAGE_WIDTHS = { standard: STANDARD, wide: 'max-w-360' } as const;
 
 export type PageWidth = keyof typeof PAGE_WIDTHS;
 
-/** 页脚宽度固定，不跟着所在页面的容器走；中号就是首页那一档，两边的边线因此对得上 */
-export const FOOTER_WIDTH = MEDIUM;
+/** 页脚宽度固定，不跟着所在页面的容器走；就是标准宽 */
+export const FOOTER_WIDTH = STANDARD;
 
 /** 页脚最小高度：内容只有两栏几行，给个下限，免得夹在上下内边距里显得扁 */
 export const FOOTER_MIN_HEIGHT = 'min-h-56';

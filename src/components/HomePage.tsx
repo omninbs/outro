@@ -7,7 +7,7 @@ import { Panel } from './ui';
  *
  * 清单是数据（registry 里的 `SURVEYS`），加一份问卷不用碰这里；
  * 第一份固定是「空预设」——`questions` 为空的那份问卷。
- * 容器宽度由 PageShell 给（首页传 width="medium"，与页脚同宽），这里不写 max-w。
+ * 容器宽度由 PageShell 给（首页传 width="standard"，与页脚同宽），这里不写 max-w。
  */
 export function HomePage({ onPick }: { onPick: (survey: Survey) => void }) {
 	return (
