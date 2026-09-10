@@ -1,3 +1,5 @@
+import type { ComponentChildren } from 'preact';
+
 /** 表单控件的统一外观 */
 const INPUT =
 	'w-full rounded-md border border-ctp-surface1 bg-ctp-crust px-3 py-2 text-base text-ctp-text ' +
@@ -55,5 +57,21 @@ export function TextArea({
 			class={`${INPUT} resize-y leading-relaxed ${cls ?? ''}`}
 			onInput={(e) => onInput(e.currentTarget.value)}
 		/>
+	);
+}
+
+/**
+ * 一行裸控件的外框：crust 底、一圈描边，里面的控件用 `BARE_INPUT` 不带边框。
+ *
+ * 元数据那一行、问卷里「自己写」那个框都用它——「右边嵌着 × 的输入框」
+ * 只有一个定义，两处的内边距、描边、圆角就不会各自漂移。
+ * 块编辑器的外框不用它：那里一层框里还套着正文，× 跟小标题同一行，是另一种形状。
+ */
+export function BareRow({ children, action }: { children: ComponentChildren; action?: ComponentChildren }) {
+	return (
+		<div class="flex items-center gap-2 rounded-md border border-ctp-surface0 bg-ctp-crust p-1.5">
+			{children}
+			{action}
+		</div>
 	);
 }

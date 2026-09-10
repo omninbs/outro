@@ -1,7 +1,7 @@
 import { newMetaItem, removeById, updateById } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { MetaItem } from '../lib/types';
-import { AddButton, BARE_INPUT, EmptyHint, IconButton } from './ui';
+import { AddButton, BARE_INPUT, BareRow, EmptyHint, IconButton } from './ui';
 
 /** 元数据编辑器：一行一条「名称 + 内容」，名称就是最终页左栏的标签 */
 export function MetaEditor({
@@ -16,9 +16,13 @@ export function MetaEditor({
 			{items.length === 0 && <EmptyHint>还没有元数据，点下方按钮添加</EmptyHint>}
 
 			{items.map((item) => (
-				<div
+				<BareRow
 					key={item.id}
-					class="flex items-center gap-2 rounded-md border border-ctp-surface0 bg-ctp-crust p-1.5"
+					action={
+						<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(items, item.id))}>
+							×
+						</IconButton>
+					}
 				>
 					<input
 						type="text"
@@ -34,10 +38,7 @@ export function MetaEditor({
 						class={`min-w-0 flex-1 text-ctp-text ${BARE_INPUT}`}
 						onInput={(e) => onChange(updateById(items, item.id, { value: e.currentTarget.value }))}
 					/>
-					<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(items, item.id))}>
-						×
-					</IconButton>
-				</div>
+				</BareRow>
 			))}
 
 			<AddButton onClick={() => onChange([...items, newMetaItem()])}>{COPY.action.addMeta}</AddButton>
