@@ -20,7 +20,7 @@ export const COPY = {
 
 	/** 区块名：步骤里的面板标题与清单里的分组标题 */
 	section: {
-		title: '页面标题',
+		title: '标题',
 		meta: '元数据',
 		blocks: '文本块',
 		footer: '页脚',
@@ -29,7 +29,8 @@ export const COPY = {
 
 	/** 字段名：输入框的标签，以及清单里对应那一行的标签 */
 	field: {
-		title: '标题',
+		/** 面板标题已经写着「标题」，这一栏的标签就得自己说清是哪一个标题（文本块那边还有「小标题」） */
+		title: '页面标题',
 		footerText: '页脚文字',
 		metaLabel: '名称',
 		metaValue: '填写内容',
