@@ -34,7 +34,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转。这条真栽过：一次批量改完之后 dev server 一直喂「import 已删、`${MORPH}` 还在」的半成品，浏览器报 `ReferenceError: MORPH is not defined`。判断办法是 `curl -s http://localhost:5173/src/…` 直接看它喂的是什么，`touch` 掉那几个文件再 curl 一遍确认——**别让人去刷新猜**
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
-- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）或 `probe-outro.mjs`（最终页版面：量宽度上限 / 居中 / 分栏条件 / 有没有溢出，自带一份种进 localStorage 的存档，种完要**重新加载**才生效）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次（一个脚本跑完就 `ws.close()`，否则下一次会报「Maximum number of active sessions」，那就得重启 Firefox）
+- **探针**（`.git/` 下，不入库）：`mkdir -p .git/ffprof && firefox --headless --no-remote --profile "$PWD/.git/ffprof" --remote-debugging-port=9222 about:blank`——profile 目录**必须先存在**，不然 Firefox 直接退出报「Could not find profile folder」；放 `.git/` 是因为 `vite build` 会清掉 `dist/`。然后 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）、`probe-motion.mjs`（跨断点采样 padding，几何量应当是直接跳的）或 `probe-outro.mjs`（最终页版面：量宽度上限 / 居中 / 分栏条件 / 有没有溢出，自带一份种进 localStorage 的存档，种完要**重新加载**才生效）、`probe-back.mjs`（点结尾页的「返回编辑」，看落在第几步）——探针都打 `dist/index.html`，免得吃 dev server 的旧模块。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次（一个脚本跑完就 `ws.close()`，否则下一次会报「Maximum number of active sessions」，那就得重启 Firefox）
 - 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
 - 沙箱里 `ss` 看得到端口、却看不到别人的 PID：**杀不掉你终端里那个 dev server**，要重启得请你来
 - 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
@@ -47,6 +47,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - **一个知识只有一个定义**：界面文案集中在 `src/lib/copy.ts`（只收两处以上用到的，值相同不等于同一条知识）；内容长什么样由 `src/lib/outro.ts` 的 `resolveOutro` 一处决定；框的外观是 `ui/inputs.tsx` 的 `BOX` / `BARE_INPUT` / `BareRow`；排版与动效片段在 `ui/tokens.ts`
 - 目录表叫 `_registry.ts(x)`：`src/surveys/` 是首页那些入口（全是数据，加一份 = 加一个文件 + 加一行）、`src/steps/` 是向导三步
 - 问卷是数据不是代码：题目写 `into` 决定答案落到结尾页哪里（`meta` / `block` / `title` / `footer`），需要加工才写 `build`；加一份问卷不用碰组件
+- 「回到表单」有两条路，别合成一个：首页「编辑表单」走 `openForm`（**第一步**，刚来的人要顺读），结尾页的「返回编辑」走 `backToForm`（**最后一步**即「生成」那一步，`STEPS.length - 1`——内容刚在结尾页上看过，没必要再从头点两下）
 - 注释写中文，写「为什么这么做」，不写「这行在做什么」
 - 不写自定义 CSS：Tailwind v4 + catppuccin 的 `ctp-*` token 够用。唯一的例外是 `style.css` 里那条 `.safe-area`——它要读 `env(safe-area-inset-*)`，没有别的写法
 - Tailwind 的扫描来源写死在 `style.css` 头上（`@import "tailwindcss" source(none)` + `@source "../src"` + `@source "../index.html"`）：默认它扫**整个仓库**，于是 `AGENTS.md` 里的中文散文（写着 `` `transition` ``、`` `rounded-none` `` 这种词）会被当成类名、真编译成规则——2026-09 实测产物里躺着 `.transition`、`.rounded-none`、`.contents`、`container` 这些没人用的死代码，删掉省了 700 来字节。以后加新目录（比如 `tools/`）要在这儿补一行 `@source`

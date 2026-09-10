@@ -22,10 +22,16 @@ export function App() {
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 打开表单，从第一步开始：结尾页退回来、首页点「编辑表单」都走这里；
-	// 停在中间某一步没有道理
+	// 首页点「编辑表单」：从第一步开始——刚进来的人没有「刚才那一步」，从头顺读才对
 	const openForm = () => {
 		setStep(0);
+		navigate('form');
+	};
+	// 从结尾页退回：停在**最后一步**。「生成」就在第三步，所以这是「回到刚才那一步」——
+	// 前面两步的内容刚刚都在结尾页上看过一遍了，再从头走一遍只是让人多点两下
+	// （步骤表将来变了要看这里：最后一步必须是能进结尾页的那一步）
+	const backToForm = () => {
+		setStep(STEPS.length - 1);
 		navigate('form');
 	};
 	// 重置是唯一会丢内容的动作，所以它有三步确认（第三步的 ConfirmButton）
@@ -101,7 +107,7 @@ export function App() {
 	if (view === 'outro') {
 		return (
 			<PageShell theme="latte" width={null} footer={false}>
-				<OutroPage data={data} onExit={openForm} />
+				<OutroPage data={data} onExit={backToForm} />
 			</PageShell>
 		);
 	}
