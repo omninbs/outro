@@ -56,6 +56,7 @@ export function App() {
 				steps={STEPS}
 				current={step}
 				onSelect={setStep}
+				onHome={() => navigate('home')}
 				sideList={<FilledList data={data} />}
 			>
 				<div class="space-y-6">{current.body(ctx)}</div>
