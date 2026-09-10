@@ -41,7 +41,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注释写中文，写「为什么这么做」，不写「这行在做什么」
 - 不写自定义 CSS：Tailwind v4 + catppuccin 的 `ctp-*` token 够用了
 - 入口是根目录的 `index.html`（Vite 的约定，它只是模板，产物是 `dist/index.html`）；里面的 `<title>` 是品牌名唯一一处没走 `COPY.brand` 的地方
-- 响应式只看方向：`landscape:` / `portrait:`（比宽高），不用像素断点
+- 响应式分两种问法，各问各的对象：**页面怎么分栏**看窗口比例（`landscape:` / `portrait:`）；**一行里放不放得下**看它自己的容器宽度（父级挂 `@container`，子级用 `@max-sm:`，见 `MetaEditor`）。两边都不用窗口像素断点（`md:` 那类）——两栏布局里窗口再宽，分给表单的那一栏也可能很窄
 - 路由用 hash（`#form`、`#outro`、`#<入口 id>`）：构建产物要能直接 `file://` 打开
 
 ## 环境
