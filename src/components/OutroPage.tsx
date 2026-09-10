@@ -22,8 +22,11 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效。
 
 		   窄屏（`max-narrow:grid-cols-1`）上下排成「名称一行、值一行」，跟编辑态的 `MetaEditor`
-		   是同一条规矩——窄屏是一维的流，一行里塞两列不是这一档该有的样子 */
-		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 max-narrow:grid-cols-1 wide:pt-1">
+		   是同一条规矩——窄屏是一维的流，一行里塞两列不是这一档该有的样子。
+
+		   这张表还是用 `grid`：它是**真二维**（名称列要跨行对齐，宽度由最长的名称决定）。
+		   `wide:flex-[1.2]` 是它作为宽档那一行里左栏所占的份，`min-w-0` 让值很长时这一栏仍能收缩 */
+		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 max-narrow:grid-cols-1 wide:flex-[1.2] wide:pt-1">
 			{meta.map((item) => (
 				<Fragment key={item.id}>
 					<dt class={SUB_TEXT}>{item.label}</dt>
@@ -34,10 +37,10 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 	);
 }
 
-/** 文本块（宽档下是右边那一栏），小标题留空时就只印正文 */
+/** 文本块（宽档下是右边那一栏，占 1 份），小标题留空时就只印正文 */
 function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 	return (
-		<div class="flex flex-col gap-8">
+		<div class="flex min-w-0 flex-col gap-8 wide:flex-[1]">
 			{blocks.map((block) => (
 				<section key={block.id} class="flex flex-col gap-3">
 					{block.label && (
@@ -116,10 +119,14 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 				<div class="flex flex-col gap-12">
 					{title && <OutroHeader title={title} />}
 
-					{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏。
-					    左栏（元数据）比右栏（文本块）宽一点：元数据是一行一行的「名称 + 值」，
-					    行数多、每行都要放得下值，块那边是整段文字，窄一点反而更好读 */}
-					<main class="grid grid-cols-1 items-start gap-12 wide:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+					{/* 窄屏与中档都是一栏顺读，只有 `wide:`（宽 ≥ 1024）才分两栏——两栏就是「一行」，
+					    所以用 flex 分比例：左栏（元数据）比右栏（文本块）宽一点（1.2 : 1）。
+					    元数据是一行一行的「名称 + 值」，行数多、每行都要放得下值；块那边是整段文字，
+					    窄一点反而更好读。
+					    两个反直觉的地方：① 每一列都得写 `min-w-0`（flex 项默认 `min-width: auto`，
+					    值很长时会把整行顶出屏幕）；② `items-start` 在**列**方向上是横向对齐、
+					    会把子项缩成内容宽，所以它只写在 `wide:flex-row` 那一档 */}
+					<main class="flex flex-col gap-12 wide:flex-row wide:items-start">
 						<MetaList meta={meta} />
 						<BlockList blocks={blocks} />
 					</main>
