@@ -15,15 +15,30 @@ export function App() {
 	const { view, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
+	// 回到向导、以及重置数据，都从第一步重新开始：这两件事之后停在中间某一步没有道理
+	const backToStart = () => {
+		setStep(0);
+		navigate('wizard');
+	};
+	const handleReset = () => {
+		reset();
+		setStep(0);
+	};
+
 	if (view === 'colophon') {
 		return (
 			<PageShell theme="latte">
-				<ColophonPage data={data} onExit={() => navigate('wizard')} />
+				<ColophonPage data={data} onExit={backToStart} />
 			</PageShell>
 		);
 	}
 
-	const ctx: StepContext = { data, patch, onReset: reset, onGenerate: () => navigate('colophon') };
+	const ctx: StepContext = {
+		data,
+		patch,
+		onReset: handleReset,
+		onGenerate: () => navigate('colophon'),
+	};
 	const current = STEPS[step];
 
 	return (
