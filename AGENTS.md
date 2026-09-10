@@ -31,6 +31,8 @@ npm run build       # vite build，产出单文件 dist/index.html
 
 - dev server 在 http://localhost:5173（常年有一个后台任务跑着，**不要另起一个**）；改完文件 Vite 自己热更新
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转
+- 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）
+- 反过来，判断「代码对不对」不要靠浏览器里的现象，用产物或真机量：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询，或用 headless Firefox 的 BiDi 口（`--remote-debugging-port`）读元素的计算样式
 - 装依赖用 `npm ci --cache /tmp/npm-cache`（沙箱里默认缓存目录只读）
 - 产物是自包含的单个 HTML，验线上就是 `curl` 下来比字节数、grep 字样
 
