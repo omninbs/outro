@@ -1,16 +1,11 @@
-import { BlockEditor, newBlock } from '../components/BlockEditor';
-import { Field, Panel, TextInput } from '../components/ui';
+import { BlockEditor } from '../components/BlockEditor';
+import { Chip, Field, Panel, TextInput } from '../components/ui';
+import { newBlock } from '../lib/card';
 import { DEFAULT_FOOTER, DEFAULT_NOTICE_LABEL, NOTICE_TEMPLATES } from '../lib/config';
-import type { CardData } from '../lib/types';
+import type { CardData, Patch } from '../lib/types';
 
 /** 描述：主体右栏的文本块 + 页脚 */
-export function DescribeStep({
-	data,
-	patch,
-}: {
-	data: CardData;
-	patch: (next: Partial<CardData>) => void;
-}) {
+export function DescribeStep({ data, patch }: { data: CardData; patch: Patch }) {
 	return (
 		<>
 			<Panel title="文本块">
@@ -19,16 +14,14 @@ export function DescribeStep({
 				<p class="mb-2 mt-5 text-base text-ctp-subtext0">常用声明，点击追加</p>
 				<div class="flex flex-wrap gap-2">
 					{NOTICE_TEMPLATES.map((template) => (
-						<button
+						<Chip
 							key={template.id}
-							type="button"
 							onClick={() =>
 								patch({ blocks: [...data.blocks, newBlock(DEFAULT_NOTICE_LABEL, template.text)] })
 							}
-							class="rounded-full border border-ctp-surface1 px-3 py-1.5 text-base text-ctp-subtext0 transition hover:border-ctp-mauve hover:text-ctp-mauve"
 						>
 							＋ {template.label}
-						</button>
+						</Chip>
 					))}
 				</div>
 			</Panel>

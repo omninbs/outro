@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import { DEFAULT_FOOTER, DEFAULT_TITLE } from '../lib/config';
+import { resolveColophon } from '../lib/colophon';
 import type { CardData } from '../lib/types';
 import { Panel } from './ui';
 
@@ -24,17 +24,13 @@ const Row = ({ label, value }: { label: string; value: string }) => (
 );
 
 /**
- * 清单：按填写步骤分成摘要、描述、页脚三组。
+ * 清单：按填写步骤分成摘要、描述、页脚三组，内容一律取自最终的版权页（resolveColophon），
+ * 所见即最终页会印出来的东西。
  * 横屏且够宽时固定在右侧随时可见；竖屏（高 > 宽）放不下右侧栏，
  * 改在第三步「生成」前显示一次，作最后的确认。
  */
 export function FilledList({ data }: { data: CardData }) {
-	const cardTitle = data.title.trim();
-	const meta = data.meta.filter((item) => item.value.trim() !== '');
-	const blocks = data.blocks.filter((block) => block.text.trim() !== '');
-	const footer = data.footerText.trim();
-	// 页脚始终会生成，没填就是默认文案
-	const shownFooter = footer || DEFAULT_FOOTER;
+	const { title, meta, blocks, footer } = resolveColophon(data);
 
 	return (
 		<Panel title="清单">
@@ -42,9 +38,10 @@ export function FilledList({ data }: { data: CardData }) {
 				{/* 标题不是可选项：没填也会用默认文案，跟最终页一致，所以标题这一行永远在 */}
 				<Group text="摘要" count={1 + meta.length}>
 					<dl class="space-y-1.5">
-						<Row label="标题" value={cardTitle || DEFAULT_TITLE} />
+						<Row label="标题" value={title} />
 						{meta.map((item) => (
-							<Row key={item.id} label={item.label.trim() || '未命名'} value={item.value.trim()} />
+							// 清单是拿来核对的，忘了写名称的行标成「未命名」；最终页只印原名
+							<Row key={item.id} label={item.label || '未命名'} value={item.value} />
 						))}
 					</dl>
 				</Group>
@@ -54,11 +51,11 @@ export function FilledList({ data }: { data: CardData }) {
 						<div class="space-y-3">
 							{blocks.map((block) => (
 								<div key={block.id}>
-									{block.label.trim() && (
-										<h4 class="text-base font-bold text-ctp-mauve">{block.label.trim()}</h4>
+									{block.label && (
+										<h4 class="text-base font-bold text-ctp-mauve">{block.label}</h4>
 									)}
 									<p class="line-clamp-4 whitespace-pre-wrap break-words text-base leading-relaxed text-ctp-subtext0">
-										{block.text.trim()}
+										{block.text}
 									</p>
 								</div>
 							))}
@@ -67,7 +64,7 @@ export function FilledList({ data }: { data: CardData }) {
 				</Group>
 
 				<Group text="页脚" count={1}>
-					<p class="break-words text-base text-ctp-subtext0">{shownFooter}</p>
+					<p class="break-words text-base text-ctp-subtext0">{footer}</p>
 				</Group>
 			</div>
 		</Panel>

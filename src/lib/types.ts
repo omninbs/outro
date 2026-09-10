@@ -18,3 +18,6 @@ export interface CardData {
 	blocks: TextBlock[];
 	footerText: string;
 }
+
+/** 局部更新内容：步骤组件用它改自己那一部分 */
+export type Patch = (next: Partial<CardData>) => void;

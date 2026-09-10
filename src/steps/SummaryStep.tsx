@@ -1,17 +1,13 @@
-import { MetaEditor, newMetaItem } from '../components/MetaEditor';
-import { Field, Panel, TextInput } from '../components/ui';
+import { MetaEditor } from '../components/MetaEditor';
+import { Chip, Field, Panel, TextInput } from '../components/ui';
+import { newMetaItem } from '../lib/card';
 import { DEFAULT_TITLE, QUICK_META } from '../lib/config';
-import type { CardData } from '../lib/types';
+import type { CardData, Patch } from '../lib/types';
 
 /** 摘要：页面标题 + 主体左栏的元数据 */
-export function SummaryStep({
-	data,
-	patch,
-}: {
-	data: CardData;
-	patch: (next: Partial<CardData>) => void;
-}) {
-	const hasQuick = (label: string) => data.meta.some((item) => item.label.trim() === label);
+export function SummaryStep({ data, patch }: { data: CardData; patch: Patch }) {
+	// 常用条目加没加，看的是它到底在不在列表里，而不是它有没有被点过
+	const added = (label: string) => data.meta.some((item) => item.label.trim() === label);
 
 	return (
 		<>
@@ -31,22 +27,17 @@ export function SummaryStep({
 				<p class="mb-2 mt-5 text-base text-ctp-subtext0">常用条目，点击追加</p>
 				<div class="flex flex-wrap gap-2">
 					{QUICK_META.map((label) => {
-						const added = hasQuick(label);
+						const isAdded = added(label);
 						return (
-							<button
+							<Chip
 								key={label}
-								type="button"
-								disabled={added}
+								tone={isAdded ? 'done' : 'plain'}
+								disabled={isAdded}
 								onClick={() => patch({ meta: [...data.meta, newMetaItem(label)] })}
-								class={`rounded-full border px-3 py-1.5 text-base transition ${
-									added
-										? 'border-ctp-green/40 text-ctp-green'
-										: 'border-ctp-surface1 text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve'
-								}`}
 							>
-								{added ? '✓ ' : '＋ '}
+								{isAdded ? '✓ ' : '＋ '}
 								{label}
-							</button>
+							</Chip>
 						);
 					})}
 				</div>
