@@ -31,7 +31,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 ```
 
 - dev server 在 http://localhost:5173（`npm run dev`，常年有一个后台任务跑着，**不要另起一个**）；改完文件 Vite 自己热更新
-- 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转
+- 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转。这条真栽过：一次批量改完之后 dev server 一直喂「import 已删、`${MORPH}` 还在」的半成品，浏览器报 `ReferenceError: MORPH is not defined`。判断办法是 `curl -s http://localhost:5173/src/…` 直接看它喂的是什么，`touch` 掉那几个文件再 curl 一遍确认——**别让人去刷新猜**
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
 - **探针**（`.git/` 下，不入库）：先 `firefox --headless --no-remote --profile dist/ffprof --remote-debugging-port=9222 about:blank`，再 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）或 `node .git/probe-motion.mjs`（跨断点连续采样：几何量**不该**有过渡，形状应当是直接跳的）。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
