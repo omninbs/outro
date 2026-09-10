@@ -1,5 +1,3 @@
-import { MORPH } from '../components/ui/tokens';
-
 /**
  * 没有分栏的页面的标准宽度：首页、问卷页都用它。
  * 页脚也用同一个数，于是单栏页面从标题到页脚边线齐平。
@@ -23,9 +21,9 @@ export const FOOTER_MIN_HEIGHT = 'min-h-56';
  * 窄屏（`max-narrow`）它把自己的横向留白让出去（`px-0`）——留白改成由里面的文字 / 控件
  * 各自带一次 `px-inset`（见 `style.css` 的 `--spacing-inset`），面则横向贴边。
  * 只有这样整页才会落到同一条竖线上；容器留一道、里面再留一道，就会越套越深。
- * 跨窄屏线时这道留白是收放过去的（`MORPH`），不是瞬间跳掉。
+ * 跨窄屏线时这道留白是直接跳掉的：几何量不插值（见 `ui/tokens.ts`）。
  */
-const container = (width: string) => `mx-auto w-full ${width} px-6 max-narrow:px-0 ${MORPH}`;
+const container = (width: string) => `mx-auto w-full ${width} px-6 max-narrow:px-0`;
 
 /** 页面内容用的容器：居中、按页面定宽 */
 export const pageContainer = (width: PageWidth) => container(PAGE_WIDTHS[width]);

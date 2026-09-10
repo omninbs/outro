@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import { MORPH, RISE } from './tokens';
+import { RISE } from './tokens';
 
 /**
  * 裸控件的外观：无边框、无底色，撑在框里。
@@ -31,12 +31,13 @@ export const BOX = 'rounded-md border border-ctp-surface0 bg-ctp-crust';
  *
  * 窄屏（`max-narrow`）它横向贴边、去掉侧边描边与圆角，变成横跨整屏的一条「带」，
  * 横向留白改由它自己带一次 `px-inset`——于是框里的文字跟页面上别处的文字同一条竖线。
- * 跨窄屏线时这几样一起过渡（`MORPH`）；新挂上来的一行从透明淡进来（`RISE`），不「啪」地出现。
+ * 跨窄屏线时这几样是直接跳的（几何量不插值，见 `ui/tokens.ts`），身上带着 `RISE`：
+ * 新挂上来的一行从透明淡进来，不「啪」地出现；聚焦时那道描边也在它的清单里，自然淡过去。
  */
 export function BareRow({ children, action }: { children: ComponentChildren; action?: ComponentChildren }) {
 	return (
 		<div
-			class={`${BOX} flex items-center gap-2 p-1.5 focus-within:border-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${MORPH} ${RISE}`}
+			class={`${BOX} flex items-center gap-2 p-1.5 focus-within:border-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${RISE}`}
 		>
 			{children}
 			{action}

@@ -9,32 +9,28 @@
 export const SUB_TEXT = 'text-base leading-relaxed text-ctp-subtext0';
 
 /**
- * 动效全应用只有这一份定义，下面四个都长在它上面，各处的类名一律从这儿取——
- * 散着写 `transition-*` 就会出现「这个 200ms 那个 300ms、这个带回弹那个不带」，一动起来就露馅。
+ * 动效全应用只有这一份定义，下面三个都长在它上面，各处的类名一律从这儿取——
+ * 散着写 `transition-*` 就会出现「这个 200ms 那个 300ms」，一动起来就露馅。
  *
- * 一个元素只能有一份 `transition-property`，所以属性清单只能写一次、写全：
- * 内边距 / 描边宽度 / 圆角（面跨断点的形变）、透明度与颜色（出现消失、悬停），
- * 加上 `display`（好让硬切也能淡出来，配合 `transition-discrete`）。
- * 清单里都有的属性在元素上不存在时不会有什么代价，但没有的属性就一定动不了。
+ * 清单里**只留能「淡」的属性**：透明度、文字色、底色、描边色，加上 `display`
+ * （好让硬切也能淡出来，配合 `transition-discrete`）。
  *
- * **只做渐变，不做位移与缩放**：`transform` 故意不在清单里，谁也不许「按下去缩一下」。
- * 元素一旦在空间里动起来就没有好下场——缩放不动邻居，看着像在抖（2026-09 那批选项按钮
- * 就是这么被否掉的）；真动了，观者就得跟着重新找位置。要表达「我点到了」，换颜色。
- * 唯一允许的「动」是连贯的形变：面跨断点时长成贴边的带（`MORPH`），那本来就是同一件东西在变。
+ * 几何量——内边距 / 描边宽度 / 圆角 / 位移 / 缩放——一概不插值，形状要变就直接跳。
+ * 这不是偷懒：插值出来的是「在动」，而页面里只要有东西在动，观者就得跟着重新找位置。
+ * 2026-09 试过两轮都收掉了——选项按钮按下缩 2%（缩放不动邻居，看着像在抖）、
+ * 跨窄屏线时整页的面一起收放（一片东西同时在挪，像整页在抖）。
+ * 想让人知道「发生了什么」，变颜色就够了。
  *
  * 基调：150ms、ease-out、不回弹。目标是「别硬蹦」而不是「炫」，
  * 看上去应该几乎察觉不到有动画，只觉得不突兀。
  * 系统开了「减少动态效果」时一律不画（`motion-reduce:transition-none`），不用另写 CSS。
  *
- * 只给**能插值**的东西配过渡：`flex-direction`、列数变化这类插不了值，
- * 只能靠淡入淡出「遮」，遮不住的就让它利落地跳，别硬做。
+ * `flex-direction`、列数变化这类插不了值的，只能靠淡入淡出「遮」（`FADE`），
+ * 遮不住的就让它利落地跳，别硬做。
  */
 const MOTION =
-	'transition-[padding,border-width,border-radius,opacity,color,background-color,border-color,display] ' +
+	'transition-[opacity,color,background-color,border-color,display] ' +
 	'duration-150 ease-out motion-reduce:transition-none';
-
-/** 面（卡片 / 框 / 页面留白）跨响应式断点时的形变：卡片长成贴边的带，就是这几条一起走 */
-export const MORPH = MOTION;
 
 /** 出现 / 消失：右侧清单、步骤条名称这类。带上 display，硬切也能淡出来 */
 export const FADE = `${MOTION} transition-discrete`;
@@ -43,8 +39,9 @@ export const FADE = `${MOTION} transition-discrete`;
 export const RISE = `${MOTION} starting:opacity-0`;
 
 /**
- * 可点件（按钮、选项、可点卡片、链接）：悬停与选中的颜色变化走渐变。
- * 跟 `MORPH` 是同一份清单——可点件往往也是个会跨断点变形的面，清单写全了才够用；
- * 单独起个名字是为了让调用处看得出「这里在说可点」，不是为了加效果。
+ * 交互态（悬停 / 聚焦 / 选中）的颜色渐变：可点件、聚焦时会变色的框都用它。
+ *
+ * 反馈是这个元素**自己**变色，不位移、不换形状；贴在框里的图标按钮（×）连淡底都不给——
+ * 从透明浮出一块底色，看着像框里又长出一个按钮。
  */
 export const HOVER = MOTION;

@@ -105,7 +105,8 @@ export function IconButton({
 			type="button"
 			title={title}
 			onClick={onClick}
-			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 hover:bg-ctp-surface0 hover:text-ctp-red ${HOVER}`}
+			// 悬停只变颜色，不给淡底：它贴在框里，浮出一块底色看着像框里又长出一个按钮
+			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 hover:text-ctp-red ${HOVER}`}
 		>
 			{children}
 		</button>

@@ -34,7 +34,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 注意 Vite 的开发态转换按秒缓存：同一秒里连改同一个文件两次，可能喂出半新半旧的模块，`touch` 一下强制重转
 - 改完样式在浏览器里看不出变化时，**先重启 dev server，再查代码**：旧进程会把改之前编译好的样式一直喂给新开的标签页，硬刷新、换标签都没用（2026-09 那次「窄屏断点没生效」就是这么白查了一轮）。重启还能清掉积坏的 HMR 状态——同一个月里遇到过一次 `#app` 渲染成空、typecheck/build 却全过，重启就好了
 - 反过来，判断「代码对不对」不要靠浏览器里的现象：`curl` dev server 的 `src/style.css?direct` 看编译出来的媒体查询；要量真实几何就用 headless Firefox 的 BiDi 口
-- **探针**（`.git/` 下，不入库）：先 `firefox --headless --no-remote --profile dist/ffprof --remote-debugging-port=9222 about:blank`，再 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）或 `node .git/probe-motion.mjs`（跨断点时连续采样，看是不是真在过渡）。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
+- **探针**（`.git/` 下，不入库）：先 `firefox --headless --no-remote --profile dist/ffprof --remote-debugging-port=9222 about:blank`，再 `node .git/probe-overflow.mjs 485 481`（找横向溢出的元素）或 `node .git/probe-motion.mjs`（跨断点连续采样：几何量**不该**有过渡，形状应当是直接跳的）。Firefox 只允许**一个** BiDi 会话，所以一个脚本里把要量的宽度 / 路由循环完，别一个宽度起一次
 - 量响应式时记住：**Firefox 的媒体查询宽度把滚动条算进去**，排版区不算（窗口 485 → 媒体查询按 485 判，`clientWidth` 只有 473）
 - 沙箱里 `ss` 看得到端口、却看不到别人的 PID：**杀不掉你终端里那个 dev server**，要重启得请你来
 - 杀进程别用 `pkill -f '关键词'`——模式会匹配到自己那条命令行，整条命令被杀（退出码 143）。用 `firefox … & ffpid=$!` 存 PID，或 `pkill -x 名字`
@@ -60,8 +60,9 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 推论：**贴边的面没法再给内容留边**，所以卡片里凡是裸文字 / 裸列表都得自己写 `max-narrow:px-inset`（`Field` 的标签、`FilledList` 的内容、首页卡片的说明、`GenerateStep` 的正文都是这么办的）
 - 元数据行（`MetaEditor`）窄屏上下排——它算窄模式的一种样式变体，不按自己的容器宽度单独判
 - 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
-- **动效**只从 `ui/tokens.ts` 的 `MORPH` / `FADE` / `RISE` / `HOVER` 里挑，别在组件里散着写 `transition-*`：一个元素只能有一份 `transition-property`，所以属性清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹（目标是「别硬蹦」不是「炫」），`motion-reduce` 下完全不动；只给**能插值**的属性配过渡，`flex-direction`、列数变化那类只能用 `FADE` 淡一下遮住
-- **只做渐变，不做位移与缩放**：公共属性清单里故意没有 `transform`，「按下去缩一下」这类特效别再加——缩放不动邻居，在排版流里看着就像在抖（选项按钮被否掉过一次）。要表达「我点到了」就换颜色 / 透明度。唯一允许的「动」是连贯的形变：面跨断点长成贴边的带（`MORPH`），那是同一件东西在变
+- **动效**只有渐变：`ui/tokens.ts` 的 `FADE` / `RISE` / `HOVER` 都长在同一份清单上（`opacity` / 文字色 / 底色 / 描边色 / `display`），别在组件里散着写 `transition-*`——一个元素只能有一份 `transition-property`，所以清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹（目标是「别硬蹦」不是「炫」），`motion-reduce` 下完全不动；`flex-direction`、列数变化这类插不了值的只能用 `FADE` 淡一下遮住
+- **几何量一概不插值**：内边距 / 描边宽度 / 圆角 / 位移 / 缩放都不在清单里——按下不缩放，跨窄屏线时零件不收放，形状变化直接跳。理由是插值出来的是「在动」，页面里一有东西在动，观者就得跟着重新找位置；2026-09 为此收掉两轮（选项按钮按下缩 2%、整页跨窄屏线一起收放），**别再加回来**。反馈一律靠颜色
+- 悬停的反馈是**元素自己**变色，不位移也不换形状；贴在框里的图标按钮（×）连淡底都不给——浮出一块底色看着像框里又长出一个按钮
 - 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
 
 ## 内容与文案

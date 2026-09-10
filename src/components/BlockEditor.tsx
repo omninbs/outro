@@ -1,7 +1,7 @@
 import { newBlock, removeById, updateById } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
-import { AddButton, BARE_INPUT, BOX, EmptyHint, IconButton, MORPH, RISE } from './ui';
+import { AddButton, BARE_INPUT, BOX, EmptyHint, IconButton, RISE } from './ui';
 
 /** 文本块编辑器：一行小标题（可留空）+ 一段正文 */
 export function BlockEditor({
@@ -17,10 +17,10 @@ export function BlockEditor({
 
 			{blocks.map((block) => (
 				/* 窄屏跟 BareRow 一个待遇：横向贴边、去侧边描边与圆角，横向留白自己带一次；
-				   跨线时一起过渡，新加的一块从透明淡进来 */
+				   跨线时形状直接换，新加的一块从透明淡进来 */
 				<div
 					key={block.id}
-					class={`${BOX} p-2 max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${MORPH} ${RISE}`}
+					class={`${BOX} p-2 max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${RISE}`}
 				>
 					<div class="flex items-center gap-2">
 						<input
