@@ -8,8 +8,9 @@
 
 - `npm run dev` 开发预览（http://localhost:5173）
 - `npm run build` 产出单个自包含的 `dist/index.html`，双击用 `file://` 打开即可
-- 向导三步：摘要 → 描述 → 生成。当前页面记在 hash 里（地址出现 `#outro` 就是结尾页），
-  刷新与前进后退都能回到原处——也正是因为要支持 `file://`，这里不用路径路由
+- 首页选开始方式：空预设（自己从空白表单写）或问卷（还没做，入口先占位）
+- 空预设表单三步：摘要 → 描述 → 生成。当前页面记在 hash 里：空 hash 是首页、`#form` 是表单、
+  `#outro` 是结尾页，刷新与前进后退都能回到原处——也正是因为要支持 `file://`，这里不用路径路由
 - 结尾页按 F11 全屏后自行截图，工具本身不导出图片
 
 ## 约定
@@ -26,7 +27,7 @@
   - `store` 内容状态 · `router` hash 路由 · `id` 主键
 - `src/components/`
   - `ui/` 基础原子（Panel / Field / TextInput / Button / ConfirmButton / AddButton / IconButton / EmptyHint）
-  - `PageShell` 页面外壳 · `WizardShell` 向导骨架 · `OutroPage` 结尾页 · `FilledList` 清单
+  - `PageShell` 页面外壳 · `HomePage` 首页 · `WizardShell` 向导骨架 · `OutroPage` 结尾页 · `FilledList` 清单
   - `MetaEditor` / `BlockEditor` 两个列表编辑器 · `Stepper` 步骤条
 - `src/steps/` 三个步骤组件 + `registry.tsx` 步骤表（加一步只改这一处）
 

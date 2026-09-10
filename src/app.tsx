@@ -2,6 +2,7 @@ import { useState } from 'preact/hooks';
 
 import { OutroPage } from './components/OutroPage';
 import { FilledList } from './components/FilledList';
+import { HomePage } from './components/HomePage';
 import { PageShell } from './components/PageShell';
 import { WizardShell } from './components/WizardShell';
 import { Button } from './components/ui';
@@ -9,21 +10,29 @@ import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
 import { STEPS, type StepContext } from './steps/registry';
 
-/** 只有两个页面：向导和最终页。哪一步显示什么由 steps/registry 决定，这里只管分派 */
+/** 三个页面：首页、表单、最终页。哪一步显示什么由 steps/registry 决定，这里只管分派 */
 export function App() {
 	const { data, patch, reset } = useCard();
 	const { view, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 回到向导、以及重置数据，都从第一步重新开始：这两件事之后停在中间某一步没有道理
+	// 回到表单、以及重置数据，都从第一步重新开始：这两件事之后停在中间某一步没有道理
 	const backToStart = () => {
 		setStep(0);
-		navigate('wizard');
+		navigate('form');
 	};
 	const handleReset = () => {
 		reset();
 		setStep(0);
 	};
+
+	if (view === 'home') {
+		return (
+			<PageShell>
+				<HomePage />
+			</PageShell>
+		);
+	}
 
 	if (view === 'outro') {
 		return (
