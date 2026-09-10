@@ -11,7 +11,7 @@ export function DescribeStep({ data, patch }: { data: CardData; patch: Patch }) 
 			<Panel title="文本块">
 				<BlockEditor blocks={data.blocks} onChange={(blocks) => patch({ blocks })} />
 
-				<p class="mb-2 mt-5 text-base text-ctp-subtext0">常用声明，点击追加</p>
+				<p class="mb-2 mt-5 text-base text-ctp-subtext0">常用说明，点击追加</p>
 				<div class="flex flex-wrap gap-2">
 					{NOTICE_TEMPLATES.map((template) => (
 						<Chip
