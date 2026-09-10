@@ -11,7 +11,8 @@
 - 首页列出一份份问卷（第一份是「空预设」）：点进某份问卷答题，答完把这些答案填进内容，
   落到表单的最后一步「生成」，在那儿确认或再改
 - 「空预设」就是 `questions` 为空的那份问卷：没有题可答，直接进表单从零填，三步：摘要 → 描述 → 生成
-- 当前页面记在 hash 里：空 hash 是首页、`#form` 是表单、`#survey/<id>` 是某份问卷、`#outro` 是结尾页，
+- 当前页面记在 hash 里：空 hash 是首页、`#form` 是表单、`#outro` 是结尾页，
+  其余的 hash 就是某份问卷的 id（`#blank`、`#demo`）——问卷在地址里就是它自己的名字；
   刷新与前进后退都能回到原处——也正是因为要支持 `file://`，这里不用路径路由
 - 结尾页按 F11 全屏后自行截图，工具本身不导出图片
 
@@ -43,7 +44,7 @@
 问卷是数据不是代码：在 `src/surveys/` 新写一个文件、导出一份 `Survey`，
 再到 `src/surveys/_registry.ts` 的 `SURVEYS` 里加一行，组件一行都不用动。
 
-- `id` 直接进 hash（`#survey/<id>`），用小写 ASCII，别带斜杠
+- `id` 就是它在地址里的名字（`#demo`），用小写 ASCII；不能占用保留名 `form` / `outro`
 - `questions[].kind`：`text` 单行 · `long` 多行（`rows`，默认 5）· `choice` 单选（配 `options`）
 - `questions[].into`：答案落到结尾页哪里——`title` / `footer` / `meta`（左栏一行，配 `label`）/
   `block`（右栏一块，配 `label`）；不写就只给 `build` 用，自己不出现在内容里

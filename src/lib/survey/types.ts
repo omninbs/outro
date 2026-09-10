@@ -47,7 +47,10 @@ export type Answers = Record<string, string>;
  * 一份问卷 = 一个入口。不同领域各写一份，首页按 `SURVEYS` 的顺序铺卡片。
  */
 export interface Survey {
-	/** 写进 hash（`#survey/<id>`），所以用小写 ASCII，别带斜杠 */
+	/**
+	 * 问卷在地址里的名字（`#demo`），用小写 ASCII。
+	 * 不能占用保留名 `form` / `outro`；首页是空 hash，也用不了。
+	 */
 	id: string;
 	/** 首页卡片上的名字 */
 	title: string;
