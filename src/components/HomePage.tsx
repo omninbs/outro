@@ -1,5 +1,4 @@
 import { useRouter } from '../lib/router';
-import { PageFooter } from './PageFooter';
 import { Panel } from './ui';
 
 /**
@@ -31,8 +30,6 @@ export function HomePage() {
 					</p>
 				</Panel>
 			</div>
-
-			<PageFooter />
 		</div>
 	);
 }

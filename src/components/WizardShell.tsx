@@ -1,10 +1,9 @@
 import type { ComponentChildren } from 'preact';
 
-import { PageFooter } from './PageFooter';
 import { Stepper, type StepDef } from './Stepper';
 
 /**
- * 向导骨架：标题、步骤条、两栏，页脚收尾。横屏且够宽时右侧常驻清单；
+ * 向导骨架：标题、步骤条、两栏。横屏且够宽时右侧常驻清单；
  * 其余情况单栏顺读，需要清单的步骤自己把它放到表单下面。
  * 骨架不关心当前是哪一步，步骤内容由调用方作为 children 传进来。
  */
@@ -23,7 +22,7 @@ export function WizardShell({
 }) {
 	// 这里的 w-full 不能省：外层 PageShell 是 flex 列容器，只有 mx-auto 的话，
 	// 这一层会按内容宽度收缩，而不是像块级布局那样先占满再用 max-w 截住。
-	// flex-1 + 内层 flex-col 是给页脚的 mt-auto 用的，内容不满一屏时也贴底。
+	// flex-1 是给页脚的 mt-auto 用的：内容不满一屏时页脚也贴窗口底部。
 	return (
 		<div class="mx-auto flex w-full max-w-360 flex-1 flex-col px-6 py-12">
 			<header class="mb-6">
@@ -40,8 +39,6 @@ export function WizardShell({
 
 				<div class="hidden lg:landscape:sticky lg:landscape:top-12 lg:landscape:block">{sideList}</div>
 			</div>
-
-			<PageFooter />
 		</div>
 	);
 }

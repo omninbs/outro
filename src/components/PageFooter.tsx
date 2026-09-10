@@ -1,20 +1,20 @@
 import { useRouter } from '../lib/router';
 
 /**
- * 页脚：标准页面件，首页和表单页一模一样，最终页没有——那一页要整屏截图，页脚会入画。
+ * 页脚：标准页面件，由 PageShell 统一挂，页面自己不用管（最终页除外）。
  *
- * 自己读路由，不收 props：既然每个页面都长一样，让调用方传东西进来只会长出差异。
- * 样式照 Catppuccin 来：一条 surface0 分隔线，链接用 mauve、悬停加下划线；
- * 不铺背景色块，免得跟页面里的卡片抢视觉。
- * 内容不满一屏时也要落在窗口底部，靠外层 flex 列的 mt-auto 顶下去——
- * 调用方的容器得是 `flex flex-1 flex-col`。
+ * 宽度与内边距写在这里，不跟着各页内容列走：首页列窄（max-w-2xl）、表单页列宽（max-w-360），
+ * 页脚要是继承各自那一列，两个页面的分隔线和链接就会对不齐。
+ * 所以分隔线铺满整幅，链接放在自己那个和表单页同宽的居中容器里，每页都一样。
+ *
+ * 样式照 Catppuccin 来：surface0 分隔线、overlay0 文字、mauve 链接配悬停下划线。
  */
 export function PageFooter() {
 	const { navigate } = useRouter();
 
 	return (
-		<footer class="mt-auto pt-12 text-base text-ctp-overlay0">
-			<nav class="flex items-center justify-end gap-x-5 border-t border-ctp-surface0 pt-5">
+		<footer class="mt-auto border-t border-ctp-surface0">
+			<nav class="mx-auto flex w-full max-w-360 items-center justify-end px-6 py-5 text-base text-ctp-overlay0">
 				<button
 					type="button"
 					onClick={() => navigate('home')}

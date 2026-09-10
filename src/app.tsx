@@ -36,7 +36,7 @@ export function App() {
 
 	if (view === 'outro') {
 		return (
-			<PageShell theme="latte">
+			<PageShell theme="latte" footer={false}>
 				<OutroPage data={data} onExit={backToStart} />
 			</PageShell>
 		);
