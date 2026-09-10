@@ -17,7 +17,7 @@ export function HomePage() {
 				<p class="mt-1 text-base text-ctp-subtext0">选一种开始方式</p>
 			</header>
 
-			<div class="grid items-start gap-6 landscape:grid-cols-2">
+			<div class="space-y-6">
 				<Panel title="空预设">
 					<p class="mb-4 text-base leading-relaxed text-ctp-subtext0">
 						从一张白纸开始：标题、元数据、文本块都由你自己写。
