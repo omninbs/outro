@@ -37,7 +37,7 @@ export interface Question {
 	default?: string;
 	/** 答题框里的占位提示 */
 	placeholder?: string;
-	/** `kind: 'choice'` 的选项。选项只是常用的那几个，答题时照样可以自己写 */
+	/** `kind: 'choice'` 的选项。选项只是常用的那几个，答题时点「自定义」照样能自己写 */
 	options?: string[];
 	/** `kind: 'long'` 的行数，默认 5 */
 	rows?: number;

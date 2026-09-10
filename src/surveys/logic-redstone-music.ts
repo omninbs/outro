@@ -12,7 +12,7 @@ import type { Survey } from '../lib/survey/types';
  * - 「默认：不显示」不是预填值，而是**不写 `default` + 占位提示写「不显示」**：
  *   空答案本来就不会印到结尾页，靠这一点表达「不问就不显示这一行」
  * - 三道单选题都写了 `default`，所以一进问卷就是「无分歧 / 无要求 / 无差异」，
- *   想换就点别的选项，或在下方的输入框里自己写
+ *   想换就点别的选项，或点「自定义」自己写一句
  */
 export const logicRedstoneMusicSurvey: Survey = {
 	id: 'logic-redstone-music',
