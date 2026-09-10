@@ -1,7 +1,7 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-import { TAP } from './tokens';
+import { HOVER } from './tokens';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
@@ -42,7 +42,7 @@ export function Button({
 			onClick={onClick}
 			onBlur={onBlur}
 			disabled={disabled}
-			class={`rounded-md text-base font-medium ${TAP} ${VARIANTS[variant]} ${cls ?? ''} disabled:cursor-not-allowed disabled:opacity-50`}
+			class={`rounded-md text-base font-medium ${HOVER} ${VARIANTS[variant]} ${cls ?? ''} disabled:cursor-not-allowed disabled:opacity-50`}
 		>
 			{children}
 		</button>
@@ -105,7 +105,7 @@ export function IconButton({
 			type="button"
 			title={title}
 			onClick={onClick}
-			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 hover:bg-ctp-surface0 hover:text-ctp-red ${TAP}`}
+			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 hover:bg-ctp-surface0 hover:text-ctp-red ${HOVER}`}
 		>
 			{children}
 		</button>
@@ -118,7 +118,7 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
 		<button
 			type="button"
 			onClick={onClick}
-			class={`w-full rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${TAP}`}
+			class={`w-full rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${HOVER}`}
 		>
 			＋ {children}
 		</button>

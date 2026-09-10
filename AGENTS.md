@@ -60,7 +60,8 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 推论：**贴边的面没法再给内容留边**，所以卡片里凡是裸文字 / 裸列表都得自己写 `max-narrow:px-inset`（`Field` 的标签、`FilledList` 的内容、首页卡片的说明、`GenerateStep` 的正文都是这么办的）
 - 元数据行（`MetaEditor`）窄屏上下排——它算窄模式的一种样式变体，不按自己的容器宽度单独判
 - 用 `grid` 就一定显式写列模板（`grid-cols-1`、`grid-cols-[minmax(0,1fr)_…]`）：不写的话那一列是隐式的 `auto`，按内容 max-content 算、**不会收缩**，输入框天生的固有宽度（400px 出头）会把整列顶出屏幕（2026-09 那次「485px 溢出」就是这么来的）
-- **动效**只从 `ui/tokens.ts` 的 `MORPH` / `FADE` / `RISE` / `TAP` 里挑，别在组件里散着写 `transition-*`：一个元素只能有一份 `transition-property`，所以属性清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹 / 位移不过一两个像素（目标是「别硬蹦」不是「炫」），`motion-reduce` 下完全不动；只给**能插值**的属性配过渡，`flex-direction`、列数变化那类只能用 `FADE` 淡一下遮住
+- **动效**只从 `ui/tokens.ts` 的 `MORPH` / `FADE` / `RISE` / `HOVER` 里挑，别在组件里散着写 `transition-*`：一个元素只能有一份 `transition-property`，所以属性清单只在那个文件里写一次。基调 150ms / ease-out / 不回弹（目标是「别硬蹦」不是「炫」），`motion-reduce` 下完全不动；只给**能插值**的属性配过渡，`flex-direction`、列数变化那类只能用 `FADE` 淡一下遮住
+- **只做渐变，不做位移与缩放**：公共属性清单里故意没有 `transform`，「按下去缩一下」这类特效别再加——缩放不动邻居，在排版流里看着就像在抖（选项按钮被否掉过一次）。要表达「我点到了」就换颜色 / 透明度。唯一允许的「动」是连贯的形变：面跨断点长成贴边的带（`MORPH`），那是同一件东西在变
 - 最终页（`OutroPage`）不跟这三档：它是拿去截图的作品面，之后单独定规矩
 
 ## 内容与文案

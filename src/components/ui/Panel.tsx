@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import { MORPH, TAP } from './tokens';
+import { MORPH, HOVER } from './tokens';
 
 /**
  * 卡片外观。窄屏（`max-narrow`）它不再是一张「卡片」：横向贴边、去掉侧边描边与圆角，
@@ -48,7 +48,7 @@ export function Panel({
 		<button
 			type="button"
 			onClick={onClick}
-			class={`${CARD} block w-full cursor-pointer text-left hover:border-ctp-mauve hover:bg-ctp-surface0/40 ${TAP}`}
+			class={`${CARD} block w-full cursor-pointer text-left hover:border-ctp-mauve hover:bg-ctp-surface0/40 ${HOVER}`}
 		>
 			{head}
 			{children}

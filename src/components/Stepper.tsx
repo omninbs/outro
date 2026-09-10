@@ -1,4 +1,4 @@
-import { FADE, TAP } from './ui';
+import { FADE, HOVER } from './ui';
 
 export interface StepDef {
 	id: string;
@@ -23,7 +23,7 @@ export function Stepper({
 						<button
 							type="button"
 							onClick={() => onSelect(index)}
-							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${TAP} ${
+							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${HOVER} ${
 								active
 									? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
 									: 'border-ctp-surface0 text-ctp-subtext0 hover:text-ctp-text'
