@@ -6,10 +6,15 @@ type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 /**
  * 内边距写进变体里，是为了把描边宽度从内边距里扣掉：
  * 文字行高 24px，四舍五入后四种变体的外部高度都是 40px，并排时严丝合缝。
+ *
+ * ghost 的底色用「文字色 5% 淡洗」而不是 surface0：surface0 在亮色（latte）下比底色深一大截、
+ * 在暗色（mocha）下反而比底色浅，同一个 token 两边深浅相反，做浅灰按钮总有一边发脏。
+ * 淡洗则自动跟着底色走：亮色里变淡灰、暗色里变淡亮，永远只是「比页面略深/略亮一点」。
  */
 const VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust hover:opacity-90',
-	ghost: 'border border-ctp-surface1 bg-ctp-surface0 px-[15px] py-[7px] text-ctp-text hover:bg-ctp-surface1',
+	ghost:
+		'border border-ctp-surface1 bg-ctp-text/5 px-[15px] py-[7px] text-ctp-text hover:bg-ctp-text/10',
 	danger: 'border-2 border-ctp-red px-3.5 py-1.5 text-ctp-red hover:bg-ctp-red/10',
 	dangerSolid: 'bg-ctp-red px-4 py-2 text-ctp-crust hover:opacity-90',
 };

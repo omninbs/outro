@@ -24,7 +24,7 @@ export function Stepper({
 							onClick={() => onSelect(index)}
 							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base transition ${
 								active
-									? 'border-ctp-mauve bg-ctp-surface0 text-ctp-text'
+									? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
 									: 'border-ctp-surface0 text-ctp-subtext0 hover:text-ctp-text'
 							}`}
 						>
