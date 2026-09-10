@@ -1,5 +1,7 @@
+import { COPY } from '../lib/copy';
 import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
 import { useRouter } from '../lib/router';
+import { SUB_TEXT } from './ui';
 
 /**
  * 页脚：固定页面件，由 PageShell 统一挂，页面自己不用管（最终页除外）。
@@ -22,8 +24,8 @@ export function PageFooter() {
 				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 landscape:flex-row landscape:items-start landscape:justify-between`}
 			>
 				<div class="landscape:flex-[7]">
-					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">结尾页生成器</h2>
-					<p class="text-base leading-relaxed text-ctp-subtext0">一个生成视频结尾信息页的小工具</p>
+					<h2 class="mb-2 text-lg font-semibold tracking-wide text-ctp-subtext1">{COPY.brand}</h2>
+					<p class={SUB_TEXT}>一个生成视频结尾信息页的小工具</p>
 				</div>
 
 				<nav class="landscape:flex-[5]">
@@ -35,7 +37,7 @@ export function PageFooter() {
 								onClick={() => navigate('home')}
 								class="block cursor-pointer py-1 text-ctp-text transition hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em]"
 							>
-								返回主页
+								{COPY.action.backHome}
 							</button>
 						</li>
 					</ul>

@@ -1,4 +1,5 @@
 import { newMetaItem, removeById, updateById } from '../lib/card';
+import { COPY } from '../lib/copy';
 import type { MetaItem } from '../lib/types';
 import { AddButton, BARE_INPUT, EmptyHint, IconButton } from './ui';
 
@@ -22,24 +23,24 @@ export function MetaEditor({
 					<input
 						type="text"
 						value={item.label}
-						placeholder="名称"
+						placeholder={COPY.field.metaLabel}
 						class={`w-36 shrink-0 font-medium text-ctp-mauve ${BARE_INPUT}`}
 						onInput={(e) => onChange(updateById(items, item.id, { label: e.currentTarget.value }))}
 					/>
 					<input
 						type="text"
 						value={item.value}
-						placeholder="填写内容"
+						placeholder={COPY.field.metaValue}
 						class={`min-w-0 flex-1 text-ctp-text ${BARE_INPUT}`}
 						onInput={(e) => onChange(updateById(items, item.id, { value: e.currentTarget.value }))}
 					/>
-					<IconButton title="删除" onClick={() => onChange(removeById(items, item.id))}>
+					<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(items, item.id))}>
 						×
 					</IconButton>
 				</div>
 			))}
 
-			<AddButton onClick={() => onChange([...items, newMetaItem()])}>添加元数据</AddButton>
+			<AddButton onClick={() => onChange([...items, newMetaItem()])}>{COPY.action.addMeta}</AddButton>
 		</div>
 	);
 }

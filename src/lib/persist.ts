@@ -1,4 +1,4 @@
-import { DEFAULT_CARD, DEFAULT_FOOTER, DEFAULT_TITLE } from './config';
+import { DEFAULT_CARD } from './config';
 import { newId } from './id';
 import type { CardData, MetaItem, TextBlock } from './types';
 
@@ -14,6 +14,13 @@ const LEGACY_NOTICE_LABEL = '版权声明';
 const LEGACY_NOTICE_TEXT =
 	'本工程仅供学习交流与个人收藏使用。允许转载分享，转载时请注明原歌曲作者与本工程作者，并保留本声明。' +
 	'禁止商用、售卖或用于付费订阅；如需二创或商业合作，请先取得授权。';
+
+/**
+ * v1 当年预填的默认文案。这是**历史值**，不跟着 lib/copy.ts 里现在的文案走——
+ * 迁移要认的是旧档里写着什么，而不是今天默认显示什么，两者混成一个常量就迟早搬错。
+ */
+const LEGACY_DEFAULT_TITLE = '标题';
+const LEGACY_DEFAULT_FOOTER = '底部一行字';
 
 const str = (value: unknown, fallback = '') => (typeof value === 'string' ? value : fallback);
 
@@ -65,8 +72,8 @@ export function loadCard(): CardData {
 		const card = parseCard(legacy);
 		return {
 			...card,
-			title: dropDefault(card.title, DEFAULT_TITLE),
-			footerText: dropDefault(card.footerText, DEFAULT_FOOTER),
+			title: dropDefault(card.title, LEGACY_DEFAULT_TITLE),
+			footerText: dropDefault(card.footerText, LEGACY_DEFAULT_FOOTER),
 			blocks: card.blocks.filter(
 				(block) =>
 					!(

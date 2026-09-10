@@ -2,6 +2,7 @@ import { Fragment } from 'preact';
 
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
+import { SUB_TEXT } from './ui';
 
 /** 页首：标题 + 一条短横线 */
 function OutroHeader({ title }: { title: string }) {
@@ -22,7 +23,7 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		<dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 landscape:pt-1">
 			{meta.map((item) => (
 				<Fragment key={item.id}>
-					<dt class="text-base leading-relaxed text-ctp-subtext0">{item.label}</dt>
+					<dt class={SUB_TEXT}>{item.label}</dt>
 					<dd class="min-w-0 break-words text-base leading-relaxed">{item.value}</dd>
 				</Fragment>
 			))}

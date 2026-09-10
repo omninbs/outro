@@ -1,4 +1,4 @@
-import { DEFAULT_FOOTER, DEFAULT_TITLE } from './config';
+import { COPY } from './copy';
 import type { CardData } from './types';
 
 /** 最终页左栏的一行：名称已去空白，值保证非空 */
@@ -30,13 +30,13 @@ export interface OutroContent {
  */
 export function resolveOutro(data: CardData): OutroContent {
 	return {
-		title: data.title.trim() || DEFAULT_TITLE,
+		title: data.title.trim() || COPY.fallback.title,
 		meta: data.meta
 			.filter((item) => item.value.trim() !== '')
 			.map((item) => ({ id: item.id, label: item.label.trim(), value: item.value.trim() })),
 		blocks: data.blocks
 			.filter((block) => block.text.trim() !== '')
 			.map((block) => ({ id: block.id, label: block.label.trim(), text: block.text.trim() })),
-		footer: data.footerText.trim() || DEFAULT_FOOTER,
+		footer: data.footerText.trim() || COPY.fallback.footer,
 	};
 }

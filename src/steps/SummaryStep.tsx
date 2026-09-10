@@ -1,23 +1,23 @@
 import { MetaEditor } from '../components/MetaEditor';
 import { Field, Panel, TextInput } from '../components/ui';
-import { DEFAULT_TITLE } from '../lib/config';
+import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
 
 /** 摘要：页面标题 + 主体左栏的元数据 */
 export function SummaryStep({ data, patch }: { data: CardData; patch: Patch }) {
 	return (
 		<>
-			<Panel title="页面标题">
-				<Field label="标题">
+			<Panel title={COPY.section.title}>
+				<Field label={COPY.field.title}>
 					<TextInput
 						value={data.title}
 						onInput={(title) => patch({ title })}
-						placeholder={DEFAULT_TITLE}
+						placeholder={COPY.fallback.title}
 					/>
 				</Field>
 			</Panel>
 
-			<Panel title="元数据">
+			<Panel title={COPY.section.meta}>
 				<MetaEditor items={data.meta} onChange={(meta) => patch({ meta })} />
 			</Panel>
 		</>

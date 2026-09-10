@@ -1,6 +1,8 @@
 import { SURVEYS } from '../surveys/_registry';
+import { COPY } from '../lib/copy';
 import type { Survey } from '../lib/survey/types';
-import { Panel } from './ui';
+import { PageHeader } from './PageHeader';
+import { Panel, SUB_TEXT } from './ui';
 
 /**
  * 首页：把问卷清单铺成一列卡片，整块可点。
@@ -12,15 +14,12 @@ import { Panel } from './ui';
 export function HomePage({ onPick }: { onPick: (survey: Survey) => void }) {
 	return (
 		<div>
-			<header class="mb-6">
-				<h1 class="text-lg font-semibold">结尾页生成器</h1>
-				<p class="mt-1 text-base text-ctp-subtext0">选一种开始方式</p>
-			</header>
+			<PageHeader title={COPY.brand} description="选一种开始方式" />
 
 			<div class="space-y-6">
 				{SURVEYS.map((survey) => (
 					<Panel key={survey.id} title={survey.title} onClick={() => onPick(survey)}>
-						<p class="text-base leading-relaxed text-ctp-subtext0">{survey.description}</p>
+						<p class={SUB_TEXT}>{survey.description}</p>
 					</Panel>
 				))}
 			</div>

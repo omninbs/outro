@@ -1,4 +1,5 @@
 import { newBlock, removeById, updateById } from '../lib/card';
+import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
 import { AddButton, BARE_INPUT, EmptyHint, IconButton } from './ui';
 
@@ -20,25 +21,25 @@ export function BlockEditor({
 						<input
 							type="text"
 							value={block.label}
-							placeholder="小标题（可留空）"
+							placeholder={COPY.field.blockLabel}
 							class={`min-w-0 flex-1 font-medium text-ctp-mauve ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(blocks, block.id, { label: e.currentTarget.value }))}
 						/>
-						<IconButton title="删除" onClick={() => onChange(removeById(blocks, block.id))}>
+						<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(blocks, block.id))}>
 							×
 						</IconButton>
 					</div>
 					<textarea
 						value={block.text}
 						rows={5}
-						placeholder="正文"
+						placeholder={COPY.field.blockText}
 						class={`mt-1 w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
 						onInput={(e) => onChange(updateById(blocks, block.id, { text: e.currentTarget.value }))}
 					/>
 				</div>
 			))}
 
-			<AddButton onClick={() => onChange([...blocks, newBlock()])}>添加文本块</AddButton>
+			<AddButton onClick={() => onChange([...blocks, newBlock()])}>{COPY.action.addBlock}</AddButton>
 		</div>
 	);
 }

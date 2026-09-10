@@ -1,6 +1,7 @@
 import type { ComponentChildren } from 'preact';
 
 import type { StepDef } from '../components/Stepper';
+import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
 import { DescribeStep } from './DescribeStep';
 import { GenerateStep } from './GenerateStep';
@@ -24,17 +25,17 @@ export interface StepEntry extends StepDef {
 export const STEPS: StepEntry[] = [
 	{
 		id: 'summary',
-		label: '摘要',
+		label: COPY.step.summary,
 		body: ({ data, patch }) => <SummaryStep data={data} patch={patch} />,
 	},
 	{
 		id: 'describe',
-		label: '描述',
+		label: COPY.step.describe,
 		body: ({ data, patch }) => <DescribeStep data={data} patch={patch} />,
 	},
 	{
 		id: 'generate',
-		label: '生成',
+		label: COPY.step.generate,
 		listBelow: true,
 		body: ({ onReset, onGenerate }) => <GenerateStep onReset={onReset} onGenerate={onGenerate} />,
 	},

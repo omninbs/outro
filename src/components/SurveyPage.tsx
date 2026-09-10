@@ -1,8 +1,10 @@
 import { useState } from 'preact/hooks';
 
+import { COPY } from '../lib/copy';
 import type { Answers, Survey } from '../lib/survey/types';
+import { PageHeader } from './PageHeader';
 import { QuestionInput } from './QuestionInput';
-import { Button, Panel } from './ui';
+import { Button, Panel, ActionRow } from './ui';
 
 /**
  * 问卷页：把一份问卷（数据）渲染成题面，答案就地攒在组件状态里。
@@ -26,10 +28,7 @@ export function SurveyPage({
 
 	return (
 		<div>
-			<header class="mb-6">
-				<h1 class="text-lg font-semibold">{survey.title}</h1>
-				<p class="mt-1 text-base text-ctp-subtext0">{survey.description}</p>
-			</header>
+			<PageHeader title={survey.title} description={survey.description} />
 
 			<Panel>
 				{survey.questions.map((question) => (
@@ -42,12 +41,12 @@ export function SurveyPage({
 				))}
 			</Panel>
 
-			<div class="mt-6 flex items-center justify-between">
-				<Button onClick={onExit}>返回主页</Button>
+			<ActionRow>
+				<Button onClick={onExit}>{COPY.action.backHome}</Button>
 				<Button variant="primary" onClick={() => onFinish(answers)}>
 					完成
 				</Button>
-			</div>
+			</ActionRow>
 		</div>
 	);
 }

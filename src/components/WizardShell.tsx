@@ -1,5 +1,7 @@
 import type { ComponentChildren } from 'preact';
 
+import { COPY } from '../lib/copy';
+import { PageHeader } from './PageHeader';
 import { Stepper, type StepDef } from './Stepper';
 
 /**
@@ -24,12 +26,10 @@ export function WizardShell({
 }) {
 	return (
 		<div>
-			<header class="mb-6">
-				<h1 class="text-lg font-semibold">结尾页生成器</h1>
-				<p class="mt-1 text-base text-ctp-subtext0">
-					按步骤填写内容，右侧实时确认已填信息，最后生成结尾页
-				</p>
-			</header>
+			<PageHeader
+				title={COPY.brand}
+				description="按步骤填写内容，右侧实时确认已填信息，最后生成结尾页"
+			/>
 
 			<Stepper steps={steps} current={current} onSelect={onSelect} />
 

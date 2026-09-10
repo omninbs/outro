@@ -3,10 +3,12 @@ import { useState } from 'preact/hooks';
 import { OutroPage } from './components/OutroPage';
 import { FilledList } from './components/FilledList';
 import { HomePage } from './components/HomePage';
+import { PageHeader } from './components/PageHeader';
 import { PageShell } from './components/PageShell';
 import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
-import { Button } from './components/ui';
+import { Button, ActionRow } from './components/ui';
+import { COPY } from './lib/copy';
 import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
 import { buildFrom } from './lib/survey/build';
@@ -65,12 +67,10 @@ export function App() {
 		if (!survey) {
 			return (
 				<PageShell width="standard">
-					<header>
-						<h1 class="text-lg font-semibold">没有这份问卷</h1>
-						<p class="mt-1 text-base text-ctp-subtext0">
-							地址里的问卷 id 认不出来，回首页重新选一份。
-						</p>
-					</header>
+					<PageHeader
+						title="没有这份问卷"
+						description="地址里的问卷 id 认不出来，回首页重新选一份。"
+					/>
 				</PageShell>
 			);
 		}
@@ -118,10 +118,10 @@ export function App() {
 					</div>
 				)}
 
-				<div class="mt-6 flex items-center justify-between">
+				<ActionRow>
 					{step === 0 ? (
 						// 第一步没有「上一步」可退，这个位置改成退出表单
-						<Button onClick={() => navigate('home')}>返回首页</Button>
+						<Button onClick={() => navigate('home')}>{COPY.action.backHome}</Button>
 					) : (
 						<Button onClick={() => setStep(step - 1)}>上一步</Button>
 					)}
@@ -130,7 +130,7 @@ export function App() {
 							下一步
 						</Button>
 					)}
-				</div>
+				</ActionRow>
 			</WizardShell>
 		</PageShell>
 	);
