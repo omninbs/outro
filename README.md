@@ -27,7 +27,7 @@
   - `store` 内容状态 · `router` hash 路由 · `id` 主键
 - `src/components/`
   - `ui/` 基础原子（Panel / Field / TextInput / Button / ConfirmButton / AddButton / IconButton / EmptyHint）
-  - `PageShell` 页面外壳 · `HomePage` 首页 · `WizardShell` 向导骨架 · `OutroPage` 结尾页 · `FilledList` 清单
+  - `PageShell` 页面外壳 · `HomePage` 首页 · `WizardShell` 向导骨架 · `PageFooter` 页脚 · `OutroPage` 结尾页 · `FilledList` 清单
   - `MetaEditor` / `BlockEditor` 两个列表编辑器 · `Stepper` 步骤条
 - `src/steps/` 三个步骤组件 + `registry.tsx` 步骤表（加一步只改这一处）
 
