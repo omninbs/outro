@@ -76,30 +76,42 @@ export function TextInput({
 	);
 }
 
-/** 多行框一律这么高：问卷的段落题和文本块的正文是同一件事，两处不能各写一个数 */
-export const TEXTAREA_ROWS = 3;
+/**
+ * 多行框一律三行，没有例外——问卷的段落题和文本块的正文是同一件事，
+ * 所以行数写死在这儿，不开成 prop：调用点管内容，不管控件有多高。
+ * 纵向下拉可调（`resize-y`）留给要写更多的人，那才是他自己的事。
+ */
+const TEXTAREA_ROWS = 3;
 
-/** 多行版：问卷里「一段话」这类题目用它，纵向下拉可调；同样是「框 + 裸控件」 */
-export function TextArea({
+/** 裸的多行框：自己不套框，两处套法不同（`BareRow` 里一个、块编辑器那层框里一个） */
+export function BareTextArea({
 	value,
 	onInput,
 	placeholder,
-	rows = TEXTAREA_ROWS,
+	class: extra = '',
 }: {
 	value: string;
 	onInput: (value: string) => void;
 	placeholder?: string;
-	rows?: number;
+	/** 只用来补外边距这类位置差异 */
+	class?: string;
 }) {
 	return (
+		<textarea
+			value={value}
+			rows={TEXTAREA_ROWS}
+			placeholder={placeholder}
+			class={`w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT} ${extra}`}
+			onInput={(e) => onInput(e.currentTarget.value)}
+		/>
+	);
+}
+
+/** 多行版：问卷里「一段话」这类题目用它；同样是「框 + 裸控件」 */
+export function TextArea(props: { value: string; onInput: (value: string) => void; placeholder?: string }) {
+	return (
 		<BareRow>
-			<textarea
-				value={value}
-				rows={rows}
-				placeholder={placeholder}
-				class={`w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
-				onInput={(e) => onInput(e.currentTarget.value)}
-			/>
+			<BareTextArea {...props} />
 		</BareRow>
 	);
 }

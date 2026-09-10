@@ -1,7 +1,7 @@
 import { newBlock, removeById, updateById } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
-import { AddButton, BARE_INPUT, BOX, EmptyHint, IconButton, RISE, TEXTAREA_ROWS } from './ui';
+import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from './ui';
 
 /** 文本块编辑器：一行小标题（可留空）+ 一段正文 */
 export function BlockEditor({
@@ -34,12 +34,11 @@ export function BlockEditor({
 							×
 						</IconButton>
 					</div>
-					<textarea
+					<BareTextArea
 						value={block.text}
-						rows={TEXTAREA_ROWS}
 						placeholder={COPY.field.blockText}
-						class={`mt-1 w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
-						onInput={(e) => onChange(updateById(blocks, block.id, { text: e.currentTarget.value }))}
+						class="mt-1"
+						onInput={(text) => onChange(updateById(blocks, block.id, { text }))}
 					/>
 				</div>
 			))}

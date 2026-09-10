@@ -46,7 +46,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 
 ## 代码约定
 
-- **一个知识只有一个定义**：界面文案集中在 `src/lib/copy.ts`（只收两处以上用到的，值相同不等于同一条知识）；内容长什么样由 `src/lib/outro.ts` 的 `resolveOutro` 一处决定；框的外观是 `ui/inputs.tsx` 的 `BOX` / `BARE_INPUT` / `BareRow`；排版与动效片段在 `ui/tokens.ts`；可点的整行是 `ui/LinkList.tsx`（页脚那两条链接用它）
+- **一个知识只有一个定义**：界面文案集中在 `src/lib/copy.ts`（只收两处以上用到的，值相同不等于同一条知识）；内容长什么样由 `src/lib/outro.ts` 的 `resolveOutro` 一处决定；框的外观是 `ui/inputs.tsx` 的 `BOX` / `BARE_INPUT` / `BareRow` / `BareTextArea`（裸多行框，三行的行数也写在里面）；排版与动效片段在 `ui/tokens.ts`；可点的整行是 `ui/LinkList.tsx`（页脚那两条链接用它）
 - 目录表叫 `_registry.ts(x)`：`src/surveys/` 是首页那些入口（全是数据，加一份 = 加一个文件 + 加一行）、`src/steps/` 是向导三步
 - 问卷是数据不是代码：题目写 `into` 决定答案落到结尾页哪里（`meta` / `block` / `title` / `footer`），需要加工才写 `build`；加一份问卷不用碰组件
 - **问卷答完是「以 `DEFAULT_CARD` 为底，问卷答到的部分盖上去」**（`buildFrom`），不是把内容清空：问卷没问到的去处保持默认值——没有页脚题的问卷答完，页脚那行署名还在（2026-09 修过：`buildCard` 当年从全空字面量起步，默认署名被写成了空串）。所以 `buildCard` / `Survey.build` 返回的是 `Partial<CardData>`：只有问到的去处才出现在结果里；问到却答空的标题 / 页脚写成空串（「这一块就是要空着」），元数据 / 文本块的空答案整条丢掉
@@ -81,7 +81,7 @@ npm run build       # vite build，产出单文件 dist/index.html
 - 选项表是常用值不是全集：长一点的单选都要留「自定义」的口子，自己写的那一句也要能进结尾页
 - × 要**看起来**嵌在框里：靠组合拿到（`BareRow` 多传一个 `action`），不是塞进 `<input>` 里
 - **没有兜底文案**（2026-09 收掉）：留空就是不印——标题空着，标题块（连下面那根横线）整个不渲染；页脚空着，署名那行不渲染（「返回编辑」还在）。占位提示也不是数据：全站只有 `COPY.placeholder` 一句「不显示」，所有空框是同一个意思
-- 预填值（`default`）是**真值**：框里一开始就写着，会一路印到结尾页；「默认不显示这一行」用**不写 `default`** 表达，而不是预填一句「不显示」。页脚那份初始值（`config.ts` 的 `DEFAULT_CARD.footerText`）也是真值，删掉就真没有。问卷数据里因此没有 `placeholder` / `rows` 这类只管控件长相的字段，多行框的行数写死在 `ui/inputs.tsx` 的 `TEXTAREA_ROWS`（3 行，2026-09 从 5 行压下来的），文本块正文那个框也读同一个数——两处各写一个数迟早只剩一处被改
+- 预填值（`default`）是**真值**：框里一开始就写着，会一路印到结尾页；「默认不显示这一行」用**不写 `default`** 表达，而不是预填一句「不显示」。页脚那份初始值（`config.ts` 的 `DEFAULT_CARD.footerText`）也是真值，删掉就真没有。问卷数据里因此没有 `placeholder` / `rows` 这类只管控件长相的字段，多行框的行数是**写死的 3 行**（`ui/inputs.tsx` 的 `BareTextArea`，2026-09 从 5 行压下来的）：问卷的段落题与文本块的正文都走它，行数**不开成 prop**，调用点不管控件有多高
 - 空答案整条丢掉：没填的题不在结尾页留一个空标签
 - 清单三段（摘要 / 描述 / 页脚）**哪一段空着就在那一组里放一个虚线提示**（`EmptyHint` + `COPY.empty`「留空」）：空的是哪一段由它上面的小标题说明，提示只说「这一段是空的」，别写成一句解释。`EmptyHint` 只带**框内部**的内边距，所以清单的 `max-narrow:px-inset` 写在「有内容」的三个分支上而不是外层——两层叠着写，窄屏那个框会比别的行窄一圈
 - 不用 `truncate` 之类截断内容：名称 / 值写长了就让它换行（`FilledList` 的标签列曾经是 `truncate`，会悄悄丢字）。清单是给人最后确认用的，宁可它高一点
