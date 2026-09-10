@@ -28,7 +28,7 @@ export function SummaryStep({
 			<Panel title="元数据">
 				<MetaEditor items={data.meta} onChange={(meta) => patch({ meta })} />
 
-				<p class="mb-2 mt-5 text-xs text-ctp-subtext0">常用条目，点击追加</p>
+				<p class="mb-2 mt-5 text-base text-ctp-subtext0">常用条目，点击追加</p>
 				<div class="flex flex-wrap gap-2">
 					{QUICK_META.map((label) => {
 						const added = hasQuick(label);
@@ -38,7 +38,7 @@ export function SummaryStep({
 								type="button"
 								disabled={added}
 								onClick={() => patch({ meta: [...data.meta, newMetaItem(label)] })}
-								class={`rounded-full border px-3 py-1 text-xs transition ${
+								class={`rounded-full border px-3 py-1.5 text-base transition ${
 									added
 										? 'border-ctp-green/40 text-ctp-green'
 										: 'border-ctp-surface1 text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve'

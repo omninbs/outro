@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'preact/hooks';
-import { Checklist } from './components/Checklist';
+import { useState } from 'preact/hooks';
 import { ColophonPage } from './components/ColophonPage';
-import { newMetaItem } from './components/MetaEditor';
-import { Preview } from './components/Preview';
+import { FilledList } from './components/FilledList';
 import { Stepper, type StepDef } from './components/Stepper';
 import { Button } from './components/ui';
-import { evaluate } from './lib/evaluate';
+import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
 import { DescribeStep } from './steps/DescribeStep';
 import { GenerateStep } from './steps/GenerateStep';
@@ -17,42 +15,27 @@ const STEPS: StepDef[] = [
 	{ id: 'generate', label: '生成' },
 ];
 
-/** 版权页是应用里的一个路由：#/colophon */
-const PAGE_HASH = '#/colophon';
-
+/** 视图由状态切换，见 lib/router.tsx */
 export function App() {
 	const { data, patch, reset } = useCard();
+	const { view, navigate } = useRouter();
 	const [step, setStep] = useState(0);
-	const [viewing, setViewing] = useState(() => window.location.hash === PAGE_HASH);
-	const { hints, score, grade } = evaluate(data);
 
-	useEffect(() => {
-		const sync = () => setViewing(window.location.hash === PAGE_HASH);
-		window.addEventListener('hashchange', sync);
-		return () => window.removeEventListener('hashchange', sync);
-	}, []);
-
-	const addQuickMeta = (label: string) => {
-		if (data.meta.some((item) => item.label.trim() === label)) return;
-		patch({ meta: [...data.meta, newMetaItem(label)] });
-		setStep(0);
-	};
-
-	if (viewing) {
+	if (view === 'colophon') {
 		return (
-			<div class="flex min-h-dvh flex-col">
-				<ColophonPage data={data} exitHref="#/" />
+			<div class="safe-area flex min-h-dvh flex-col">
+				<ColophonPage data={data} onExit={() => navigate('wizard')} />
 			</div>
 		);
 	}
 
 	return (
-		<div class="min-h-dvh bg-ctp-base text-ctp-text antialiased">
+		<div class="safe-area min-h-dvh bg-ctp-base text-ctp-text antialiased">
 			<div class="mx-auto max-w-360 px-6 py-8">
 				<header class="mb-6">
 					<h1 class="text-lg font-semibold">版权页生成器</h1>
-					<p class="mt-1 text-xs text-ctp-subtext0">
-						按步骤填写内容，右侧实时预览，最后生成版权页
+					<p class="mt-1 text-base text-ctp-subtext0">
+						按步骤填写内容，右侧实时确认已填信息，最后生成版权页
 					</p>
 				</header>
 
@@ -63,7 +46,9 @@ export function App() {
 						<div class="space-y-6">
 							{step === 0 && <SummaryStep data={data} patch={patch} />}
 							{step === 1 && <DescribeStep data={data} patch={patch} />}
-							{step === 2 && <GenerateStep onReset={reset} />}
+							{step === 2 && (
+								<GenerateStep onReset={reset} onGenerate={() => navigate('colophon')} />
+							)}
 						</div>
 
 						<div class="mt-6 flex items-center justify-between">
@@ -78,9 +63,8 @@ export function App() {
 						</div>
 					</div>
 
-					<div class="space-y-4 lg:sticky lg:top-8">
-						<Preview data={data} />
-						<Checklist hints={hints} score={score} grade={grade} onAdd={addQuickMeta} />
+					<div class="lg:sticky lg:top-8">
+						<FilledList data={data} />
 					</div>
 				</div>
 			</div>

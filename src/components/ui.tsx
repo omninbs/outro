@@ -1,13 +1,13 @@
 import type { ComponentChildren } from 'preact';
 
 const INPUT =
-	'w-full rounded-md border border-ctp-surface1 bg-ctp-crust px-3 py-2 text-sm text-ctp-text ' +
+	'w-full rounded-md border border-ctp-surface1 bg-ctp-crust px-3 py-2 text-base text-ctp-text ' +
 	'placeholder:text-ctp-overlay0 focus:border-ctp-mauve focus:outline-none';
 
 export function Panel({ title, children }: { title?: string; children: ComponentChildren }) {
 	return (
 		<section class="rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5">
-			{title && <h2 class="mb-4 text-sm font-semibold tracking-wide text-ctp-subtext1">{title}</h2>}
+			{title && <h2 class="mb-4 text-lg font-semibold tracking-wide text-ctp-subtext1">{title}</h2>}
 			{children}
 		</section>
 	);
@@ -24,9 +24,9 @@ export function Field({
 }) {
 	return (
 		<label class="mb-4 block last:mb-0">
-			<span class="mb-1.5 block text-xs text-ctp-subtext0">{label}</span>
+			<span class="mb-1.5 block text-base text-ctp-subtext0">{label}</span>
 			{children}
-			{hint && <span class="mt-1.5 block text-xs text-ctp-overlay0">{hint}</span>}
+			{hint && <span class="mt-1.5 block text-base text-ctp-overlay0">{hint}</span>}
 		</label>
 	);
 }
@@ -126,7 +126,7 @@ export function Button({
 	disabled?: boolean;
 	class?: string;
 }) {
-	const base = `rounded-md px-4 py-2 text-sm font-medium transition ${VARIANTS[variant]} ${cls ?? ''}`;
+	const base = `rounded-md px-4 py-2 text-base font-medium transition ${VARIANTS[variant]} ${cls ?? ''}`;
 
 	if (href) {
 		return (

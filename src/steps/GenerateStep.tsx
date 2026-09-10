@@ -1,13 +1,19 @@
 import { Button, Panel } from '../components/ui';
 
-export function GenerateStep({ onReset }: { onReset: () => void }) {
+export function GenerateStep({
+	onReset,
+	onGenerate,
+}: {
+	onReset: () => void;
+	onGenerate: () => void;
+}) {
 	return (
 		<Panel title="生成">
-			<p class="mb-4 text-xs leading-relaxed text-ctp-subtext0">
-				点击后进入版权页。按 F11 全屏后自行截图即可，页脚左侧的「编辑」可以回到这里。
+			<p class="mb-4 text-base leading-relaxed text-ctp-subtext0">
+				点击后进入版权页。按 F11 全屏后自行截图即可，页脚左侧的「返回编辑」可以回到这里。
 			</p>
 			<div class="flex flex-wrap gap-2">
-				<Button variant="primary" href="#/colophon">
+				<Button variant="primary" onClick={onGenerate}>
 					生成
 				</Button>
 				<Button

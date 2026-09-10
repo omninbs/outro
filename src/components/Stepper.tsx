@@ -22,14 +22,14 @@ export function Stepper({
 						<button
 							type="button"
 							onClick={() => onSelect(index)}
-							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition ${
+							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base transition ${
 								active
 									? 'border-ctp-mauve bg-ctp-surface0 text-ctp-text'
 									: 'border-ctp-surface0 text-ctp-subtext0 hover:text-ctp-text'
 							}`}
 						>
 							<span
-								class={`grid h-5 w-5 place-items-center rounded-full text-xs ${
+								class={`grid h-6 w-6 place-items-center rounded-full text-base ${
 									active
 										? 'bg-ctp-mauve text-ctp-crust'
 										: done
