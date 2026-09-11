@@ -68,7 +68,7 @@ export const logicRedstoneMusicSurvey: Survey = {
 			id: 'bedrock',
 			label: '基岩版兼容',
 			kind: 'choice',
-			options: ['无差异', '需调整延迟补偿', '请查看对应版本'],
+			options: ['无差异', '需调整延时补偿', '请查看对应版本'],
 			default: '无差异',
 		},
 		{
