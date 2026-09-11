@@ -27,9 +27,13 @@ const Group = ({ text, count, children }: { text: string; count: number; childre
  *
  * 窄屏上下排（跟所有别处的元数据行一样）；这时 `flex-1` 管的是「竖着分」，
  * 会把值压成零高，所以窄屏换成 `flex-none` 交给宽度定。
+ *
+ * 窄屏那个对内间隙（`max-narrow:gap-0.5`，2px）要**明显小于条与条之间的**
+ * （`dl` 的 `max-narrow:gap-2`，8px）：名称与值是一「条」，两个数挨太近就看不出成组。
+ * 2026-09 用户提的——原来是 4px 对 6px，只差 2px，被 26px 的行高整个吃掉。
  */
 const Row = ({ label, value }: { label: string; value: string }) => (
-	<div class="flex gap-3 text-base leading-relaxed max-narrow:flex-col max-narrow:gap-1">
+	<div class="flex gap-3 text-base leading-relaxed max-narrow:flex-col max-narrow:gap-0.5">
 		<dt class="w-24 shrink-0 text-ctp-subtext0 max-narrow:w-full">{label}</dt>
 		<dd class="min-w-0 flex-1 break-words text-ctp-text max-narrow:flex-none">{value}</dd>
 	</div>
@@ -54,7 +58,9 @@ export function FilledList({ data }: { data: CardData }) {
 				{/* 标题也能留空：没填就不印这一行，跟最终页一致 */}
 				<Group text={COPY.step.summary} count={(title ? 1 : 0) + meta.length}>
 					{title || meta.length ? (
-						<dl class="flex flex-col gap-1.5 max-narrow:px-inset">
+						<dl class="flex flex-col gap-1.5 max-narrow:gap-2 max-narrow:px-inset">
+							{/* 条与条的间隙窄屏要放开（`max-narrow:gap-2`）：上下排之后，
+							    「对内紧、条间松」是唯一能把条目分开的东西，对内那个数见 `Row` */}
 							{title && <Row label={COPY.field.title} value={title} />}
 							{meta.map((item) => (
 								<Row key={item.id} label={item.label} value={item.value} />
