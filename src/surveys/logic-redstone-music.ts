@@ -91,6 +91,12 @@ export const logicRedstoneMusicSurvey: Survey = {
 		},
 		{
 			into: 'meta',
+			id: 'videoAuthor',
+			label: '视频作者',
+			kind: 'text',
+		},
+		{
+			into: 'meta',
 			id: 'license',
 			label: '转载和再制',
 			kind: 'choice',
