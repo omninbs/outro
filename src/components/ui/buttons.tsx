@@ -19,11 +19,11 @@ type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
  * 淡洗则自动跟着底色走：亮色里变淡灰、暗色里变淡亮，永远只是「比页面略深/略亮一点」。
  */
 const VARIANTS: Record<ButtonVariant, string> = {
-	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust hover:opacity-90',
+	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust press:opacity-90',
 	ghost:
-		'border border-ctp-surface1 bg-ctp-text/5 px-[15px] py-[7px] text-ctp-text hover:bg-ctp-text/10',
-	danger: 'border border-ctp-red px-[15px] py-[7px] text-ctp-red hover:bg-ctp-red/10',
-	dangerSolid: 'bg-ctp-red px-4 py-2 text-ctp-crust hover:opacity-90',
+		'border border-ctp-surface1 bg-ctp-text/5 px-[15px] py-[7px] text-ctp-text press:bg-ctp-text/10',
+	danger: 'border border-ctp-red px-[15px] py-[7px] text-ctp-red press:bg-ctp-red/10',
+	dangerSolid: 'bg-ctp-red px-4 py-2 text-ctp-crust press:opacity-90',
 };
 
 export function Button({
@@ -102,8 +102,8 @@ export function IconButton({ title, onClick }: { title: string; onClick: () => v
 			type="button"
 			title={title}
 			onClick={onClick}
-			// 悬停只变颜色，不给淡底：它贴在框里，浮出一块底色看着像框里又长出一个按钮
-			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 hover:text-ctp-red ${HOVER}`}
+			// 悬停 / 按下只变颜色，不给淡底：它贴在框里，浮出一块底色看着像框里又长出一个按钮
+			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}
 		>
 			<CloseIcon />
 		</button>
@@ -118,7 +118,7 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
 			onClick={onClick}
 			// 图标与文字是「一行里的两样东西」，距离由 `gap` 给——原来那个 ＋ 是全角字符，
 			// 距离是拿一个空格凑的，换字体就变
-			class={`flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 hover:border-ctp-mauve hover:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${HOVER}`}
+			class={`flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${HOVER}`}
 		>
 			<PlusIcon />
 			{children}

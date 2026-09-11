@@ -47,7 +47,7 @@ export function Panel({
 		<button
 			type="button"
 			onClick={onClick}
-			class={`${CARD} block w-full cursor-pointer text-left hover:border-ctp-mauve hover:bg-ctp-surface0/40 ${HOVER}`}
+			class={`${CARD} block w-full cursor-pointer text-left press:border-ctp-mauve press:bg-ctp-surface0/40 ${HOVER}`}
 		>
 			{head}
 			{children}

@@ -74,7 +74,7 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
 		<footer class="flex justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
 			<span>
 				{onExit && (
-					<button type="button" onClick={onExit} class="cursor-pointer hover:underline print:hidden">
+					<button type="button" onClick={onExit} class="cursor-pointer press:underline print:hidden">
 						返回编辑
 					</button>
 				)}

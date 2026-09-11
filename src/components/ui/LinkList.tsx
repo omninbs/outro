@@ -38,7 +38,7 @@ export function LinkList({ items }: { items: readonly LinkItem[] }) {
 						href={item.href}
 						target={item.external ? '_blank' : undefined}
 						rel={item.external ? 'noreferrer' : undefined}
-						class={`block py-2 text-ctp-subtext0 hover:text-ctp-blue hover:underline decoration-[0.1em] underline-offset-[0.25em] ${HOVER}`}
+						class={`block py-2 text-ctp-subtext0 press:text-ctp-blue press:underline decoration-[0.1em] underline-offset-[0.25em] ${HOVER}`}
 					>
 						{item.text}
 					</a>

@@ -9,7 +9,7 @@ import { Field, FADE, IconButton, HOVER, TextArea, TextInput } from './ui';
 const tone = (active: boolean) =>
 	active
 		? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
-		: 'border-ctp-surface1 text-ctp-subtext0 hover:text-ctp-text';
+		: 'border-ctp-surface1 text-ctp-subtext0 press:text-ctp-text';
 
 /** 词级预设：横着排的小按钮——单选的取值都是词，横排一列能一眼扫完 */
 const PILL = `rounded-md border px-3 py-1.5 text-base ${HOVER}`;
@@ -26,7 +26,7 @@ const BLOCK = `w-full rounded-md border px-3 py-3 text-left text-base leading-re
 /** 「自定义」：虚线描边，跟实心的预设区分开——它不是预设，是另一种输入形态 */
 const CUSTOM =
 	'rounded-md border border-dashed border-ctp-surface1 text-base text-ctp-subtext0 ' +
-	`${HOVER} hover:border-ctp-mauve hover:text-ctp-mauve`;
+	`${HOVER} press:border-ctp-mauve press:text-ctp-mauve`;
 
 /**
  * 一道题的答题控件：按 `kind` 选题的形态。
