@@ -7,16 +7,10 @@ import { CloseIcon, PlusIcon } from './icons';
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
 /**
- * 内边距写进变体里，是为了把描边宽度从内边距里扣掉：
- * 文字行高 24px，四种变体的外部高度都是 40px、横向那圈也都是 32px，并排时严丝合缝。
- * **描边一律 1px**：有描边的（`ghost` / `danger`）是 `1px + px-[15px] py-[7px]`，
- * 没描边的（`primary` / `dangerSolid`）是 `px-4 py-2`——四种变体的差别只在颜色。
- * 2026-09 用户提的：`danger` 原来是 `border-2`，一排按钮里就它一个粗边，
- * 看着像另一种东西（几何量没有区别，纯粹是那根线的粗细在作怪）。
- *
- * ghost 的底色用「文字色 5% 淡洗」而不是 surface0：surface0 在亮色（latte）下比底色深一大截、
- * 在暗色（mocha）下反而比底色浅，同一个 token 两边深浅相反，做浅灰按钮总有一边发脏。
- * 淡洗则自动跟着底色走：亮色里变淡灰、暗色里变淡亮，永远只是「比页面略深/略亮一点」。
+ * 四种变体的差别**只在颜色**：几何一律一致，描边粗细也算几何——一排按钮里不能有一个看着像
+ * 另一种东西，所以危险动作只靠颜色与文案表达，不给某个变体单独加粗或放大。
+ * 中性那颗的底色拿文字色兑出来、不用固定的色阶：固定色阶在亮色主题下比底色深、在暗色主题下
+ * 比底色浅，做中性按钮总有一边发脏。
  */
 const VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust press:opacity-90',
@@ -55,8 +49,8 @@ export function Button({
 }
 
 /**
- * 危险操作的二次确认按钮：第一下先把按钮变成实心红并换成确认文案，
- * 再点一下才真的执行；失焦或超过 timeoutMs 没动作就自动收回。
+ * 危险动作的二次确认：按钮自己翻成确认态（换颜色、换文案），再点一下才真执行，
+ * 失焦或搁置一会儿就自动退回——不弹对话框，也就不打断手里的事。
  */
 export function ConfirmButton({
 	children,
@@ -95,14 +89,14 @@ export function ConfirmButton({
 	);
 }
 
-/** 列表行尾的删除按钮（那颗叉）。图标由它自己带，调用点只说「点它干什么」 */
+/** 行尾的删除动作：图标由它自带，调用点只说「点它干什么」 */
 export function IconButton({ title, onClick }: { title: string; onClick: () => void }) {
 	return (
 		<button
 			type="button"
 			title={title}
 			onClick={onClick}
-			// 悬停 / 按下只变颜色，不给淡底：它贴在框里，浮出一块底色看着像框里又长出一个按钮
+			// 反馈只变颜色：它贴在框里，浮出一块底色看着像框里又长出一个按钮
 			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}
 		>
 			<CloseIcon />
@@ -110,14 +104,12 @@ export function IconButton({ title, onClick }: { title: string; onClick: () => v
 	);
 }
 
-/** 列表末尾的虚线添加按钮。窄屏跟列表里的条目一个待遇：贴边、去侧边描边与圆角 */
+/** 列表末尾的添加动作：虚线框，窄档跟列表里的条目一个待遇（贴边、去侧边描边与圆角） */
 export function AddButton({ onClick, children }: { onClick: () => void; children: ComponentChildren }) {
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			// 图标与文字是「一行里的两样东西」，距离由 `gap` 给——原来那个 ＋ 是全角字符，
-			// 距离是拿一个空格凑的，换字体就变
 			class={`flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${HOVER}`}
 		>
 			<PlusIcon />
