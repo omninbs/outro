@@ -31,7 +31,7 @@ npm run typecheck && npm test && npm run build
 - 一维排布一律 flex + `gap-*`（行、列、嵌套、两栏分比例）；每列写 `min-w-0`；`items-start` 只写在行方向；条件渲染的间距用父层 `gap`，不用 `space-y-*`；列里的裸件要内容宽写 `self-start`
 - `grid` 只给真二维（现仅元数据表）并显式写列模板；`<label>` 只包一个控件，一组选项用 `<div role="group" aria-label>`
 - 界面符号用图标组件（`ui/icons.tsx` 包 `lucide-preact`），不写字体字符；分隔线、下划线用元素画；依赖按需装、不抄精简版
-- 一个知识只有一个定义（含注释）：文案 `lib/copy.ts`、内容 `lib/outro.ts`、框外观 `ui/inputs.tsx`、动效 `ui/tokens.ts`、可点整行 `ui/LinkList.tsx`、目录表 `_registry.ts(x)`
+- 一个知识只有一个定义（含注释）：文案 `lib/copy.ts`、内容 `lib/outro.ts`、框外观 `ui/inputs.tsx`、动效 `ui/tokens.ts`、可点整行 `ui/LinkList.tsx`、画布几何 `lib/frame.ts`、目录表 `_registry.ts(x)`
 - 存图＝把屏幕上那一份装进 SVG 给浏览器画到画布，一档一颗按钮，无第二套渲染路径（`lib/image.ts`）：克隆外壳带 CSS 装进 SVG 视口，视口是 `data-card` 那块（外壳按设计宽摆好、左移空出的那段）；设计宽与比例写死在 `OUTPUTS`，出图前挂进屏幕外取景台按那个宽排
 - 设计宽只定档不定卡片宽（钉 `min-width` 会盖掉宽度上限）；`data-card` 宽钉回克隆、高由卡片定，克隆里摘掉「至少一屏高」；画布四周留较长边的四分之一（不少于），按比例补齐、倍率写死 2
 - 控件与卡片分开：最终页无控件，返回靠点任意处，动作在向导第三步
