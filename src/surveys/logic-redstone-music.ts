@@ -56,7 +56,7 @@ export const logicRedstoneMusicSurvey: Survey = {
 			id: 'buildRequirement',
 			label: '建造要求',
 			kind: 'choice',
-			options: ['无要求', '不建议跨区块'],
+			options: ['无要求', '不建议跨区块', '方向性', '位置性'],
 			default: '无要求',
 		},
 		{
