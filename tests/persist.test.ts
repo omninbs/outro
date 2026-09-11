@@ -51,4 +51,12 @@ describe('parseCard', () => {
 	it('整块缺字段时给的是空内容，不是 undefined', () => {
 		expect(parseCard('{}')).toEqual({ title: '', meta: [], blocks: [], footerText: '' });
 	});
+
+	it('存档顶层不是一个对象时同样按空档读', () => {
+		const empty = { title: '', meta: [], blocks: [], footerText: '' };
+
+		expect(parseCard('null')).toEqual(empty);
+		expect(parseCard('7')).toEqual(empty);
+		expect(parseCard('"标题"')).toEqual(empty);
+	});
 });

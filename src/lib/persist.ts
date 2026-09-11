@@ -31,6 +31,17 @@ function rows(value: unknown): Record<string, unknown>[] {
 		: [];
 }
 
+/**
+ * 存档的顶层：解析结果不是一个对象（`null`、数字、字符串）时按空档读——
+ * 存档是外面来的，不能拿它当类型使；JSON 本身坏掉仍旧抛，那是另一回事，由 `loadCard` 兜。
+ */
+function archiveOf(raw: string): Record<string, unknown> {
+	const parsed: unknown = JSON.parse(raw);
+	if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+
+	return parsed as Record<string, unknown>;
+}
+
 const asMeta = (value: unknown): MetaItem[] =>
 	rows(value).map((row) => ({ id: str(row.id) || newId('m'), label: str(row.label), value: str(row.value) }));
 
@@ -39,7 +50,7 @@ const asBlocks = (value: unknown): TextBlock[] =>
 
 /** 存档 JSON → 当前结构，顺带兼容旧写法；纯函数，迁移可以单独试 */
 export function parseCard(raw: string): CardData {
-	const old = JSON.parse(raw) as Record<string, unknown>;
+	const old = archiveOf(raw);
 
 	const meta = asMeta(Array.isArray(old.meta) ? old.meta : Array.isArray(old.fields) ? old.fields : DEFAULT_CARD.meta);
 
