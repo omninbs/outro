@@ -107,7 +107,7 @@ export function App() {
 		data,
 		patch,
 		onReset: handleReset,
-		onGenerate: () => navigate('outro'),
+		onPreview: () => navigate('outro'),
 	};
 	const current = STEPS[step];
 

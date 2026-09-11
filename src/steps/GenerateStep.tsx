@@ -10,11 +10,11 @@ import type { CardData } from '../lib/types';
 export function GenerateStep({
 	data,
 	onReset,
-	onGenerate,
+	onPreview,
 }: {
 	data: CardData;
 	onReset: () => void;
-	onGenerate: () => void;
+	onPreview: () => void;
 }) {
 	// 存图要有一份排好版的卡片才量得出来，而排的这过程不该被人看见：点一下才把结尾页挂在屏幕外，存完就收
 	const [saving, setSaving] = useState(false);
@@ -36,11 +36,11 @@ export function GenerateStep({
 	return (
 		<Panel title={COPY.step.generate}>
 			<p class="mb-4 text-base leading-relaxed text-ctp-subtext0 max-narrow:px-inset">
-				点「生成」进入结尾页，那一屏点哪儿都能回来；也可以直接「保存为图片」，存下一张方形的图。
+				点「预览」看到的就是成品本身，那一屏点哪儿都能回来；「保存为图片」直接存下一张方形的图。
 			</p>
 			<div class="flex flex-wrap items-center gap-2 max-narrow:px-inset">
-				<Button variant="primary" onClick={onGenerate}>
-					{COPY.action.generate}
+				<Button variant="primary" onClick={onPreview}>
+					{COPY.action.preview}
 				</Button>
 				<Button
 					disabled={saving}

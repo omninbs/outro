@@ -40,7 +40,7 @@ export const COPY = {
 		addMeta: '添加元数据',
 		addBlock: '添加文本块',
 		remove: '删除',
-		generate: '生成',
+		preview: '预览',
 		save: '保存为图片',
 		reset: '重置',
 		confirmReset: '确认重置',

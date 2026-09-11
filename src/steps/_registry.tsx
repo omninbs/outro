@@ -13,7 +13,7 @@ export interface StepContext {
 	data: CardData;
 	patch: Patch;
 	onReset: () => void;
-	onGenerate: () => void;
+	onPreview: () => void;
 }
 
 export interface StepEntry extends StepDef {
@@ -42,8 +42,8 @@ export const STEPS: StepEntry[] = [
 		label: COPY.step.generate,
 		icon: SparklesIcon,
 		listBelow: true,
-		body: ({ data, onReset, onGenerate }) => (
-			<GenerateStep data={data} onReset={onReset} onGenerate={onGenerate} />
+		body: ({ data, onReset, onPreview }) => (
+			<GenerateStep data={data} onReset={onReset} onPreview={onPreview} />
 		),
 	},
 ];
