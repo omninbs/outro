@@ -8,7 +8,11 @@ type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
 /**
  * 内边距写进变体里，是为了把描边宽度从内边距里扣掉：
- * 文字行高 24px，四舍五入后四种变体的外部高度都是 40px，并排时严丝合缝。
+ * 文字行高 24px，四种变体的外部高度都是 40px、横向那圈也都是 32px，并排时严丝合缝。
+ * **描边一律 1px**：有描边的（`ghost` / `danger`）是 `1px + px-[15px] py-[7px]`，
+ * 没描边的（`primary` / `dangerSolid`）是 `px-4 py-2`——四种变体的差别只在颜色。
+ * 2026-09 用户提的：`danger` 原来是 `border-2`，一排按钮里就它一个粗边，
+ * 看着像另一种东西（几何量没有区别，纯粹是那根线的粗细在作怪）。
  *
  * ghost 的底色用「文字色 5% 淡洗」而不是 surface0：surface0 在亮色（latte）下比底色深一大截、
  * 在暗色（mocha）下反而比底色浅，同一个 token 两边深浅相反，做浅灰按钮总有一边发脏。
@@ -18,7 +22,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust hover:opacity-90',
 	ghost:
 		'border border-ctp-surface1 bg-ctp-text/5 px-[15px] py-[7px] text-ctp-text hover:bg-ctp-text/10',
-	danger: 'border-2 border-ctp-red px-3.5 py-1.5 text-ctp-red hover:bg-ctp-red/10',
+	danger: 'border border-ctp-red px-[15px] py-[7px] text-ctp-red hover:bg-ctp-red/10',
 	dangerSolid: 'bg-ctp-red px-4 py-2 text-ctp-crust hover:opacity-90',
 };
 
