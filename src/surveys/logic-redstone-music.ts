@@ -108,8 +108,8 @@ export const logicRedstoneMusicSurvey: Survey = {
 			id: 'colophon',
 			label: '尾注',
 			kind: 'long',
-			options: ['感谢全体参与者 uwu'],
-			default: '感谢全体参与者 uwu',
+			options: ['感谢全体贡献者 uwu'],
+			default: '感谢全体贡献者 uwu',
 		},
 		{
 			into: 'block',
