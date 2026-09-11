@@ -23,13 +23,14 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		   是同一条规矩——窄屏是一维的流，一行里塞两列不是这一档该有的样子。
 
 		   这张表还是用 `grid`：它是**真二维**（名称列要跨行对齐，宽度由最长的名称决定）。
-		   `wide:flex-[1.2]` 是它作为宽档那一行里左栏所占的份，`min-w-0` 让值很长时这一栏仍能收缩
+		   `wide:flex-[1]` 是它作为宽档那一行里左栏所占的份——跟右栏 **1 : 1 对分**
+		   （2026-09 从 1.2 : 1 改成等分的），`min-w-0` 让值很长时这一栏仍能收缩
 
 		   一对名称 / 值是一「条」，所以每对包一层：中宽档这层用 `contents` **整个消失**
 		   （`dt` / `dd` 仍是 `dl` 的直接子项，跨行对齐就靠这一点，图片级零影响），
 		   窄档它变成一个 flex 列，把「对内紧、条间松」那个节奏做出来——
 		   对数跟清单里那套一样（对内 2px、条间 8px），见 `FilledList` 的 `Row` */
-		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 max-narrow:grid-cols-1 wide:flex-[1.2] wide:pt-1">
+		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 max-narrow:grid-cols-1 wide:flex-[1] wide:pt-1">
 			{meta.map((item) => (
 				<div key={item.id} class="contents max-narrow:flex max-narrow:flex-col max-narrow:gap-0.5">
 					<dt class={SUB_TEXT}>{item.label}</dt>
