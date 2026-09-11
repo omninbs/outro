@@ -24,18 +24,26 @@ const str = (value: unknown, fallback = '') => (typeof value === 'string' ? valu
 /** 旧档把默认文案直接预填进了框里，迁移时那等于「没填」 */
 const dropDefault = (value: string, fallback: string) => (value.trim() === fallback ? '' : value);
 
+/** 存档里的一列：形状对不上的整条丢掉——存档是外面来的，不能拿它当类型使 */
+const rows = (value: unknown): Record<string, unknown>[] =>
+	Array.isArray(value)
+		? value.filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
+		: [];
+
+const asMeta = (value: unknown): MetaItem[] =>
+	rows(value).map((row) => ({ id: str(row.id) || newId('m'), label: str(row.label), value: str(row.value) }));
+
+const asBlocks = (value: unknown): TextBlock[] =>
+	rows(value).map((row) => ({ id: str(row.id) || newId('b'), label: str(row.label), text: str(row.text) }));
+
 /** 存档 JSON → 当前结构，顺带兼容旧写法；纯函数，迁移可以单独试 */
 export function parseCard(raw: string): CardData {
 	const old = JSON.parse(raw) as Record<string, unknown>;
 
-	const meta: MetaItem[] = Array.isArray(old.meta)
-		? (old.meta as MetaItem[])
-		: Array.isArray(old.fields)
-			? (old.fields as MetaItem[])
-			: structuredClone(DEFAULT_CARD.meta);
+	const meta = asMeta(Array.isArray(old.meta) ? old.meta : Array.isArray(old.fields) ? old.fields : DEFAULT_CARD.meta);
 
 	const blocks: TextBlock[] = Array.isArray(old.blocks)
-		? (old.blocks as TextBlock[])
+		? asBlocks(old.blocks)
 		: str(old.notice).trim()
 			? [
 					{
