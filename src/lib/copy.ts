@@ -50,6 +50,8 @@ export const COPY = {
 		save: '保存',
 		reset: '重置',
 		confirmReset: '确认重置',
+		/** 危险动作翻成确认态时补的一句话：换了一颗按钮的样子，念屏的人也得知道 */
+		confirmHint: '再点一下确认',
 		/** 问卷答完，把答案搬进内容 */
 		finish: '完成',
 		prev: '上一步',

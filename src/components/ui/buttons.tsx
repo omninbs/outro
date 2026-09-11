@@ -1,6 +1,7 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
+import { COPY } from '../../lib/copy';
 import { HOVER } from './tokens';
 import { CloseIcon, PlusIcon } from './icons';
 
@@ -56,11 +57,12 @@ export function ConfirmButton({
 	children,
 	confirmLabel,
 	onConfirm,
-	timeoutMs = 1000,
+	timeoutMs = 3000,
 }: {
 	children: ComponentChildren;
 	confirmLabel: ComponentChildren;
 	onConfirm: () => void;
+	/** 确认态的窗口：太短来不及读，太长就成了挡路的模态；失焦与超时都退回 */
 	timeoutMs?: number;
 }) {
 	const [confirming, setConfirming] = useState(false);
@@ -85,6 +87,10 @@ export function ConfirmButton({
 			onBlur={() => setConfirming(false)}
 		>
 			{confirming ? confirmLabel : children}
+			{/* 按钮换了样子，念屏的人不一定听得到；状态变化交给 live region 说一句 */}
+			<span role="status" class="sr-only">
+				{confirming ? COPY.action.confirmHint : ''}
+			</span>
 		</Button>
 	);
 }

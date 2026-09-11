@@ -30,6 +30,7 @@ export function Stepper({
 					<li key={step.id} class="flex items-center gap-2">
 						<button
 							type="button"
+							aria-current={active ? 'step' : undefined}
 							onClick={() => onSelect(index)}
 							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${HOVER} ${
 								active
