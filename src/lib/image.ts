@@ -42,7 +42,7 @@ export const OUTPUTS: OutputPreset[] = [
 ];
 
 /** 四周留白的下限：排版区最长边的这个比例那一边至少这么宽 */
-const MARGIN = 1 / 16;
+const MARGIN = 1 / 8;
 
 /** 画布边长上限：浏览器画布有上限，太大的也发不出去；按长边收到这个数 */
 const LIMIT = 2160;
