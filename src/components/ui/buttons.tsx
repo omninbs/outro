@@ -90,11 +90,13 @@ export function ConfirmButton({
 }
 
 /** 行尾的删除动作：图标由它自带，调用点只说「点它干什么」 */
-export function IconButton({ title, onClick }: { title: string; onClick: () => void }) {
+export function IconButton({ label, onClick }: { label: string; onClick: () => void }) {
 	return (
 		<button
 			type="button"
-			title={title}
+			// 图标没有文字，名字只能在这儿给；`title` 顺带把鼠标悬停时的提示也留上
+			aria-label={label}
+			title={label}
 			onClick={onClick}
 			// 反馈只变颜色：它贴在框里，浮出一块底色看着像框里又长出一个按钮
 			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}

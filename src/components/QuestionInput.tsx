@@ -68,7 +68,7 @@ export function QuestionInput({
 				answerBox(
 					'自己写',
 					<IconButton
-						title="退回选项"
+						label={COPY.action.backToOptions}
 						onClick={() => {
 							onChange(revertTo);
 							setCustom(false);

@@ -1,5 +1,6 @@
 import { Fragment } from 'preact';
 
+import { COPY } from '../lib/copy';
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { SUB_TEXT } from './ui';
@@ -88,8 +89,20 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 	const { title, meta, blocks, footer } = resolveOutro(data);
 
 	return (
-		/* 整屏都是「回去」的靶子：手指点哪儿都行，不用去找那颗按钮 */
-		<div class="flex flex-1 cursor-pointer flex-col justify-center-safe" onClick={onExit}>
+		/* 整屏都是「回去」的靶子：手指点哪儿都行，不用去找那颗按钮；键盘用户 Tab 进来按回车或空格
+		   也是同一个动作——这一屏不摆控件，这个出口照样不占地方、进不了图 */
+		<div
+			class="flex flex-1 cursor-pointer flex-col justify-center-safe"
+			role={onExit ? 'button' : undefined}
+			tabIndex={onExit ? 0 : undefined}
+			aria-label={onExit ? COPY.action.backToEdit : undefined}
+			onClick={onExit}
+			onKeyDown={(event) => {
+				if (!onExit || (event.key !== 'Enter' && event.key !== ' ')) return;
+				event.preventDefault();
+				onExit();
+			}}
+		>
 			{/* 这一层就是版面本身，也是图里被裁下来的那一块（`data-card` 是给存图找那一份用的）。
 			    宽度上限 + 一圈内边距；上限不是照着容器定的数，是拿**「一行要多宽」反推出来的**——
 			    居中那两档里内边距其实不起作用，只有视口窄到把容器顶住时才成为那道边距。

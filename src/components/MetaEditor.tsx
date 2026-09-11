@@ -19,7 +19,7 @@ export function MetaEditor({
 				<BareRow
 					key={item.id}
 					action={
-						<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(items, item.id))} />
+						<IconButton label={COPY.action.remove} onClick={() => onChange(removeById(items, item.id))} />
 					}
 				>
 					{/* 窄屏上下排：名称框定宽且不让位，跟值硬挤在一行里，值那栏就没剩多少了；
