@@ -46,7 +46,7 @@ export const OUTPUTS: OutputPreset[] = [
 ];
 
 /** 四周留白的下限：拍下来那一块最长边的这个比例那一边至少这么宽 */
-const MARGIN = 1 / 8;
+const MARGIN = 1 / 4;
 
 /**
  * 光栅化的倍率：图里的字号小，一倍画出来发虚——SVG 与画布一起按这个倍数放大，
