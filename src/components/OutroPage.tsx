@@ -98,7 +98,7 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 			    宽度上限 + 一圈内边距；上限不是照着容器定的数，是拿**「一行要多宽」反推出来的**——
 			    居中那两档里内边距其实不起作用，只有视口窄到把容器顶住时才成为那道边距。
 			    来龙去脉与那几个数见 `AGENTS.md` 的「响应式」 */}
-			<div data-card class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[49rem]">
+			<div data-card class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[41rem]">
 				{/* 三段（标题 / 主体 / 署名）在**一个**列里——所以没有谁的间距是挂在 margin 上的：
 				    哪一段不印，那一份 `gap` 自动少掉，不会留下一段空白 */}
 				<div class="flex flex-col gap-12">
