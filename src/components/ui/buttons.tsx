@@ -13,6 +13,10 @@ type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
  * 中性那颗的底色拿文字色兑出来、不用固定的色阶：固定色阶在亮色主题下比底色深、在暗色主题下
  * 比底色浅，做中性按钮总有一边发脏。
  */
+/**
+ * 描边也算几何：带描边的那两款各减掉一像素的内边距，四款的外高才是同一个数。
+ * 于是这里有两处「减一」，它们不是手调的数，是描边换来的。
+ */
 const VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust press:opacity-90',
 	ghost:
