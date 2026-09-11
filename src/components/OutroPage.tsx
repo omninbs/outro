@@ -1,4 +1,5 @@
 import { Fragment } from 'preact';
+import { useRef } from 'preact/hooks';
 
 import { COPY } from '../lib/copy';
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
@@ -87,6 +88,8 @@ function OutroFooter({ footer }: { footer: string }) {
  */
 export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
 	const { title, meta, blocks, footer } = resolveOutro(data);
+	/* 按下时手指在哪儿：拖选文字与双击选词也会派一次 click，那不是「点一下就走」 */
+	const pressed = useRef<{ x: number; y: number } | null>(null);
 
 	return (
 		/* 整屏都是「回去」的靶子：手指点哪儿都行，不用去找那颗按钮；键盘用户 Tab 进来按回车或空格
@@ -96,7 +99,17 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 			role={onExit ? 'button' : undefined}
 			tabIndex={onExit ? 0 : undefined}
 			aria-label={onExit ? COPY.action.backToEdit : undefined}
-			onClick={onExit}
+			onPointerDown={(event) => {
+				pressed.current = { x: event.clientX, y: event.clientY };
+			}}
+			onClick={(event) => {
+				const from = pressed.current;
+				pressed.current = null;
+				if (!onExit || !from) return;
+				// 手移开了就是在选字：选中的内容不该连同这一屏一起没了
+				if (Math.hypot(event.clientX - from.x, event.clientY - from.y) > 8) return;
+				onExit();
+			}}
 			onKeyDown={(event) => {
 				if (!onExit || (event.key !== 'Enter' && event.key !== ' ')) return;
 				event.preventDefault();
