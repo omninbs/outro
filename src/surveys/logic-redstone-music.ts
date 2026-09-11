@@ -120,8 +120,8 @@ export const logicRedstoneMusicSurvey: Survey = {
 			label: '指南',
 			kind: 'long',
 			// 默认值以选项给出：`default` 指向 `options` 里那一条，一进问卷它是选中状态
-			options: ['建造红石音乐所需要具备的基础知识请参考基础教学'],
-			default: '建造红石音乐所需要具备的基础知识请参考基础教学',
+			options: ['建造红石音乐所需要具备的基础知识请参考基础教学。'],
+			default: '建造红石音乐所需要具备的基础知识请参考基础教学。',
 		},
 	],
 };
