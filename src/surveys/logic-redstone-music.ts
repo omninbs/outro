@@ -44,7 +44,7 @@ export const logicRedstoneMusicSurvey: Survey = {
 			id: 'version',
 			label: '适用版本',
 			kind: 'choice',
-			options: ['JE1.14+ & BE1.13.0+', 'JE1.21+ & BE1.21.0+', 'JE26.1+ & BE26.10+'],
+			options: ['JE1.14+ & BE1.13.0+', 'JE1.21+ & BE1.21.0+', 'JE26.1+ & BE26.10+', 'JE1.21+', 'JE26.1+'],
 			default: 'JE1.14+ & BE1.13.0+',
 		},
 		{
