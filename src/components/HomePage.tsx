@@ -5,11 +5,8 @@ import { PageHeader } from './PageHeader';
 import { Panel, SUB_TEXT } from './ui';
 
 /**
- * 首页：把入口铺成一列卡片，整块可点。
- *
- * 清单是数据（surveys/_registry.ts 里的 `SURVEYS`），加一份入口不用碰这里；
- * 第一张固定是「编辑表单」——不用预设、直接进表单的那条路。
- * 容器宽度由 PageShell 给（首页传 width="standard"，与页脚同宽），这里不写 max-w。
+ * 首页：把入口铺成一列卡片，卡片整块可点——入口清单是数据，加一份不用碰这里。
+ * 第一张固定是「编辑表单」：不用预设、直接进表单的那条路。定宽由 PageShell 给，这里不管。
  */
 export function HomePage({ onPick }: { onPick: (survey: Survey) => void }) {
 	return (

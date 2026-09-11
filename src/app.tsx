@@ -16,51 +16,43 @@ import { findSurvey } from './surveys/_registry';
 import type { Answers, Survey } from './lib/survey/types';
 import { STEPS, type StepContext } from './steps/_registry';
 
-/** 四个页面：首页、表单、问卷、最终页。步骤表在 steps/_registry，问卷表在 surveys/_registry，这里只管分派 */
+/** 首页、表单、问卷、最终页都在这里分派；步骤与问卷各自长什么样，归它们自己的表 */
 export function App() {
 	const { data, patch, reset } = useCard();
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 首页点「编辑表单」：从第一步开始——刚进来的人没有「刚才那一步」，从头顺读才对
+	// 回到表单只有一条原则：内容已经成型就停在最后一步，没有「刚才那一步」才从第一步进
 	const openForm = () => {
 		setStep(0);
 		navigate('form');
 	};
-	// 从结尾页退回、或问卷答完，都停在**最后一步**（「生成」）：这两处的内容刚刚都成型了
-	// ——一处是在结尾页上看过，一处是刚由问卷填完——再从头走一遍只是让人多点两下。
-	// 前面几步要改还是能点步骤条回去。
-	// （步骤表将来变了要看这里：最后一步必须是能进结尾页的那一步）
+	// 结尾页退回与问卷答完都是「内容刚成型」，停最后一步（它必须就是能进结尾页的那一步）
 	const formAtLastStep = () => {
 		setStep(STEPS.length - 1);
 		navigate('form');
 	};
-	// 重置是唯一会丢内容的动作，所以它有三步确认（第三步的 ConfirmButton）
+	// 重置是唯一会丢内容的动作，所以只有它需要一道确认
 	const handleReset = () => {
 		reset();
 		setStep(0);
 	};
 
-	// 从首页选一个入口：有题的进问卷页，没有题的（「编辑表单」）没有页可看，直接进表单。
-	// 问卷一个字都不动已有内容：进问卷页只是看看、中途退出来，
-	// 不该把已经填好的东西弄丢，它们答完的那一刻整份替换内容
+	// 有题的入口去问卷页，没题的（不用预设那条路）没有页可看，直接进表单；
+	// 而问卷在答完之前一个字都不动已有内容——进去看看、中途退出来，都不该弄丢已经填好的东西
 	const startSurvey = (survey: Survey) => {
 		if (survey.questions.length === 0) openForm();
 		else navigate('survey', survey.id);
 	};
 
-	// 地址里直接写 #edit（书签、别人给的链接）跟点那张卡是一回事。
-	// 放 effect 里是因为渲染期间不能改状态；地址换掉之后 view 就不是 survey 了，不会重复触发
+	// 地址里直接写入口 id（书签、别人给的链接）跟点那张卡是一回事
 	useEffect(() => {
 		if (view !== 'survey' || !surveyId) return;
 		const survey = findSurvey(surveyId);
 		if (survey && survey.questions.length === 0) openForm();
 	}, [view, surveyId]);
 
-	// 答完问卷：答案搬成内容，整份替换当前内容，然后进表单的**最后一步**（「生成」）。
-	// 2026-09 之前是回第一步：那时问卷只问常见的那几题，答案落进内容之后标题、元数据
-	// 还得让人过一眼。问卷问全面之后这条理由没了——答完就是「内容已经成型」，
-	// 跟从结尾页退回来是同一种处境，所以两处共用 `formAtLastStep`
+	// 答完问卷就是「内容已经成型」，跟从结尾页退回来是同一种处境，所以两处走同一条路
 	const finishSurvey = (survey: Survey, answers: Answers) => {
 		patch(buildFrom(survey, answers));
 		formAtLastStep();
@@ -77,8 +69,7 @@ export function App() {
 	if (view === 'survey') {
 		const survey = surveyId ? findSurvey(surveyId) : undefined;
 
-		// 认不出的 id（手写的地址、改名后的旧链接）不留空白页。
-		// 用页面自己的标题块，不套卡片：404 没有内容，套一层框反而像「这里本该有东西」
+		// 认不出的 id 不留空白页，而且只给一个标题块、不套卡片：没有内容，套一层框反而像「本该有东西」
 		if (!survey) {
 			return (
 				<PageShell width="standard">
@@ -90,8 +81,7 @@ export function App() {
 			);
 		}
 
-		// 没有题的入口没有问卷页：落到下面的表单去（地址由上面的 effect 收拾）。
-		// 空问卷页上那个「完成」点下去等于把内容换成空的
+		// 没有题的入口不该有问卷页：那一页上的「完成」点下去，等于把内容换成空的
 		if (survey.questions.length > 0) {
 			return (
 				<PageShell width="standard">
@@ -129,8 +119,7 @@ export function App() {
 				onSelect={setStep}
 				sideList={<FilledList data={data} />}
 			>
-				{/* key 用步骤 id：换一步就是换一个节点，于是那一步的内容是淡进来的（RISE），
-				    而不是原地把字全换掉 */}
+				{/* 换一步就是换一个节点，于是新内容淡进来，而不是原地把字全换掉 */}
 				<div key={current.id} class={`flex flex-col gap-6 ${RISE}`}>
 					{current.body(ctx)}
 				</div>
@@ -143,7 +132,6 @@ export function App() {
 
 				<ActionRow>
 					{step === 0 ? (
-						// 第一步没有「上一步」可退，这个位置改成退出表单
 						<Button onClick={() => navigate('home')}>{COPY.action.backHome}</Button>
 					) : (
 						<Button onClick={() => setStep(step - 1)}>上一步</Button>

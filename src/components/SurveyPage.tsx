@@ -7,10 +7,8 @@ import { QuestionInput } from './QuestionInput';
 import { Button, Panel, ActionRow } from './ui';
 
 /**
- * 问卷页：把一份问卷（数据）渲染成题面，答案就地攒在组件状态里。
- *
- * 这里只管答题，不管答卷长什么样——答案交回调用方，由它搬成内容。
- * 所以页面上没有清单：问卷是「带引导的填写」，填完回表单继续，预览在那边看就够了。
+ * 问卷页：把一份问卷（数据）渲染成题面，答案就地攒着、交回调用方去搬成内容——这里只管答题。
+ * 页面上因此没有清单：问卷是「带引导的填写」，填完回表单继续，预览在那边的清单里看就够。
  */
 export function SurveyPage({
 	survey,
@@ -22,7 +20,7 @@ export function SurveyPage({
 	onExit: () => void;
 }) {
 	const [answers, setAnswers] = useState<Answers>(() =>
-		// 先铺一层预填值：写了 `default` 的题一进来就带着答案，不想要就自己改掉
+		// 预填值是真值：写了预填的题一进来就带着答案，不想要就自己改掉
 		Object.fromEntries(survey.questions.map((question) => [question.id, question.default ?? ''])),
 	);
 
