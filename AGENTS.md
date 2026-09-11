@@ -15,12 +15,13 @@
 
 ## 验证
 
-没有 lint，闸门两条（合成一条跑）：
+没有 lint，闸门三条（合成一条跑）：
 
 ```bash
-npm run typecheck && npm run build
+npm run typecheck && npm test && npm run build
 ```
 
+- 单测只碰**纯函数**（`tests/`）：数据搬运、存档迁移、内容过滤。界面与样式不测——那两样靠人看，写不出比看更准的断言
 - dev server 在 http://localhost:5173，常有后台任务不要另起；转换按秒缓存，改完同一文件 `touch` 后 `curl` 比特征串（逐个模块比），样式看不出变化先重启它
 - 探针只在读代码判断不了时用：脚本在 `.git/`，一轮量完、用完关 Firefox；profile 先建、单 BiDi 会话、端口占用换 `PROBE_PORT`；真实几何用 headless BiDi
 - 别人的 dev server 杀不掉请用户重启；自己起的换掉先 `job_kill`；杀进程用 `pkill -x` 或存 PID；装依赖 `npm ci --cache /tmp/npm-cache`
