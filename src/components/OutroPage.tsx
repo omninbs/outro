@@ -88,12 +88,9 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
 
 /**
  * 结尾页：上标题、中主体（元数据 + 文本块）、下页脚。
- * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，
- * 所以清单与最终页永远一致。配色用 Catppuccin 标准的 Latte，由外层 PageShell 挂上。
+ * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，所以清单与最终页永远一致。
  *
- * 它是拿去截图的那一屏，所以比别处多两条自己的规矩：**要一致的是「栏」（一行）的宽**，
- * 于是容器上限按栏宽反推、内边距只留一个数；以及整块在视口里**横竖都居中**。
- * 那些数连同来历都在 `AGENTS.md` 的「响应式」里——那是规格，注释只说想法。
+ * 它是拿去截图的那一屏，所以要的是一张**版面**：一行在三档下一样宽，整块在视口里横竖居中。
  */
 export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
 	const { title, meta, blocks, footer } = resolveOutro(data);
