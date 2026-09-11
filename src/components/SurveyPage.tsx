@@ -28,7 +28,7 @@ export function SurveyPage({
 		setAnswers((prev) => ({ ...prev, [questionId]: value }));
 
 	return (
-		<div>
+		<div class="flex flex-col gap-6">
 			<PageHeader title={survey.title} description={survey.description} />
 
 			<Panel>

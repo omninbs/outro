@@ -24,7 +24,7 @@ export function WizardShell({
 	children: ComponentChildren;
 }) {
 	return (
-		<div>
+		<div class="flex flex-col gap-6">
 			<PageHeader
 				title={COPY.brand}
 				description="按步骤填写内容，最后生成结尾页"
@@ -35,8 +35,8 @@ export function WizardShell({
 			{/* 两栏就是「一行」，用一维排布分比例：清单是给人扫一眼的，正文那栏要更宽。
 			    每一列都必须能收缩——控件天生的固有宽度会把整行顶出屏幕。
 			    把几列对齐到顶部只在并排那一档写：上下排时它管的是横向，会把子项缩成内容宽 */}
-			<div class="mt-6 flex flex-col gap-6 wide:flex-row wide:items-start">
-				<div class="min-w-0 wide:flex-[1]">{children}</div>
+			<div class="flex flex-col gap-6 wide:flex-row wide:items-start">
+				<div class="flex min-w-0 flex-col gap-6 wide:flex-[1]">{children}</div>
 
 				{/* 清单在宽档才出现，所以它吸顶的位置得跟容器顶对齐，滚动时看着才是同一层。
 				    列数变化插不了值，于是出现与消失只能淡一下，不能硬蹦 */}

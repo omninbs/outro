@@ -7,10 +7,10 @@ import { Panel, SUB_TEXT, EmptyHint } from './ui';
 
 /** 分组标题：每组上面一条细线，第一组也不例外——免得它跟面板标题粘在一起 */
 const Group = ({ text, count, children }: { text: string; count: number; children: ComponentChildren }) => (
-	<section class="border-t border-ctp-surface0 pt-5">
+	<section class="flex flex-col gap-2 border-t border-ctp-surface0 pt-5">
 		{/* 窄屏卡片贴边、不提供横向留白，所以标题行得自己带一次，才跟内容落在同一条竖线上
 		   （上面那条细线属于「面」，贴边是刻意的） */}
-		<div class="mb-2 flex items-baseline justify-between gap-2 narrow:px-inset">
+		<div class="flex items-baseline justify-between gap-2 narrow:px-inset">
 			<h3 class="text-base font-semibold tracking-wide text-ctp-subtext1">{text}</h3>
 			<span class="text-base tabular-nums text-ctp-overlay0">{count}</span>
 		</div>

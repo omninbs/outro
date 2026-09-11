@@ -67,20 +67,17 @@ export function BareTextArea({
 	value,
 	onInput,
 	placeholder,
-	class: extra = '',
 }: {
 	value: string;
 	onInput: (value: string) => void;
 	placeholder?: string;
-	/** 只用来补外边距这类位置差异 */
-	class?: string;
 }) {
 	return (
 		<textarea
 			value={value}
 			rows={TEXTAREA_ROWS}
 			placeholder={placeholder}
-			class={`w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT} ${extra}`}
+			class={`w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
 			onInput={(e) => onInput(e.currentTarget.value)}
 		/>
 	);

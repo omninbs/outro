@@ -18,13 +18,13 @@ export function PageFooter() {
 			<div
 				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 narrow:px-inset wide:flex-row wide:items-start wide:justify-between`}
 			>
-				<div class="wide:flex-[7]">
-					<h2 class={`mb-2 ${HEADING}`}>{COPY.brand}</h2>
+				<div class="flex flex-col gap-2 wide:flex-[7]">
+					<h2 class={HEADING}>{COPY.brand}</h2>
 					<p class={SUB_TEXT}>一个生成视频结尾信息页的小工具</p>
 				</div>
 
-				<nav class="wide:flex-[5]">
-					<h2 class={`mb-2 ${HEADING}`}>链接</h2>
+				<nav class="flex flex-col gap-2 wide:flex-[5]">
+					<h2 class={HEADING}>链接</h2>
 					<LinkList
 						items={[
 							// 「返回主页」在应用内跳，「源代码」是外链

@@ -16,11 +16,11 @@ export function Field({
 	children: ComponentChildren;
 }) {
 	/* 窄屏外面那层卡片已经横向贴边，标签自己带一次留白才跟框里的文字对齐 */
-	const head = <span class="mb-1.5 block text-base text-ctp-subtext0 narrow:px-inset">{label}</span>;
+	const head = <span class="text-base text-ctp-subtext0 narrow:px-inset">{label}</span>;
 
 	if (group) {
 		return (
-			<div class="mb-4 last:mb-0" role="group" aria-label={label}>
+			<div class="flex flex-col gap-1.5" role="group" aria-label={label}>
 				{head}
 				{children}
 			</div>
@@ -28,7 +28,7 @@ export function Field({
 	}
 
 	return (
-		<label class="mb-4 block last:mb-0">
+		<label class="flex flex-col gap-1.5">
 			{head}
 			{children}
 		</label>

@@ -127,7 +127,7 @@ export function App() {
 				</div>
 
 				{current.listBelow && (
-					<div class="mt-6 wide:hidden">
+					<div class="wide:hidden">
 						<FilledList data={data} />
 					</div>
 				)}

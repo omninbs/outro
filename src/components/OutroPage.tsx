@@ -8,9 +8,9 @@ import { SUB_TEXT } from './ui';
 /** 页首：标题 + 一条短横线。标题空着就整块不渲染——留空没有兜底文案，横线也跟着走 */
 function OutroHeader({ title }: { title: string }) {
 	return (
-		<header>
+		<header class="flex flex-col gap-4">
 			<h1 class="text-xl leading-none font-semibold tracking-wide">{title}</h1>
-			<div class="mt-4 h-0.5 w-16 bg-ctp-mauve" />
+			<div class="h-0.5 w-16 bg-ctp-mauve" />
 		</header>
 	);
 }

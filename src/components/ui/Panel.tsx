@@ -7,7 +7,7 @@ import { HOVER } from './tokens';
  * 自己带一次——贴边的面没法再给内容留边，裸文字与裸列表都得自己带；跨这条线形状直接换，不收放。
  */
 const CARD =
-	'rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5 ' +
+	'flex flex-col gap-4 rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5 ' +
 	'narrow:rounded-none narrow:border-x-0 narrow:px-0';
 
 /**
@@ -24,7 +24,7 @@ export function Panel({
 	children: ComponentChildren;
 }) {
 	const head = title && (
-		<h2 class="mb-4 text-lg font-semibold tracking-wide text-ctp-subtext1 narrow:px-inset">{title}</h2>
+		<h2 class="text-lg font-semibold tracking-wide text-ctp-subtext1 narrow:px-inset">{title}</h2>
 	);
 
 	if (!onClick) {
@@ -40,7 +40,7 @@ export function Panel({
 		<button
 			type="button"
 			onClick={onClick}
-			class={`${CARD} block w-full cursor-pointer text-left press:border-ctp-mauve press:bg-ctp-surface0/40 ${HOVER}`}
+			class={`${CARD} w-full cursor-pointer text-left press:border-ctp-mauve press:bg-ctp-surface0/40 ${HOVER}`}
 		>
 			{head}
 			{children}
