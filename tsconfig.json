@@ -4,9 +4,10 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"noEmit": true,
-		"allowJs": true,
-		"checkJs": true,
 		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
 
 		/* Preact Config */
 		"jsx": "react-jsx",
