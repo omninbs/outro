@@ -4,7 +4,7 @@ import { useRef } from 'preact/hooks';
 import { COPY } from '../lib/copy';
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
-import { SUB_TEXT } from './ui';
+import { BLOCK_HEADING, SUB_TEXT } from './ui';
 
 /** 页首：标题 + 一条短横线。标题空着就整块不渲染——留空没有兜底文案，横线也跟着走 */
 function OutroHeader({ title }: { title: string }) {
@@ -46,7 +46,7 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 			{blocks.map((block) => (
 				<section key={block.id} class="flex flex-col gap-3">
 					{block.label && (
-						<h2 class="text-base leading-none font-bold tracking-widest text-ctp-mauve">
+						<h2 class={`text-base leading-none ${BLOCK_HEADING}`}>
 							{block.label}
 						</h2>
 					)}

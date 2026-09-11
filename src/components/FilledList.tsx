@@ -3,7 +3,7 @@ import type { ComponentChildren } from 'preact';
 import { COPY } from '../lib/copy';
 import { resolveOutro } from '../lib/outro';
 import type { CardData } from '../lib/types';
-import { Panel, SUB_TEXT, EmptyHint } from './ui';
+import { BLOCK_HEADING, CARD_HEADING, Panel, SUB_TEXT, EmptyHint } from './ui';
 
 /** 分组标题：每组上面一条细线，第一组也不例外——免得它跟面板标题粘在一起 */
 function Group({ text, count, children }: { text: string; count: number; children: ComponentChildren }) {
@@ -12,7 +12,7 @@ function Group({ text, count, children }: { text: string; count: number; childre
 			{/* 窄屏卡片贴边、不提供横向留白，所以标题行得自己带一次，才跟内容落在同一条竖线上
 			   （上面那条细线属于「面」，贴边是刻意的） */}
 			<div class="flex items-baseline justify-between gap-2 narrow:px-inset">
-				<h3 class="text-base font-semibold tracking-wide text-ctp-subtext1">{text}</h3>
+				<h3 class={`text-base ${CARD_HEADING}`}>{text}</h3>
 				<span class="text-base tabular-nums text-ctp-overlay0">{count}</span>
 			</div>
 			{children}
@@ -68,7 +68,7 @@ export function FilledList({ data }: { data: CardData }) {
 							{blocks.map((block) => (
 								<div key={block.id}>
 									{block.label && (
-										<h4 class="text-base font-bold text-ctp-mauve">{block.label}</h4>
+										<h4 class={`text-base ${BLOCK_HEADING}`}>{block.label}</h4>
 									)}
 									<p class={`whitespace-pre-wrap break-words ${SUB_TEXT}`}>
 										{block.text}

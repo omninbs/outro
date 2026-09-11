@@ -6,4 +6,4 @@ export { TextInput, TextArea, BareTextArea, BareRow, BARE_INPUT, BOX } from './i
 export { Button, ConfirmButton, IconButton, AddButton } from './buttons';
 export { CloseIcon, PlusIcon, CheckIcon, ListIcon, PenLineIcon, SparklesIcon } from './icons';
 export { ActionRow } from './ActionRow';
-export { SUB_TEXT, HEADING, FADE, RISE, HOVER } from './tokens';
+export { SUB_TEXT, HEADING, CARD_HEADING, BLOCK_HEADING, FADE, RISE, HOVER } from './tokens';

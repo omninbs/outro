@@ -9,10 +9,20 @@ export const SUB_TEXT = 'text-base leading-relaxed text-ctp-subtext0';
 /**
  * 标题的字样：**同一层级的标题必须同款**——页面标题与页脚那两栏的标题共用它，
  * 那两栏并排，谁也不该显得比谁高一档。抄成三份，所以它不再是排版细节。
- * 另一档是**印在卡片里**的标题：靠字距与更淡的颜色跟正文分开，各只有一处，
- * 所以留在各自组件里，等第三处出现再往这儿收。
  */
 export const HEADING = 'text-lg font-semibold';
+
+/**
+ * 卡片里「一块内容的名字」的字样：面板标题与清单里的分组标题共用它。
+ * 字号不进这个常量——嵌到哪一层就小一档，那是层级自己的事，由调用点给。
+ */
+export const CARD_HEADING = 'font-semibold tracking-wide text-ctp-subtext1';
+
+/**
+ * 文本块的小标题：清单与结尾页共用它——清单就是结尾页的预览，
+ * 同一块内容在两处只能长一个样，所以不能只在一处带字距。
+ */
+export const BLOCK_HEADING = 'font-bold tracking-widest text-ctp-mauve';
 
 /**
  * 动效全应用只有这一份定义，下面三个都长在它上面，各处一律从这儿取——

@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import { HOVER } from './tokens';
+import { CARD_HEADING, HOVER } from './tokens';
 
 /**
  * 卡片的长相。窄屏它不再是一张「卡片」：横向贴边，变成横跨整屏的一条带，横向留白改由里面的文字
@@ -26,7 +26,7 @@ export function Panel({
 	children: ComponentChildren;
 }) {
 	const head = title && (
-		<h2 class="text-lg font-semibold tracking-wide text-ctp-subtext1 narrow:px-inset">
+		<h2 class={`text-lg ${CARD_HEADING} narrow:px-inset`}>
 			{href ? (
 				/* `after` 那一层铺满卡片：点哪儿都行，链接自己还是链接 */
 				<a href={href} class="after:absolute after:inset-0 after:content-['']">
