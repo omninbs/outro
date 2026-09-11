@@ -103,7 +103,7 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 					{/* 宽档才分两栏，两栏就是「一行」，所以用 flex 等分。
 					   并排时两栏之间那道缝比段落之间的间距收一档：竖着排时留白是分段的，
 					   并排时它是同一行里的一处停顿，跟段间距一样松就散了，两栏会各自成一段 */}
-					<main class="flex flex-col gap-12 wide:flex-row wide:items-start wide:gap-10">
+					<main class="flex flex-col gap-12 wide:flex-row wide:items-start wide:gap-8">
 						<MetaList meta={meta} />
 						<BlockList blocks={blocks} />
 					</main>
