@@ -66,7 +66,7 @@ export function FilledList({ data }: { data: CardData }) {
 									{block.label && (
 										<h4 class="text-base font-bold text-ctp-mauve">{block.label}</h4>
 									)}
-									<p class={`line-clamp-4 whitespace-pre-wrap break-words ${SUB_TEXT}`}>
+									<p class={`whitespace-pre-wrap break-words ${SUB_TEXT}`}>
 										{block.text}
 									</p>
 								</div>
