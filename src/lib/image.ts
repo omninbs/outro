@@ -32,8 +32,8 @@ export interface OutputPreset {
 
 /**
  * 三档成品。`viewport` 直接写像素，不写 rem：画布与边距都是像素上的事，跟界面的字号无关。
- * 窄与宽贴着档位线取（30rem / 64rem），而且窄那一个要**站在线里面**：
- * 档位按含滚动条的窗口宽判，取正好的 480 时它反而落到中档那一边。
+ * 横版要踩在宽档线（64rem）以上，分栏才成立；竖版与方版都在它以下，排的是同一份单栏版面，
+ * 两档的差别只在画布比例与四周留白。
  */
 export const OUTPUTS: OutputPreset[] = [
 	{ viewport: 456, aspect: 2 / 3, suffix: '2x3', label: '竖版' },

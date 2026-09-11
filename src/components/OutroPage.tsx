@@ -1,3 +1,5 @@
+import { Fragment } from 'preact';
+
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { SUB_TEXT } from './ui';
@@ -19,23 +21,17 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		   跟左栏成片的元数据顶对齐会显得它飘在上面，把左栏压下去一点才平。
 		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效。
 
-		   窄屏（`narrow:grid-cols-1`）上下排成「名称一行、值一行」，跟编辑态的 `MetaEditor`
-		   是同一条规矩——窄屏是一维的流，一行里塞两列不是这一档该有的样子。
+		   这张表是全站唯一一处真二维的排布（名称列要跟行对齐，宽度由最长的名称决定），
+		   所以只有它用表格；它又是宽档那一行里的左栏，跟右栏对分，值很长时自己还能收缩。
 
-		   这张表还是用 `grid`：它是**真二维**（名称列要跨行对齐，宽度由最长的名称决定）。
-		   `wide:flex-[1]` 是它作为宽档那一行里左栏所占的份——跟右栏 **1 : 1 对分**
-		   （2026-09 从 1.2 : 1 改成等分的），`min-w-0` 让值很长时这一栏仍能收缩
-
-		   一对名称 / 值是一「条」，所以每对包一层：中宽档这层用 `contents` **整个消失**
-		   （`dt` / `dd` 仍是 `dl` 的直接子项，跨行对齐就靠这一点，图片级零影响），
-		   窄档它变成一个 flex 列，把「对内紧、条间松」那个节奏做出来——
-		   对数跟清单里那套一样（对内 2px、条间 8px），见 `FilledList` 的 `Row` */
-		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 narrow:grid-cols-1 wide:flex-[1] wide:pt-1">
+		   名称与值是一「条」，跟行对齐本身就是那条「对内紧」的线——最终页只跟中宽那一档走，
+		   所以不必像编辑态与清单那样，为窄档另拆一种上下排的排法 */
+		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 wide:flex-[1] wide:pt-1">
 			{meta.map((item) => (
-				<div key={item.id} class="contents narrow:flex narrow:flex-col narrow:gap-0.5">
+				<Fragment key={item.id}>
 					<dt class={SUB_TEXT}>{item.label}</dt>
 					<dd class="min-w-0 break-words text-base leading-relaxed">{item.value}</dd>
-				</div>
+				</Fragment>
 			))}
 		</dl>
 	);
@@ -64,16 +60,15 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 /**
  * 署名：卡片里的第三段，靠右。
  *
- * 段间距由父层的 `gap` 给，自己不带外边距；只有一段短字，中档一行放得下，
- * 所以只在**最窄那一档**折起来（`narrow:flex-col`）。
- * 折与不折由档位写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
+ * 段间距由父层的 `gap` 给，自己不带外边距；只有一段短字，一行放得下。
+ * 折与不折由结构写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
  *
  * 卡片里**没有控件**：控件一进来就占住一块地方，署名能有多宽、于是从哪儿折行，就都由它决定——
  * 页面上挪一下按钮，成品里的折行跟着变（2026-09 栽过两次）。所以控件一律在向导那边。
  */
 function OutroFooter({ footer }: { footer: string }) {
 	return (
-		<footer class="flex justify-end text-base tracking-wide text-ctp-overlay0 narrow:flex-col">
+		<footer class="flex justify-end text-base tracking-wide text-ctp-overlay0">
 			{footer && <span>{footer}</span>}
 		</footer>
 	);
@@ -83,7 +78,8 @@ function OutroFooter({ footer }: { footer: string }) {
  * 结尾页：上标题、中主体（元数据 + 文本块）、下署名。
  * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，所以清单与最终页永远一致。
  *
- * 它是拿去截图的那一屏，所以要的是一张**版面**：一行在三档下一样宽，整块在视口里横竖居中。
+ * 它是拿去截图的那一屏，所以要的是一张**版面**：一行有多宽由容器上限写死、不随观者的窗口变，
+ * 整块在视口里横竖居中。
  * 它也就是**成品本身**：「保存为图片」拍的就是这一份（见 `src/lib/image.ts`），
  * 这份 HTML 与它这一身样式原样搬进图里，不另排一份——所以这一屏里**一颗控件都没有**，
  * 控件一律留在向导那边（存图归第三步，返回靠点这一屏的任意处）。
