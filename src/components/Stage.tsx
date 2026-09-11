@@ -8,8 +8,9 @@ import type { CardData } from '../lib/types';
 /**
  * 取景台：把结尾页按 `preset.viewport` 的宽度排一份出来，好让 `saveImage` 把它装进画布。
  *
- * 宽度**钉死在台子上**（外层那一圈写死宽度），卡片再钉一次自己的宽度：
- * 它平时是「一行要多宽」那个上限里的居中块，这里没有页面留白可退，量到的就是这一档的设计宽。
+ * **只有台子这一圈写死宽度**：它把档位与排版条件定死，跟观者的窗口无关。
+ * 卡片自己照旧按页面那套规矩定宽（「一行要多宽」那个上限里的居中块），进台子不换宽度——
+ * 台子要是顺手把它撑到设计宽，存出来的就跟预览里那一份不是同一个东西了。
  * 台子又是最终页版面的量具——档位量的是离得最近的那一层容器的内联尺寸（页面里量到的是页面宽），
  * 这里量到的就是台子宽。于是这一档排出来的是什么，跟观者的窗口一点关系都没有。
  * 台子自己不再声明容器：量具只有「管宽的那一层」，多一层容器只会让查询落到更里面、
@@ -26,10 +27,7 @@ export function Stage({ preset, data, onCard }: { preset: OutputPreset; data: Ca
 
 	useEffect(() => {
 		const card = root.current?.querySelector<HTMLElement>('[data-card]');
-		if (!card) return;
-		card.style.width = `${preset.viewport}px`;
-		card.style.minWidth = `${preset.viewport}px`;
-		onCard(card);
+		if (card) onCard(card);
 	}, [onCard]);
 
 	// 缩放比取两头的较小者：整份要放得进视口，缩放后的横向宽高又得撑得住祖先的溢出区
