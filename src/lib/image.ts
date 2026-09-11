@@ -8,17 +8,14 @@
  * 正是因为它把一个文档里的计算结果搬到了条件不同的另一个文档里。
  *
  * 方形是量出来的：边长取卡片较长的那一条的两倍，卡片按原尺寸摆在正中。
- * 页面上的控件只占位不印（跟打印同一条规矩）：它们的宽度是排版的一部分，抽掉就会重新折行。
+ * 底色取外壳的底色（不透明）。
  */
-/** 图里「按钮只占位不印」的写法：跟打印那份 `print:invisible` 是同一条规矩的两种落法 */
-const NO_BUTTONS = '[&_button]:invisible';
-
 /** 文件名拿标题当名字：存下来的图多半是照标题认的；标题空着就叫「结尾页」 */
 function fileName(title: string) {
 	return `${title.trim().replace(/[\\/:*?"<>|]/g, '').slice(0, 60) || '结尾页'}.png`;
 }
 
-/** 卡片是 `card`；外壳、以及图里要拿掉的控件，都从它身上找 */
+/** 卡片是 `card`（谁的那一份都行，外壳跟着它找） */
 export async function saveImage(card: HTMLElement, title: string) {
 	const box = card.getBoundingClientRect();
 	const side = 2 * Math.ceil(Math.max(box.width, box.height));
@@ -27,12 +24,10 @@ export async function saveImage(card: HTMLElement, title: string) {
 	const background = getComputedStyle(shell).backgroundColor;
 
 	const stage = shell.cloneNode(true) as HTMLElement;
-	stage.classList.add(NO_BUTTONS);
 	stage.style.height = `${box.height}px`;
 	// 宽度钉成屏幕上量到的那个数：图里没有滚动条，不钉住它就会比屏幕上宽出十几像素、折行跟着变
 	const pinned = stage.querySelector<HTMLElement>('[data-card]');
 	if (pinned) pinned.style.width = `${box.width}px`;
-	for (const chrome of stage.querySelectorAll('[data-chrome]')) chrome.remove();
 	stage.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
 
 	const css = [...document.querySelectorAll('style')].map((s) => s.textContent ?? '').join('\n');

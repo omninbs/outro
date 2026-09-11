@@ -42,6 +42,8 @@ export const STEPS: StepEntry[] = [
 		label: COPY.step.generate,
 		icon: SparklesIcon,
 		listBelow: true,
-		body: ({ onReset, onGenerate }) => <GenerateStep onReset={onReset} onGenerate={onGenerate} />,
+		body: ({ data, onReset, onGenerate }) => (
+			<GenerateStep data={data} onReset={onReset} onGenerate={onGenerate} />
+		),
 	},
 ];
