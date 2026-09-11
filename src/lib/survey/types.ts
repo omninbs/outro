@@ -7,7 +7,7 @@ export type QuestionKind = 'text' | 'long' | 'choice';
  * 答案的去处：结尾页上就这四块，写成一个字符串。
  *
  * 结尾页上那一行 / 那一块的名字取题面（`Question.label`）——「换个叫法」是另一件事，
- * 真需要时再加字段。2026-09 它原本是 `{ kind, label? }`，11 道题一处都没写过 `label`，
+ * 真需要时再加字段。2026-09 它原本是 `{ kind, label? }`，那时没有一道题写过 `label`，
  * 于是那层对象只剩包装，压成了字符串。
  */
 export type Placement = 'title' | 'footer' | 'meta' | 'block';

@@ -34,7 +34,7 @@ npm run typecheck && npm test && npm run build
 - 界面符号用图标组件（`ui/icons.tsx` 包 `lucide-preact`），不写字体字符；分隔线、下划线用元素画；依赖按需装、不抄精简版
 - 一个知识只有一个定义（含注释）：文案 `lib/copy.ts`、内容 `lib/outro.ts`、框外观 `ui/inputs.tsx`、动效 `ui/tokens.ts`、可点整行 `ui/LinkList.tsx`、画布几何 `lib/frame.ts`、目录表 `_registry.ts(x)`
 - 存图＝把屏幕上那一份装进 SVG 给浏览器画到画布，一档一颗按钮，无第二套渲染路径（`lib/image.ts`）：克隆外壳带 CSS 装进 SVG 视口，视口是 `data-card` 那块（外壳按设计宽摆好、左移空出的那段）；设计宽与比例写死在 `OUTPUTS`，出图前挂进屏幕外取景台按那个宽排；装进 `<img>` 的是 `data:` URL，**不能换回 `blob:`**——Chromium 系把「blob 里装着 `foreignObject` 的 SVG」判成异源，画到画布上会把画布弄脏、`toBlob` 直接抛 SecurityError（Firefox 不脏，所以只在 Chromium 上露，2026-09 实测）
-- 设计宽只定档不定卡片宽（钉 `min-width` 会盖掉宽度上限）；`data-card` 宽钉回克隆、高由卡片定，克隆里摘掉「至少一屏高」；画布四周留较长边的四分之一（不少于），按比例补齐、倍率写死 2
+- 设计宽只定档不定卡片宽（钉 `min-width` 会盖掉宽度上限）；`data-card` 宽钉回克隆、高由卡片定，克隆里摘掉「至少一屏高」；画布四周留**拍下来那一块**较长边的四分之一（不少于），按比例补齐、倍率写死 2
 - 控件与卡片分开：最终页无控件，返回靠点任意处，动作在向导第三步
 - 问卷是数据：题目写 `into`（`meta` / `block` / `title` / `footer`）决定答案去处，要加工才写 `build`；答完以 `DEFAULT_CARD` 为底盖答到的部分，不是清空（问到却答空的标题、页脚写空串，空元数据与文本块丢掉）
 - 回到表单：内容已成型停最后一步（`formAtLastStep`），重置回第一步，其余时候表单记住你看过的那一步——步骤是表单自己的状态，地址里不带它；按钮四种变体只差颜色（外高 40px、内边距 32px、描边 1px），危险动作靠颜色与文案
