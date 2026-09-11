@@ -48,7 +48,13 @@ export const OUTPUTS: OutputPreset[] = [
 /** 四周留白的下限：拍下来那一块最长边的这个比例那一边至少这么宽 */
 const MARGIN = 1 / 8;
 
-/** 画布边长上限：浏览器画布有上限，太大的也发不出去；按长边收到这个数 */
+/**
+ * 光栅化的倍率：图里的字号小，一倍画出来发虚——SVG 与画布一起按这个倍数放大，
+ * viewBox 不动，于是版面一个像素都不变，只是画得细一档。
+ */
+const SCALE = 2;
+
+/** 画布边长上限（按放大后的画布算）：浏览器画布有上限，太大的也发不出去；按长边收到这个数 */
 const LIMIT = 2160;
 
 /**
@@ -89,9 +95,10 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 	stage.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
 
 	const css = [...document.querySelectorAll('style')].map((s) => s.textContent ?? '').join('\n');
-	// 画的是整个排版视口（三档的判据就是它），裁的只是卡片那一块
+	// 画的是整个排版视口（三档的判据就是它），裁的只是卡片那一块；
+	// 声明成放大后的尺寸、viewBox 不动，装进去的那一份于是照着原样放大，文字与细线因而更实
 	const drawn =
-		`<svg xmlns="http://www.w3.org/2000/svg" width="${preset.viewport}" height="${content.height}" viewBox="0 0 ${preset.viewport} ${content.height}">` +
+		`<svg xmlns="http://www.w3.org/2000/svg" width="${preset.viewport * SCALE}" height="${content.height * SCALE}" viewBox="0 0 ${preset.viewport} ${content.height}">` +
 		`<foreignObject width="${preset.viewport}" height="${content.height}">` +
 		`<html xmlns="http://www.w3.org/1999/xhtml"><head><style><![CDATA[${css}]]></style></head>` +
 		`<body>${new XMLSerializer().serializeToString(stage)}</body></html>` +
@@ -108,10 +115,10 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 
 	const frame = frameOf(preset.aspect, content);
 	// 画布被顶到上限时整幅一起收：卡片与留白同比例，图小一号但版面不变
-	const size = Math.min(1, LIMIT / frame.width, LIMIT / frame.height);
-	const width = Math.round(frame.width * size);
-	const height = Math.round(frame.height * size);
-	// 浏览器给 foreignObject 的固有尺寸未必等于声明的视口，按实拍与视口的比换算，卡片在图里就不会被放大
+	const size = Math.min(1, LIMIT / (frame.width * SCALE), LIMIT / (frame.height * SCALE));
+	const width = Math.round(frame.width * size * SCALE);
+	const height = Math.round(frame.height * size * SCALE);
+	// 实拍尺寸与排版视口的比：浏览器给 foreignObject 的固有尺寸未必等于声明的视口，换算一下它才不会被放大
 	const ratio = shot.naturalWidth / preset.viewport;
 
 	const canvas = document.createElement('canvas');
@@ -121,14 +128,15 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 	if (!ctx) throw new Error('画布开不出来');
 	ctx.fillStyle = background;
 	ctx.fillRect(0, 0, width, height);
-	// 裁的就是卡片那一块：横向居中于视口，所以从它左边那一段起；竖着从顶起（克隆的高度就是它）
-	const put = { width: content.width * size, height: content.height * size };
+	// 裁的就是卡片那一块：横向居中于视口，所以从它左边那一段起；竖着从顶起（克隆的高度就是它）。
+	// 源取实拍上的整张卡片、落点按画布尺寸：上限触发的缩小因此是整幅等比，不是裁掉一块
+	const put = { width: content.width * size * SCALE, height: content.height * size * SCALE };
 	ctx.drawImage(
 		shot,
-		left / ratio,
+		left * ratio,
 		0,
-		put.width / ratio,
-		put.height / ratio,
+		content.width * ratio,
+		content.height * ratio,
 		Math.round((width - put.width) / 2),
 		Math.round((height - put.height) / 2),
 		put.width,
