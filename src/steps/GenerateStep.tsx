@@ -6,6 +6,12 @@ import { COPY } from '../lib/copy';
 import { OUTPUTS, saveImage, type OutputPreset } from '../lib/image';
 import type { CardData } from '../lib/types';
 
+/**
+ * 一次存图：按哪一档排、图叫什么名字。名字在**按下那一刻**就定死——按钮上写的就是这一档，
+ * 图认的也是当时看见的那个标题；排与画都发生在后面几步，不该回头再读一遍会变的东西。
+ */
+type Job = { preset: OutputPreset; title: string };
+
 export function GenerateStep({
 	data,
 	onReset,
@@ -16,13 +22,13 @@ export function GenerateStep({
 	onPreview: () => void;
 }) {
 	// 存图要有一份排好版的卡片才量得出来，而排的这过程不该被人看见：点一下才把结尾页挂在屏幕外，存完就收
-	const [job, setJob] = useState<OutputPreset | null>(null);
+	const [job, setJob] = useState<Job | null>(null);
 	const [failed, setFailed] = useState(false);
 	const [card, setCard] = useState<HTMLElement | null>(null);
 
 	useEffect(() => {
 		if (!job || !card) return;
-		saveImage(card, job, data.title).then(
+		saveImage(card, job.preset, job.title).then(
 			() => setJob(null),
 			() => {
 				setFailed(true);
@@ -61,7 +67,7 @@ export function GenerateStep({
 							onClick={() => {
 								setFailed(false);
 								setCard(null);
-								setJob(preset);
+								setJob({ preset, title: data.title });
 							}}
 						>
 							{COPY.action.save}
@@ -72,7 +78,7 @@ export function GenerateStep({
 			</div>
 			{failed && <p class="text-base text-ctp-red narrow:px-inset">存不下来，这个浏览器画不出图片。</p>}
 
-			{job && <Stage preset={job} data={data} onCard={setCard} />}
+			{job && <Stage preset={job.preset} data={data} onCard={setCard} />}
 		</Panel>
 	);
 }
