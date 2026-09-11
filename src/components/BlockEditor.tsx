@@ -13,7 +13,7 @@ export function BlockEditor({
 }) {
 	return (
 		<div class="flex flex-col gap-3">
-			{blocks.length === 0 && <EmptyHint>还没有文本块，点下方按钮添加</EmptyHint>}
+			{blocks.length === 0 && <EmptyHint>{COPY.emptyBlocks}</EmptyHint>}
 
 			{blocks.map((block) => (
 				/* 窄屏跟别的整行一个待遇：横向贴边、去掉侧边描边，横向留白自己带一次 */

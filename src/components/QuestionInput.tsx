@@ -66,7 +66,7 @@ export function QuestionInput({
 		<Field label={question.label} group={!custom}>
 			{custom ? (
 				answerBox(
-					'自己写',
+					COPY.placeholderCustom,
 					<IconButton
 						label={COPY.action.backToOptions}
 						onClick={() => {

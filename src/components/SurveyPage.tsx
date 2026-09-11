@@ -45,7 +45,7 @@ export function SurveyPage({
 			<ActionRow>
 				<Button onClick={onExit}>{COPY.action.backHome}</Button>
 				<Button variant="primary" onClick={() => onFinish(answers)}>
-					完成
+					{COPY.action.finish}
 				</Button>
 			</ActionRow>
 		</div>

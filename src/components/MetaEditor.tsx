@@ -13,7 +13,7 @@ export function MetaEditor({
 }) {
 	return (
 		<div class="flex flex-col gap-2">
-			{items.length === 0 && <EmptyHint>还没有元数据，点下方按钮添加</EmptyHint>}
+			{items.length === 0 && <EmptyHint>{COPY.emptyMeta}</EmptyHint>}
 
 			{items.map((item) => (
 				<BareRow

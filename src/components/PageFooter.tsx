@@ -24,12 +24,12 @@ export function PageFooter() {
 				</div>
 
 				<nav class="flex flex-col gap-2 wide:flex-[5]">
-					<h2 class={HEADING}>链接</h2>
+					<h2 class={HEADING}>{COPY.section.links}</h2>
 					<LinkList
 						items={[
 							// 「返回主页」在应用内跳，「源代码」是外链
 							{ text: COPY.action.backHome, href: '#' },
-							{ text: '源代码', href: REPO_URL, external: true },
+							{ text: COPY.action.source, href: REPO_URL, external: true },
 						]}
 					/>
 				</nav>

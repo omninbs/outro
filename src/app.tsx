@@ -129,11 +129,11 @@ export function App() {
 					{step === 0 ? (
 						<Button onClick={() => navigate('home')}>{COPY.action.backHome}</Button>
 					) : (
-						<Button onClick={() => setStep(step - 1)}>上一步</Button>
+						<Button onClick={() => setStep(step - 1)}>{COPY.action.prev}</Button>
 					)}
 					{step < STEPS.length - 1 && (
 						<Button variant="primary" onClick={() => setStep(step + 1)}>
-							下一步
+							{COPY.action.next}
 						</Button>
 					)}
 				</ActionRow>
