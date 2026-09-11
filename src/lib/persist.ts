@@ -5,32 +5,26 @@ import type { CardData, MetaItem, TextBlock } from './types';
 const STORAGE_KEY = 'outro.card.v2';
 const LEGACY_KEY = 'outro.card.v1';
 
-/** 改名前用过的键，读到就照旧接着用，不丢用户已有内容 */
+/** 改名前用过的键：认得出来就接着读，别让用户已有的内容没了 */
 const OLD_CURRENT_KEY = 'colophon.card.v2';
 const OLD_LEGACY_KEY = 'colophon.card.v1';
 
-/** v1 会把版权声明模板预填进输入框；模板本身已经删了，这两个字面量只用来认出旧档 */
+/** 旧档预填过的一段声明文本：模板本身已经删了，这两个字面量只用来认出旧档 */
 const LEGACY_NOTICE_LABEL = '版权声明';
 const LEGACY_NOTICE_TEXT =
 	'本工程仅供学习交流与个人收藏使用。允许转载分享，转载时请注明原歌曲作者与本工程作者，并保留本声明。' +
 	'禁止商用、售卖或用于付费订阅；如需二创或商业合作，请先取得授权。';
 
-/**
- * v1 当年预填的默认文案。这是**历史值**，不跟着 lib/copy.ts 里现在的文案走——
- * 迁移要认的是旧档里写着什么，而不是今天默认显示什么，两者混成一个常量就迟早搬错。
- */
+/** 旧档当年预填的默认文案：迁移认的是旧档里写着什么，不是今天默认显示什么 */
 const LEGACY_DEFAULT_TITLE = '标题';
 const LEGACY_DEFAULT_FOOTER = '底部一行字';
 
 const str = (value: unknown, fallback = '') => (typeof value === 'string' ? value : fallback);
 
-/** 旧版本把默认文案直接写进了输入框，迁移时把它当作「未填写」 */
+/** 旧档把默认文案直接预填进了框里，迁移时那等于「没填」 */
 const dropDefault = (value: string, fallback: string) => (value.trim() === fallback ? '' : value);
 
-/**
- * 把存档 JSON 解析成当前结构，兼容 v2 之前的「字段 + 声明」写法。
- * 纯函数，便于直接拿 fixture 试迁移。
- */
+/** 存档 JSON → 当前结构，顺带兼容旧写法；纯函数，迁移可以单独试 */
 export function parseCard(raw: string): CardData {
 	const old = JSON.parse(raw) as Record<string, unknown>;
 
@@ -60,7 +54,7 @@ export function parseCard(raw: string): CardData {
 	};
 }
 
-/** 读存档：当前版本 → 旧版本（迁移后顺手丢掉被预填的默认文案）→ 全新默认值 */
+/** 读存档：当前版本优先，其次是旧版本（迁移时把当年预填的默认当成没填），都没有才起一份全新的 */
 export function loadCard(): CardData {
 	try {
 		const current = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(OLD_CURRENT_KEY);
@@ -87,7 +81,7 @@ export function loadCard(): CardData {
 	}
 }
 
-/** 写存档；隐私模式下会抛错，忽略即可，不影响本次编辑 */
+/** 写存档：存不上（比如隐私模式）也不该影响这一轮编辑 */
 export function saveCard(data: CardData): void {
 	try {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

@@ -3,19 +3,13 @@ import type { ComponentChildren } from 'preact';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
 /**
- * 视图状态：应用有四个页面——首页（选开始方式）、表单（自己填）、问卷（照题答）、结尾页。
+ * 视图状态：应用就四页——首页、表单、问卷、结尾页。
  *
- * 用 hash 记录当前视图：空 fragment 是首页，`#form` 是表单，`#outro` 是结尾页，
- * 其余的 hash 就是某个入口的 id——`#edit`、`#logic-redstone-music`，入口在地址里就是它自己的名字，
- * 不再套 `survey/` 那一层。认不出的名字也当问卷 id，由问卷页告诉用户没有这一份。
- * 代价是问卷 id 不能占用保留名 `form` / `outro`。
- *
- * 用 hash 而不是路径，是因为改 hash 不触发导航，构建产物直接用浏览器打开（file://）时
- * 照样能用、能刷新、能前进后退；路径路由在 file:// 下会直接失败。
+ * 用 hash 而不是路径，是因为产物要被当文件直接打开：那样照样能刷新、能前进后退，
+ * 路径路由在这里直接废掉。代价是入口名跟固定页的地址共用一个命名空间，不能撞名。
  */
 export type View = 'home' | 'form' | 'survey' | 'outro';
 
-/** 保留名：这几页占掉的 hash，问卷 id 不能重名。问卷没有固定 hash，用它的 id 当 hash */
 const RESERVED = { form: 'form', outro: 'outro' } as const;
 
 interface Route {
@@ -35,8 +29,7 @@ function readRoute(): Route {
 }
 
 function writeRoute(route: Route) {
-	// 回首页时赋空字符串，只会留下一个「空的 fragment」，地址栏里就是那个 `#`。
-	// 用 replaceState 自己拼路径能抹掉它，但要动 History API + 显式路径，file:// 下不值当，保留 `#`。
+	// 回首页会在地址栏留下一个空 fragment；抹掉它得自己动 History API，不值当，留着
 	if (route.view === 'survey') {
 		window.location.hash = route.id ?? '';
 		return;
@@ -55,10 +48,10 @@ type RouterValue = {
 const RouterContext = createContext<RouterValue>({ view: 'home', surveyId: null, navigate: () => {} });
 
 export function RouterProvider({ children }: { children: ComponentChildren }) {
-	// 首屏直接读 hash：带着 `#form`、`#logic-redstone-music` 或 `#outro` 打开、刷新时就落在对应页面。
+	// 地址本身就是状态：首屏从地址读一次，带着地址打开或刷新都落在同一页
 	const [route, setRoute] = useState<Route>(readRoute);
 
-	// 前进 / 后退 / 手改地址栏都靠它同步回来。
+	// 之后由地址的变化同步回来——前进 / 后退、手改地址都算
 	useEffect(() => {
 		const sync = () => setRoute(readRoute());
 		window.addEventListener('hashchange', sync);
@@ -67,7 +60,7 @@ export function RouterProvider({ children }: { children: ComponentChildren }) {
 
 	const navigate = useCallback((next: View, id?: string) => {
 		const to: Route = { view: next, id: id ?? null };
-		setRoute(to); // 先切视图，不等 hashchange 事件，避免闪一下
+		setRoute(to); // 视图先行，不等事件绕回来，免得闪一下
 		writeRoute(to);
 		window.scrollTo(0, 0);
 	}, []);

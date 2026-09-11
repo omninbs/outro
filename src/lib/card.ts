@@ -1,7 +1,7 @@
 import { newId } from './id';
 import type { MetaItem, TextBlock } from './types';
 
-/** 一条新元数据。构造属于数据层，不跟编辑器组件绑在一起 */
+/** 一条新元数据：构造属于数据层，不跟编辑器组件绑在一起 */
 export const newMetaItem = (label = '', value = ''): MetaItem => ({ id: newId('m'), label, value });
 
 /** 一块新文本 */
