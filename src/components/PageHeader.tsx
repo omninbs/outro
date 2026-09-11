@@ -7,7 +7,7 @@ import { HEADING } from './ui';
 export function PageHeader({ title, description }: { title: string; description: string }) {
 	return (
 		/* 窄屏容器横向贴边，留白得由文字自己带一次 */
-		<header class="mb-6 max-narrow:px-inset">
+		<header class="mb-6 narrow:px-inset">
 			<h1 class={HEADING}>{title}</h1>
 			<p class="mt-1 text-base text-ctp-subtext0">{description}</p>
 		</header>

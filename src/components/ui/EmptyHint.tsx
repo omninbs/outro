@@ -7,7 +7,7 @@ import type { ComponentChildren } from 'preact';
 export function EmptyHint({ children }: { children: ComponentChildren }) {
 	return (
 		<p
-			class="rounded-md border border-dashed border-ctp-surface1 px-3 py-4 text-center text-base text-ctp-overlay0 max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset"
+			class="rounded-md border border-dashed border-ctp-surface1 px-3 py-4 text-center text-base text-ctp-overlay0 narrow:rounded-none narrow:border-x-0 narrow:px-inset"
 		>
 			{children}
 		</p>

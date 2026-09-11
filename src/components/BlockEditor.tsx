@@ -19,7 +19,7 @@ export function BlockEditor({
 				/* 窄屏跟别的整行一个待遇：横向贴边、去掉侧边描边，横向留白自己带一次 */
 				<div
 					key={block.id}
-					class={`${BOX} p-2 max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${RISE}`}
+					class={`${BOX} p-2 narrow:rounded-none narrow:border-x-0 narrow:px-inset ${RISE}`}
 				>
 					<div class="flex items-center gap-2">
 						<input

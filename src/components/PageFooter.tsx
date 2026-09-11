@@ -16,7 +16,7 @@ export function PageFooter() {
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
-				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 max-narrow:px-inset wide:flex-row wide:items-start wide:justify-between`}
+				class={`${footerContainer()} ${FOOTER_MIN_HEIGHT} flex flex-col gap-8 pt-12 pb-6 narrow:px-inset wide:flex-row wide:items-start wide:justify-between`}
 			>
 				<div class="wide:flex-[7]">
 					<h2 class={`mb-2 ${HEADING}`}>{COPY.brand}</h2>

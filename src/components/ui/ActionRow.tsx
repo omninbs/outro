@@ -5,5 +5,5 @@ import type { ComponentChildren } from 'preact';
  * 各写一遍迟早各改各的，所以收成一个组件；窄屏它是容器里的裸内容，横向留白得自己带一次。
  */
 export function ActionRow({ children }: { children: ComponentChildren }) {
-	return <div class="mt-6 flex items-center justify-between max-narrow:px-inset">{children}</div>;
+	return <div class="mt-6 flex items-center justify-between narrow:px-inset">{children}</div>;
 }

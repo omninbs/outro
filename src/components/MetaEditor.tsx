@@ -24,12 +24,12 @@ export function MetaEditor({
 				>
 					{/* 窄屏上下排：名称框定宽且不让位，跟值硬挤在一行里，值那栏就没剩多少了；
 					    竖着排本来就顺，× 仍在右边纵向居中，所以「一条元数据 = 一个框」没变 */}
-					<div class="flex min-w-0 flex-1 items-center gap-2 max-narrow:flex-col max-narrow:items-stretch">
+					<div class="flex min-w-0 flex-1 items-center gap-2 narrow:flex-col narrow:items-stretch">
 						<input
 							type="text"
 							value={item.label}
 							placeholder={COPY.field.metaLabel}
-							class={`w-36 shrink-0 font-medium text-ctp-mauve max-narrow:w-full ${BARE_INPUT}`}
+							class={`w-36 shrink-0 font-medium text-ctp-mauve narrow:w-full ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(items, item.id, { label: e.currentTarget.value }))}
 						/>
 						{/* 上下排之后值那一行的高度交给内容，不再竖着分 */}
@@ -37,7 +37,7 @@ export function MetaEditor({
 							type="text"
 							value={item.value}
 							placeholder={COPY.field.metaValue}
-							class={`min-w-0 flex-1 text-ctp-text max-narrow:w-full max-narrow:flex-none ${BARE_INPUT}`}
+							class={`min-w-0 flex-1 text-ctp-text narrow:w-full narrow:flex-none ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(items, item.id, { value: e.currentTarget.value }))}
 						/>
 					</div>

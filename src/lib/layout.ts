@@ -16,7 +16,7 @@ export const FOOTER_MIN_HEIGHT = 'min-h-56';
  * 页面容器：居中、按页面定宽，横向留白平时由它给；窄档让出去，改由里面的文字与控件各带一次
  * ——容器留一道、里面再留一道只会越套越深，整页也就对不到同一条竖线上。跨档直接跳，不插值。
  */
-const container = (width: string) => `mx-auto w-full ${width} px-6 max-narrow:px-0`;
+const container = (width: string) => `mx-auto w-full ${width} px-6 narrow:px-0`;
 
 /** 页面内容的容器 */
 export const pageContainer = (width: PageWidth) => container(PAGE_WIDTHS[width]);

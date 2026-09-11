@@ -21,7 +21,7 @@ export function Stepper({
 	onSelect: (index: number) => void;
 }) {
 	return (
-		<ol class="flex flex-wrap items-center gap-x-2 gap-y-2 max-narrow:px-inset">
+		<ol class="flex flex-wrap items-center gap-x-2 gap-y-2 narrow:px-inset">
 			{steps.map((step, index) => {
 				const active = index === current;
 				const done = index < current;
@@ -49,7 +49,7 @@ export function Stepper({
 								<Icon />
 							</span>
 							{/* 窄屏只留图标：名称会把这排东西挤到换行；出现与消失是淡的，不硬蹦 */}
-							<span class={`${active ? '' : 'max-narrow:hidden max-narrow:opacity-0'} ${FADE}`}>
+							<span class={`${active ? '' : 'narrow:hidden narrow:opacity-0'} ${FADE}`}>
 								{step.label}
 							</span>
 						</button>

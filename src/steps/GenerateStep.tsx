@@ -33,7 +33,7 @@ export function GenerateStep({
 
 	return (
 		<Panel title={COPY.step.generate}>
-			<p class="mb-4 text-base leading-relaxed text-ctp-subtext0 max-narrow:px-inset">
+			<p class="mb-4 text-base leading-relaxed text-ctp-subtext0 narrow:px-inset">
 				点「预览」看到的就是成品本身，那一屏点哪儿都能回来；存图是下面那三颗，各存一档比例，三种比例各自
 				排版，内容四周都留着边距。
 			</p>
@@ -43,7 +43,7 @@ export function GenerateStep({
 				不靠一个占满整行的空元素去撑开一行——那样撑出来的空档会算两遍，看着比想要的松。
 				行内那点距离跟别处按钮同一档。
 			*/}
-			<div class="flex flex-col gap-3 max-narrow:px-inset">
+			<div class="flex flex-col gap-3 narrow:px-inset">
 				<div class="flex items-center gap-x-2">
 					<Button variant="primary" onClick={onPreview}>
 						{COPY.action.preview}
@@ -70,7 +70,7 @@ export function GenerateStep({
 					))}
 				</div>
 			</div>
-			{failed && <p class="mt-3 text-base text-ctp-red max-narrow:px-inset">存不下来，这个浏览器画不出图片。</p>}
+			{failed && <p class="mt-3 text-base text-ctp-red narrow:px-inset">存不下来，这个浏览器画不出图片。</p>}
 
 			{job && <Stage preset={job} data={data} onCard={setCard} />}
 		</Panel>

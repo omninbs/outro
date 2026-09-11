@@ -8,7 +8,7 @@ import { HOVER } from './tokens';
  */
 const CARD =
 	'rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5 ' +
-	'max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-0';
+	'narrow:rounded-none narrow:border-x-0 narrow:px-0';
 
 /**
  * 步骤里的一块内容：标题 + 卡片。整块可点时它自己就是入口（首页选开始方式），
@@ -24,7 +24,7 @@ export function Panel({
 	children: ComponentChildren;
 }) {
 	const head = title && (
-		<h2 class="mb-4 text-lg font-semibold tracking-wide text-ctp-subtext1 max-narrow:px-inset">{title}</h2>
+		<h2 class="mb-4 text-lg font-semibold tracking-wide text-ctp-subtext1 narrow:px-inset">{title}</h2>
 	);
 
 	if (!onClick) {

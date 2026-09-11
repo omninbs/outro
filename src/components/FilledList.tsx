@@ -10,7 +10,7 @@ const Group = ({ text, count, children }: { text: string; count: number; childre
 	<section class="border-t border-ctp-surface0 pt-5">
 		{/* 窄屏卡片贴边、不提供横向留白，所以标题行得自己带一次，才跟内容落在同一条竖线上
 		   （上面那条细线属于「面」，贴边是刻意的） */}
-		<div class="mb-2 flex items-baseline justify-between gap-2 max-narrow:px-inset">
+		<div class="mb-2 flex items-baseline justify-between gap-2 narrow:px-inset">
 			<h3 class="text-base font-semibold tracking-wide text-ctp-subtext1">{text}</h3>
 			<span class="text-base tabular-nums text-ctp-overlay0">{count}</span>
 		</div>
@@ -24,9 +24,9 @@ const Group = ({ text, count, children }: { text: string; count: number; childre
  * 窄屏上下排，跟别处的元数据行是同一条规矩。
  */
 const Row = ({ label, value }: { label: string; value: string }) => (
-	<div class="flex gap-3 text-base leading-relaxed max-narrow:flex-col max-narrow:gap-0.5">
-		<dt class="w-24 shrink-0 text-ctp-subtext0 max-narrow:w-full">{label}</dt>
-		<dd class="min-w-0 flex-1 break-words text-ctp-text max-narrow:flex-none">{value}</dd>
+	<div class="flex gap-3 text-base leading-relaxed narrow:flex-col narrow:gap-0.5">
+		<dt class="w-24 shrink-0 text-ctp-subtext0 narrow:w-full">{label}</dt>
+		<dd class="min-w-0 flex-1 break-words text-ctp-text narrow:flex-none">{value}</dd>
 	</div>
 );
 
@@ -46,7 +46,7 @@ export function FilledList({ data }: { data: CardData }) {
 				{/* 标题也能留空：没填就不印这一行，跟最终页一致 */}
 				<Group text={COPY.step.summary} count={(title ? 1 : 0) + meta.length}>
 					{title || meta.length ? (
-						<dl class="flex flex-col gap-1.5 max-narrow:gap-2 max-narrow:px-inset">
+						<dl class="flex flex-col gap-1.5 narrow:gap-2 narrow:px-inset">
 							{/* 上下排之后，「对内紧、条间松」是唯一能把条目分开的东西 */}
 							{title && <Row label={COPY.field.title} value={title} />}
 							{meta.map((item) => (
@@ -60,7 +60,7 @@ export function FilledList({ data }: { data: CardData }) {
 
 				<Group text={COPY.step.describe} count={blocks.length}>
 					{blocks.length ? (
-						<div class="flex flex-col gap-3 max-narrow:px-inset">
+						<div class="flex flex-col gap-3 narrow:px-inset">
 							{blocks.map((block) => (
 								<div key={block.id}>
 									{block.label && (
@@ -79,7 +79,7 @@ export function FilledList({ data }: { data: CardData }) {
 
 				<Group text={COPY.section.footer} count={footer ? 1 : 0}>
 					{footer ? (
-						<p class={`break-words max-narrow:px-inset ${SUB_TEXT}`}>{footer}</p>
+						<p class={`break-words narrow:px-inset ${SUB_TEXT}`}>{footer}</p>
 					) : (
 						<EmptyHint>{COPY.empty}</EmptyHint>
 					)}

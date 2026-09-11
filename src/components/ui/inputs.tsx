@@ -7,7 +7,7 @@ import { RISE } from './tokens';
  * 横向那道留白只该有一层——窄屏归外面的框，控件再带一道会叠成两道，字也落不到全页那条竖线上。
  */
 export const BARE_INPUT =
-	'rounded border-none bg-transparent px-2 py-1.5 text-base max-narrow:px-0 ' +
+	'rounded border-none bg-transparent px-2 py-1.5 text-base narrow:px-0 ' +
 	'placeholder:text-ctp-overlay0 focus:outline-none';
 
 /**
@@ -25,7 +25,7 @@ export const BOX = 'rounded-md border border-ctp-surface0 bg-ctp-crust';
 export function BareRow({ children, action }: { children: ComponentChildren; action?: ComponentChildren }) {
 	return (
 		<div
-			class={`${BOX} flex items-center gap-2 p-1.5 focus-within:border-ctp-mauve max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${RISE}`}
+			class={`${BOX} flex items-center gap-2 p-1.5 focus-within:border-ctp-mauve narrow:rounded-none narrow:border-x-0 narrow:px-inset ${RISE}`}
 		>
 			{children}
 			{action}

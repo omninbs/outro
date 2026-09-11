@@ -44,11 +44,11 @@
 @theme {
 	/* 版面按**框**判，不按窗口判：最终页要拿去出图，出图时框宽是写死的，
 	   按窗口判的话同一档在宽屏与窄屏上会排出两个样子。`narrow:` / `wide:` 于是是
-	   容器查询变体，量的是**管宽的那一层**（见 `PageShell`）*/
+	   容器查询变体，量的是**管宽的那一层**（见 `PageShell`）。
+	   这里**不写 `--breakpoint-*`**：写了就多出第二套按窗口的判据（`max-narrow:` 那种），
+	   同一份代码里两套判据，迟早有人挑错那一个 */
 	--container-narrow: 30rem;
 	--container-wide: 64rem;
-	--breakpoint-narrow: 30rem;
-	--breakpoint-wide: 64rem;
 	/* 窄屏那唯一一次的横向留白：跟正文原本的落点差不多，也是手机上通用的缩进 */
 	--spacing-inset: 1rem;
 }

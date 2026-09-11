@@ -77,7 +77,7 @@ export function QuestionInput({
 				)
 			) : (
 				/* 窄屏贴边的卡片不提供横向留白，这一栏自己带一次，才跟题面落在同一竖线 */
-				<div class={`flex gap-2 max-narrow:px-inset ${FADE} ${long ? 'flex-col' : 'flex-wrap'}`}>
+				<div class={`flex gap-2 narrow:px-inset ${FADE} ${long ? 'flex-col' : 'flex-wrap'}`}>
 					{options.map((option) => {
 						const active = value === option;
 						return (
