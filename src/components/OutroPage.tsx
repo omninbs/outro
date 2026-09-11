@@ -64,25 +64,27 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 }
 
 /**
- * 页脚：左边「返回编辑」（打印时隐藏），右边署名。
+ * 页脚：左边「返回编辑」（成品里不印，见下），右边署名。
  *
  * 它是最终页那一列里的第三段，段间距由父层的 `gap` 给，自己不带外边距。
  * 两端各只有一段短字，中档一行放得下，所以只在**最窄那一档**折起来（`max-narrow:flex-col`）。
  * 折与不折由档位写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
  * （向导那份页脚内容多，中档就放不下了，所以它是反过来写的：`wide:` 才左右分列。）
+ *
+ * 「返回编辑」是控件，成品（打印、存图）里不该出现；但它**占着那块地方**，署名能有多宽、
+ * 于是从哪儿折行，都由它决定——收掉它的位置，署名的换行点就跟着变，成品与屏幕上的最后一行
+ * 就对不上了。所以成品里藏的是**看得见**这件事，位置照旧留着。
  */
 function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
 	return (
 		<footer class="flex justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
 			<span>
 				{onExit && (
-					<button type="button" onClick={onExit} class="cursor-pointer press:underline print:hidden">
+					<button type="button" onClick={onExit} class="cursor-pointer press:underline print:invisible">
 						返回编辑
 					</button>
 				)}
 			</span>
-			{/* 署名留空就只剩「返回编辑」那一个子项，`justify-between` 把它放回左边；
-			    打印时它本来就被 `print:hidden` 藏掉，于是空页脚整行不占东西 */}
 			{footer && <span>{footer}</span>}
 		</footer>
 	);

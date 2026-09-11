@@ -60,11 +60,13 @@ export function GenerateStep({
 
 			{/* 取景台：挂在屏幕外（往左整屏挪开，左侧溢出不会长出滚动条；挪的距离与宽度取同一个数，
 			   不然它会露出一条边），宽度仍是整屏——跟档位判断同一个基准，所以拍下来的就是这一档的
-			   版面，也不吃所在页面有没有滚动条。它只在保存的那一下存在 */}
+			   版面，也不吃所在页面有没有滚动条。它只在保存的那一下存在。
+			   里面照页面那样把版面和控件都排出来，再把控件藏成「看得见」的反面：位置留着，
+			   换行点才不会跟着变（页脚那条见 `OutroPage`）；点了会怎样无所谓，整座取景台不响 */}
 			{saving && (
-				<div class="pointer-events-none fixed top-0 -left-[100vw] w-screen">
+				<div class="pointer-events-none fixed top-0 -left-[100vw] w-screen [&_button]:invisible">
 					<div ref={canvas} class="flex flex-col latte bg-ctp-base text-ctp-text antialiased">
-						<OutroPage data={data} boardRef={board} />
+						<OutroPage data={data} onExit={() => {}} boardRef={board} />
 					</div>
 				</div>
 			)}
