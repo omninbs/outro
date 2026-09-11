@@ -41,8 +41,8 @@ export const COPY = {
 		addBlock: '添加文本块',
 		remove: '删除',
 		preview: '预览',
-		/** 三颗存图按钮共用它，后面接的是那一档长什么样，所以自带一个空格 */
-		save: '保存为图片 ',
+		/** 三颗存图按钮共用它：按钮挤在一行里，动作名得短；后面接的是那一档的名字 */
+		save: '保存',
 		reset: '重置',
 		confirmReset: '确认重置',
 		backHome: '返回主页',

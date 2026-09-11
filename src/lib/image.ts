@@ -26,7 +26,7 @@ export interface OutputPreset {
 	aspect: number;
 	/** 文件名后缀：同一份内容存三档，得从文件名上分得出 */
 	suffix: string;
-	/** 按钮上的那句话：说清这一档长什么样 */
+	/** 按钮上的那两个字：一行三颗并排，认的是「哪一档」 */
 	label: string;
 }
 
@@ -36,9 +36,9 @@ export interface OutputPreset {
  * 档位按含滚动条的窗口宽判，取正好的 480 时它反而落到中档那一边。
  */
 export const OUTPUTS: OutputPreset[] = [
-	{ viewport: 456, aspect: 2 / 3, suffix: '2x3', label: '竖版 2:3' },
-	{ viewport: 640, aspect: 1, suffix: '1x1', label: '方版 1:1' },
-	{ viewport: 1148, aspect: 3 / 2, suffix: '3x2', label: '横版 3:2' },
+	{ viewport: 456, aspect: 2 / 3, suffix: '2x3', label: '竖版' },
+	{ viewport: 640, aspect: 1, suffix: '1x1', label: '方版' },
+	{ viewport: 1148, aspect: 3 / 2, suffix: '3x2', label: '横版' },
 ];
 
 /** 四周留白的下限：排版区最长边的这个比例那一边至少这么宽 */
