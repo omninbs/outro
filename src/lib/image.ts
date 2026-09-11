@@ -97,14 +97,16 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 		`<body>${new XMLSerializer().serializeToString(board)}</body></html>` +
 		`</foreignObject></svg>`;
 
+	/* 装成 `data:` 而不是 `blob:`：Chromium 系把「blob URL 里装着外来内容（`foreignObject`）的 SVG」
+	   当成异源，画到画布上会把画布弄脏，`toBlob` 随即抛 SecurityError——存图在那儿一颗都存不出来。
+	   `data:` 不脏，且实测内容照画（2026-09 两种装法各试过一遍）。别图省事换回 blob。 */
 	const shot = new Image();
-	const svgUrl = URL.createObjectURL(new Blob([drawn], { type: 'image/svg+xml' }));
+	const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(drawn)}`;
 	await new Promise((done, fail) => {
 		shot.onload = done;
 		shot.onerror = fail;
 		shot.src = svgUrl;
 	});
-	URL.revokeObjectURL(svgUrl);
 
 	const frame = frameOf(preset.aspect, content);
 	// 画布被顶到上限时整幅一起收：卡片与留白同比例，图小一号但版面不变

@@ -24,6 +24,7 @@ npm run typecheck && npm test && npm run build
 - 单测只碰**纯函数**（`tests/`）：数据搬运、存档迁移、内容过滤。界面与样式不测——那两样靠人看，写不出比看更准的断言
 - dev server 在 http://localhost:5173，常有后台任务不要另起；转换按秒缓存，改完同一文件 `touch` 后 `curl` 比特征串（逐个模块比），样式看不出变化先重启它
 - 探针只在读代码判断不了时用：脚本在 `.git/`，一轮量完、用完关 Firefox；profile 先建、单 BiDi 会话、端口占用换 `PROBE_PORT`；真实几何用 headless BiDi
+- Chromium 那一路探针同源、更好写：探针页把结果写进 `<pre>`，用 `chromium --headless --no-sandbox --user-data-dir=$PWD/.git/probe-profile --virtual-time-budget=15000 --dump-dom <url>` 把 DOM 取回来；不给 `--user-data-dir` 它写不了默认的 profile 目录，会直接不启动
 - 别人的 dev server 杀不掉请用户重启；自己起的换掉先 `job_kill`；杀进程用 `pkill -x` 或存 PID；装依赖 `npm ci --cache /tmp/npm-cache`
 
 ## 代码约定
@@ -32,7 +33,7 @@ npm run typecheck && npm test && npm run build
 - `grid` 只给真二维（现仅元数据表）并显式写列模板；`<label>` 只包一个控件，一组选项用 `<div role="group" aria-label>`
 - 界面符号用图标组件（`ui/icons.tsx` 包 `lucide-preact`），不写字体字符；分隔线、下划线用元素画；依赖按需装、不抄精简版
 - 一个知识只有一个定义（含注释）：文案 `lib/copy.ts`、内容 `lib/outro.ts`、框外观 `ui/inputs.tsx`、动效 `ui/tokens.ts`、可点整行 `ui/LinkList.tsx`、画布几何 `lib/frame.ts`、目录表 `_registry.ts(x)`
-- 存图＝把屏幕上那一份装进 SVG 给浏览器画到画布，一档一颗按钮，无第二套渲染路径（`lib/image.ts`）：克隆外壳带 CSS 装进 SVG 视口，视口是 `data-card` 那块（外壳按设计宽摆好、左移空出的那段）；设计宽与比例写死在 `OUTPUTS`，出图前挂进屏幕外取景台按那个宽排
+- 存图＝把屏幕上那一份装进 SVG 给浏览器画到画布，一档一颗按钮，无第二套渲染路径（`lib/image.ts`）：克隆外壳带 CSS 装进 SVG 视口，视口是 `data-card` 那块（外壳按设计宽摆好、左移空出的那段）；设计宽与比例写死在 `OUTPUTS`，出图前挂进屏幕外取景台按那个宽排；装进 `<img>` 的是 `data:` URL，**不能换回 `blob:`**——Chromium 系把「blob 里装着 `foreignObject` 的 SVG」判成异源，画到画布上会把画布弄脏、`toBlob` 直接抛 SecurityError（Firefox 不脏，所以只在 Chromium 上露，2026-09 实测）
 - 设计宽只定档不定卡片宽（钉 `min-width` 会盖掉宽度上限）；`data-card` 宽钉回克隆、高由卡片定，克隆里摘掉「至少一屏高」；画布四周留较长边的四分之一（不少于），按比例补齐、倍率写死 2
 - 控件与卡片分开：最终页无控件，返回靠点任意处，动作在向导第三步
 - 问卷是数据：题目写 `into`（`meta` / `block` / `title` / `footer`）决定答案去处，要加工才写 `build`；答完以 `DEFAULT_CARD` 为底盖答到的部分，不是清空（问到却答空的标题、页脚写空串，空元数据与文本块丢掉）
