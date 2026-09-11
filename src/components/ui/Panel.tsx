@@ -3,23 +3,16 @@ import type { ComponentChildren } from 'preact';
 import { HOVER } from './tokens';
 
 /**
- * 卡片外观。窄屏（`max-narrow`）它不再是一张「卡片」：横向贴边、去掉侧边描边与圆角，
- * 变成横跨整屏的一条「带」；横向留白改由里面的文字自己带一次（`px-inset`）。
- * 跨这条线时形状是直接换的，不做收放——几何量不插值，见 `ui/tokens.ts`。
- *
- * 注意「里面的文字自己带」这件事：贴边的面没法再给内容留边，
- * 所以卡片里凡是裸文字 / 裸列表，都得自己写 `max-narrow:px-inset`
- * （`Field` 的标签、`FilledList` 的内容、首页卡片的说明、`GenerateStep` 的正文都是这么办的）。
+ * 卡片的长相。窄屏它不再是一张「卡片」：横向贴边，变成横跨整屏的一条带，横向留白改由里面的文字
+ * 自己带一次——贴边的面没法再给内容留边，裸文字与裸列表都得自己带；跨这条线形状直接换，不收放。
  */
 const CARD =
 	'rounded-lg border border-ctp-surface0 bg-ctp-mantle p-5 ' +
 	'max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-0';
 
 /**
- * 步骤里的一块内容：标题 + 圆角卡片。
- *
- * 给了 onClick 就整块可点——那种卡片本身就是入口（首页选开始方式），
- * 所以里面不该再放按钮：按钮套按钮既不合规，点哪儿都要瞄准一下也不符合直觉。
+ * 步骤里的一块内容：标题 + 卡片。整块可点时它自己就是入口（首页选开始方式），
+ * 所以里面不再放按钮——按钮套按钮既不合规，点哪儿都得瞄准一下也不符合直觉。
  */
 export function Panel({
 	title,
