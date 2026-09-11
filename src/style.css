@@ -8,6 +8,11 @@
 @source "../index.html";
 @import "@catppuccin/tailwindcss/mocha.css";
 
+/* 档位的判据一律写成「容器的宽跨过某个数」：容器查询里那个 `width` 指的就是容器自己，
+   方向写反（`64rem > width`）语法完全合法、却永远不匹配——2026-09 宽档就是这么整档失效的 */
+@custom-variant narrow (@container (width < theme(--container-narrow)));
+@custom-variant wide (@container (width >= theme(--container-wide)));
+
 /*
  * 「按下」这一档：可点件的反馈一律写 `press:`，不直接写悬停。
  *
@@ -37,6 +42,11 @@
  * 这里定的是**模式**，不是某一屏的排版——某一屏要几个数，归那一屏自己管。
  */
 @theme {
+	/* 版面按**框**判，不按窗口判：最终页要拿去出图，出图时框宽是写死的，
+	   按窗口判的话同一档在宽屏与窄屏上会排出两个样子。`narrow:` / `wide:` 于是是
+	   容器查询变体，量的是**管宽的那一层**（见 `PageShell`）*/
+	--container-narrow: 30rem;
+	--container-wide: 64rem;
 	--breakpoint-narrow: 30rem;
 	--breakpoint-wide: 64rem;
 	/* 窄屏那唯一一次的横向留白：跟正文原本的落点差不多，也是手机上通用的缩进 */

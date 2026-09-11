@@ -19,7 +19,7 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		   跟左栏成片的元数据顶对齐会显得它飘在上面，把左栏压下去一点才平。
 		   用内边距而不是外边距：内边距永远不参与合并，父级换成块级也照样生效。
 
-		   窄屏（`max-narrow:grid-cols-1`）上下排成「名称一行、值一行」，跟编辑态的 `MetaEditor`
+		   窄屏（`narrow:grid-cols-1`）上下排成「名称一行、值一行」，跟编辑态的 `MetaEditor`
 		   是同一条规矩——窄屏是一维的流，一行里塞两列不是这一档该有的样子。
 
 		   这张表还是用 `grid`：它是**真二维**（名称列要跨行对齐，宽度由最长的名称决定）。
@@ -30,9 +30,9 @@ function MetaList({ meta }: { meta: OutroMeta[] }) {
 		   （`dt` / `dd` 仍是 `dl` 的直接子项，跨行对齐就靠这一点，图片级零影响），
 		   窄档它变成一个 flex 列，把「对内紧、条间松」那个节奏做出来——
 		   对数跟清单里那套一样（对内 2px、条间 8px），见 `FilledList` 的 `Row` */
-		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 max-narrow:grid-cols-1 wide:flex-[1] wide:pt-1">
+		<dl class="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 narrow:grid-cols-1 wide:flex-[1] wide:pt-1">
 			{meta.map((item) => (
-				<div key={item.id} class="contents max-narrow:flex max-narrow:flex-col max-narrow:gap-0.5">
+				<div key={item.id} class="contents narrow:flex narrow:flex-col narrow:gap-0.5">
 					<dt class={SUB_TEXT}>{item.label}</dt>
 					<dd class="min-w-0 break-words text-base leading-relaxed">{item.value}</dd>
 				</div>
@@ -65,7 +65,7 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
  * 署名：卡片里的第三段，靠右。
  *
  * 段间距由父层的 `gap` 给，自己不带外边距；只有一段短字，中档一行放得下，
- * 所以只在**最窄那一档**折起来（`max-narrow:flex-col`）。
+ * 所以只在**最窄那一档**折起来（`narrow:flex-col`）。
  * 折与不折由档位写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
  *
  * 卡片里**没有控件**：控件一进来就占住一块地方，署名能有多宽、于是从哪儿折行，就都由它决定——
@@ -73,7 +73,7 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
  */
 function OutroFooter({ footer }: { footer: string }) {
 	return (
-		<footer class="flex justify-end text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
+		<footer class="flex justify-end text-base tracking-wide text-ctp-overlay0 narrow:flex-col">
 			{footer && <span>{footer}</span>}
 		</footer>
 	);
