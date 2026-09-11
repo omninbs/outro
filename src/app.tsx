@@ -27,10 +27,11 @@ export function App() {
 		setStep(0);
 		navigate('form');
 	};
-	// 从结尾页退回：停在**最后一步**。「生成」就在第三步，所以这是「回到刚才那一步」——
-	// 前面两步的内容刚刚都在结尾页上看过一遍了，再从头走一遍只是让人多点两下
+	// 从结尾页退回、或问卷答完，都停在**最后一步**（「生成」）：这两处的内容刚刚都成型了
+	// ——一处是在结尾页上看过，一处是刚由问卷填完——再从头走一遍只是让人多点两下。
+	// 前面几步要改还是能点步骤条回去。
 	// （步骤表将来变了要看这里：最后一步必须是能进结尾页的那一步）
-	const backToForm = () => {
+	const formAtLastStep = () => {
 		setStep(STEPS.length - 1);
 		navigate('form');
 	};
@@ -56,13 +57,13 @@ export function App() {
 		if (survey && survey.questions.length === 0) openForm();
 	}, [view, surveyId]);
 
-	// 答完问卷：答案搬成内容，整份替换当前内容，然后回到表单的第一步（摘要）。
-	// 回第一步而不是推到最后一步，是留给用户按需要再编辑的余地——问卷只把常见的问题问完，
-	// 答案落进内容之后，标题、元数据这些还得让人过一眼、改一改；直接推到「生成」等于把这段路跳过去
+	// 答完问卷：答案搬成内容，整份替换当前内容，然后进表单的**最后一步**（「生成」）。
+	// 2026-09 之前是回第一步：那时问卷只问常见的那几题，答案落进内容之后标题、元数据
+	// 还得让人过一眼。问卷问全面之后这条理由没了——答完就是「内容已经成型」，
+	// 跟从结尾页退回来是同一种处境，所以两处共用 `formAtLastStep`
 	const finishSurvey = (survey: Survey, answers: Answers) => {
 		patch(buildFrom(survey, answers));
-		setStep(0);
-		navigate('form');
+		formAtLastStep();
 	};
 
 	if (view === 'home') {
@@ -107,7 +108,7 @@ export function App() {
 	if (view === 'outro') {
 		return (
 			<PageShell theme="latte" width={null} footer={false}>
-				<OutroPage data={data} onExit={backToForm} />
+				<OutroPage data={data} onExit={formAtLastStep} />
 			</PageShell>
 		);
 	}
