@@ -28,6 +28,9 @@ function readRoute(): Route {
 	return { view: 'survey', id: name };
 }
 
+/** 换一页就回到顶部：地址是自己改的（`navigate`）还是链接、前进后退改的，都归这儿管 */
+const toTop = () => window.scrollTo(0, 0);
+
 function writeRoute(route: Route) {
 	// 回首页会在地址栏留下一个空 fragment；抹掉它得自己动 History API，不值当，留着
 	if (route.view === 'survey') {
@@ -53,7 +56,10 @@ export function RouterProvider({ children }: { children: ComponentChildren }) {
 
 	// 之后由地址的变化同步回来——前进 / 后退、手改地址都算
 	useEffect(() => {
-		const sync = () => setRoute(readRoute());
+		const sync = () => {
+			setRoute(readRoute());
+			toTop();
+		};
 		window.addEventListener('hashchange', sync);
 		return () => window.removeEventListener('hashchange', sync);
 	}, []);
@@ -62,7 +68,7 @@ export function RouterProvider({ children }: { children: ComponentChildren }) {
 		const to: Route = { view: next, id: id ?? null };
 		setRoute(to); // 视图先行，不等事件绕回来，免得闪一下
 		writeRoute(to);
-		window.scrollTo(0, 0);
+		toTop();
 	}, []);
 
 	const value = useMemo(

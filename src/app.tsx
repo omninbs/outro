@@ -38,13 +38,6 @@ export function App() {
 		setStep(0);
 	};
 
-	// 有题的入口去问卷页，没题的（不用预设那条路）没有页可看，直接进表单；
-	// 而问卷在答完之前一个字都不动已有内容——进去看看、中途退出来，都不该弄丢已经填好的东西
-	const startSurvey = (survey: Survey) => {
-		if (survey.questions.length === 0) openForm();
-		else navigate('survey', survey.id);
-	};
-
 	// 地址里直接写入口 id（书签、别人给的链接）跟点那张卡是一回事
 	useEffect(() => {
 		if (view !== 'survey' || !surveyId) return;
@@ -61,7 +54,7 @@ export function App() {
 	if (view === 'home') {
 		return (
 			<PageShell width="standard">
-				<HomePage onPick={startSurvey} />
+				<HomePage />
 			</PageShell>
 		);
 	}

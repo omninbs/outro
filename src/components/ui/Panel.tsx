@@ -11,39 +11,40 @@ const CARD =
 	'narrow:rounded-none narrow:border-x-0 narrow:px-0';
 
 /**
- * 步骤里的一块内容：标题 + 卡片。整块可点时它自己就是入口（首页选开始方式），
- * 所以里面不再放按钮——按钮套按钮既不合规，点哪儿都得瞄准一下也不符合直觉。
+ * 步骤里的一块内容：标题 + 卡片。整块可点时给 `href`——标题上的链接铺满整张卡片，
+ * 于是「点哪儿都行」与「标题还是标题」同时成立：按钮只收行内内容，装不下标题，
+ * 而这里干的本来就是跳转不是动作，地址还能中键新开、右键复制。
  */
 export function Panel({
 	title,
-	onClick,
+	href,
 	children,
 }: {
 	title?: string;
-	onClick?: () => void;
+	/** 给了它就是整块可点的入口：链接的名字就是标题 */
+	href?: string;
 	children: ComponentChildren;
 }) {
 	const head = title && (
-		<h2 class="text-lg font-semibold tracking-wide text-ctp-subtext1 narrow:px-inset">{title}</h2>
+		<h2 class="text-lg font-semibold tracking-wide text-ctp-subtext1 narrow:px-inset">
+			{href ? (
+				/* `after` 那一层铺满卡片：点哪儿都行，链接自己还是链接 */
+				<a href={href} class="after:absolute after:inset-0 after:content-['']">
+					{title}
+				</a>
+			) : (
+				title
+			)}
+		</h2>
 	);
 
-	if (!onClick) {
-		return (
-			<section class={CARD}>
-				{head}
-				{children}
-			</section>
-		);
-	}
+	/* 可点件的反馈挂在卡片自己身上：指针落在卡片哪儿，描边与底色都跟着变 */
+	const shell = href ? `${CARD} relative press:border-ctp-mauve press:bg-ctp-surface0/40 ${HOVER}` : CARD;
 
 	return (
-		<button
-			type="button"
-			onClick={onClick}
-			class={`${CARD} w-full cursor-pointer text-left press:border-ctp-mauve press:bg-ctp-surface0/40 ${HOVER}`}
-		>
+		<section class={shell}>
 			{head}
 			{children}
-		</button>
+		</section>
 	);
 }
