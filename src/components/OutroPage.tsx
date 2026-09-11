@@ -1,8 +1,10 @@
-import type { Ref } from 'preact';
+import { useRef, useState } from 'preact/hooks';
 
+import { COPY } from '../lib/copy';
+import { saveImage } from '../lib/image';
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
-import { SUB_TEXT } from './ui';
+import { Button, SUB_TEXT } from './ui';
 
 /** 页首：标题 + 一条短横线。标题空着就整块不渲染——留空没有兜底文案，横线也跟着走 */
 function OutroHeader({ title }: { title: string }) {
@@ -64,58 +66,60 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 }
 
 /**
- * 页脚：左边「返回编辑」（成品里不印，见下），右边署名。
+ * 署名：卡片里的第三段，靠右。
  *
- * 它是最终页那一列里的第三段，段间距由父层的 `gap` 给，自己不带外边距。
- * 两端各只有一段短字，中档一行放得下，所以只在**最窄那一档**折起来（`max-narrow:flex-col`）。
+ * 段间距由父层的 `gap` 给，自己不带外边距；只有一段短字，中档一行放得下，
+ * 所以只在**最窄那一档**折起来（`max-narrow:flex-col`）。
  * 折与不折由档位写死，不靠 `flex-wrap` 让内容自己挤——那样看的人不知道它什么时候会换行。
- * （向导那份页脚内容多，中档就放不下了，所以它是反过来写的：`wide:` 才左右分列。）
  *
- * 「返回编辑」是控件，成品（打印、存图）里不该出现；但它**占着那块地方**，署名能有多宽、
- * 于是从哪儿折行，都由它决定——收掉它的位置，署名的换行点就跟着变，成品与屏幕上的最后一行
- * 就对不上了。所以成品里藏的是**看得见**这件事，位置照旧留着。
+ * 控件（返回编辑、保存）**不在卡片里**，在它外面那一行：控件一进来就占住这块地方，
+ * 署名能有多宽、于是从哪儿折行，就都由控件决定——页面上挪一下按钮，成品里的折行跟着变。
  */
-function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }) {
+function OutroFooter({ footer }: { footer: string }) {
 	return (
-		<footer class="flex justify-between gap-x-8 gap-y-1 text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
-			<span>
-				{onExit && (
-					<button type="button" onClick={onExit} class="cursor-pointer press:underline print:invisible">
-						返回编辑
-					</button>
-				)}
-			</span>
+		<footer class="flex justify-end text-base tracking-wide text-ctp-overlay0 max-narrow:flex-col">
 			{footer && <span>{footer}</span>}
 		</footer>
 	);
 }
 
 /**
- * 结尾页：上标题、中主体（元数据 + 文本块）、下页脚。
+ * 结尾页：上标题、中主体（元数据 + 文本块）、下署名。
  * 只排版，不判断该显示什么——哪些行该印出来由 resolveOutro 决定，所以清单与最终页永远一致。
  *
  * 它是拿去截图的那一屏，所以要的是一张**版面**：一行在三档下一样宽，整块在视口里横竖居中。
+ * 它也就是**成品本身**，所以「保存为图片」归它：拍的是屏幕上这一份（见 `src/lib/image.ts`），
+ * 这份 HTML 与它这一身样式原样搬进图里，不另排一份。
  */
-export function OutroPage({
-	data,
-	onExit,
-	boardRef,
-}: {
-	data: CardData;
-	onExit?: () => void;
-	/** 版面那一层交出去：保存图片的人要量它，就不必自己再知道版面怎么排 */
-	boardRef?: Ref<HTMLDivElement>;
-}) {
+export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
 	const { title, meta, blocks, footer } = resolveOutro(data);
+	const board = useRef<HTMLDivElement>(null);
+	const [saving, setSaving] = useState(false);
+	const [failed, setFailed] = useState(false);
+
+	const save = () => {
+		const card = board.current;
+		if (!card || saving) return;
+		setFailed(false);
+		setSaving(true);
+		saveImage(card, data.title).then(
+			() => setSaving(false),
+			() => {
+				setFailed(true);
+				setSaving(false);
+			},
+		);
+	};
 
 	return (
 		<div class="flex flex-1 flex-col justify-center-safe">
-			{/* 这一层就是版面本身：宽度上限 + 一圈内边距。上限不是照着容器定的数，是拿
-			    **「一行要多宽」反推出来的**——居中那两档里内边距其实不起作用，只有视口窄到
-			    把容器顶住时才成为那道边距。来龙去脉与那几个数见 `AGENTS.md` 的「响应式」 */}
-			<div ref={boardRef} class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[53rem]">
-				{/* 三段（标题 / 主体 / 页脚）在**一个**列里，页脚也在这一列——所以没有谁的
-				    间距是挂在 margin 上的：哪一段不印，那一份 `gap` 自动少掉，不会留下一段空白 */}
+			{/* 这一层就是版面本身，也是图里被裁下来的那一块（`data-card` 是给存图找克隆用的）。
+			    宽度上限 + 一圈内边距；上限不是照着容器定的数，是拿**「一行要多宽」反推出来的**——
+			    居中那两档里内边距其实不起作用，只有视口窄到把容器顶住时才成为那道边距。
+			    来龙去脉与那几个数见 `AGENTS.md` 的「响应式」 */}
+			<div ref={board} data-card class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[53rem]">
+				{/* 三段（标题 / 主体 / 署名）在**一个**列里——所以没有谁的间距是挂在 margin 上的：
+				    哪一段不印，那一份 `gap` 自动少掉，不会留下一段空白 */}
 				<div class="flex flex-col gap-12">
 					{title && <OutroHeader title={title} />}
 
@@ -125,8 +129,21 @@ export function OutroPage({
 						<BlockList blocks={blocks} />
 					</main>
 
-					<OutroFooter footer={footer} onExit={onExit} />
+					<OutroFooter footer={footer} />
 				</div>
+			</div>
+
+			{/* 卡片外面那一行：整行都是控件，打印与存图都不带它——存图时按 `data-chrome` 整块拿掉。
+			    它不进卡片，卡片里的折行就不会被控件挪动（成套的规矩见 `OutroFooter` 那段） */}
+			<div
+				data-chrome
+				class="mx-auto mt-6 flex w-full max-w-[26rem] flex-wrap items-center gap-x-6 gap-y-2 p-inset print:hidden wide:max-w-[53rem]"
+			>
+				{onExit && <Button onClick={onExit}>返回编辑</Button>}
+				<Button variant="primary" disabled={saving} onClick={save}>
+					{COPY.action.save}
+				</Button>
+				{failed && <span class="text-base text-ctp-red">存不下来，这个浏览器画不出图片。</span>}
 			</div>
 		</div>
 	);

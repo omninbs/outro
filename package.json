@@ -9,7 +9,6 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"html-to-image": "^1.11.13",
 		"lucide-preact": "^1.44.0",
 		"preact": "^10.26.9"
 	},
