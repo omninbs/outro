@@ -27,7 +27,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # 与本地那条闸门同三条命令：`vite build` 自己不做类型检查，少了这一步类型错的代码照样会发上去
       - run: npm ci
+      - run: npm run typecheck
       - run: npm test
       - run: npm run build
       - uses: actions/configure-pages@v6

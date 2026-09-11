@@ -66,4 +66,4 @@ npm run typecheck && npm test && npm run build
 
 - Vite + Preact + TS（strict）+ Tailwind v4 + `vite-plugin-singlefile`；图标 `lucide-preact`（按需）；存图不装库
 - 仓库 `omninbs/outro`，线上 https://omninbs.github.io/outro/；数据存 localStorage（`outro.card.v2`，旧键迁移），无后端
-- 发布：push 到 main 由 deploy.yml 自动跑（卡住的 run 去 Actions 取消）；发别人 `cp dist/index.html dist/outro.html`（`file://` 可开）；`viewport-fit=cover` 与 `.safe-area` 是一对，删 meta 静默失效
+- 发布：push 到 main 由 deploy.yml 自动跑（跑的就是上面那条闸门，卡住的 run 去 Actions 取消）；发别人 `cp dist/index.html dist/outro.html`（`file://` 可开）；`viewport-fit=cover` 与 `.safe-area` 是一对，删 meta 静默失效
