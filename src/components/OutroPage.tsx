@@ -94,8 +94,9 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
  * 响应式跟别处**同一套**：只看宽度，窄 `< 30rem`（`max-narrow:`）一维的流、中档单栏加留白、
  * `wide:`（≥ 64rem）分两栏。它是拿去截图的那一屏，所以跟向导只有两处不同：
  *
- * ① 版面的宽按「一行的宽」（24rem）倒推：中档 `max-w-[30rem]`（行宽 24rem），宽档
- *    `wide:max-w-[57rem]`（两栏各 24rem），窄档 `max-narrow:max-w-[24rem]`——行短了看着更紧，
+ * ① **栏（一行）的宽三档一致（24rem）**，容器上限按内边距反推：窄 `max-narrow:max-w-[26rem]`、
+ *    中 `max-w-[30rem]`、宽 `wide:max-w-[57rem]`（两栏各 24rem）——行短了看着更紧，
+ *    截图也更像一张版面；
  * ② 整块在视口里**横竖都居中**：上下那点空隙不归内容，全部由剩余空间均分
  *    （`justify-center-safe`：内容比屏幕高时退回从顶部排，不会被切掉上半截）；
  * ③ 三段（标题 / 主体 / 页脚）在**一个** flex 列里，段间距一律 `gap-12`；外层那圈内边距
@@ -111,18 +112,19 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 	return (
 		<div class="flex flex-1 flex-col justify-center-safe">
 			{/* 这一层就是版面本身：宽度上限 + 一圈内边距，四边同一个 48（`p-12`）。
-			    版面宽按「一行」的宽（24rem = 384px）倒推，所以每一档的上限不同：
-			    · 中档 `max-w-[30rem]`（480）= 一行 24rem + 左右各 `p-12` 3rem ⇒ **行宽 384px**；
-			    · 宽档 `wide:max-w-[57rem]`（912）= 两栏各 24rem + `gap-12` 3rem + 左右 3rem
-			      ⇒ **每栏也是 384px**，两种档位下行长同一个数；
-			    · 窄档 `max-narrow:max-w-[24rem]`（384）+ `p-inset`（16）⇒ 行宽 352px：
-			      视口窄于 384 时自然全宽，384–480 之间是居中的 384px 柱子、两侧留白。
-			    中档提到 30rem 是 2026-09 用户报「中屏切到窄屏反而变宽」之后定的：改之前
-			    中档容器也是 24rem、行宽只有 288px，比窄档的 352 还窄——跨过 30rem 那条线
-			    文字会突然变宽。行宽的顺序必须是「窄 ≤ 中 = 宽」。
+			    **要一致的是「栏」（一行）的宽，不是容器的宽**：栏宽 = 容器 − 2× 内边距，
+			    而内边距三档不一样（窄 `p-inset` 16 / 中宽 `p-12` 48），所以容器上限得
+			    按 24rem 的栏宽**反推**：
+			    · 窄档 `max-narrow:max-w-[26rem]`（416 = 一行 24rem + 左右各 1rem）；
+			    · 中档 `max-w-[30rem]`（480 = 一行 24rem + 左右各 3rem）；
+			    · 宽档 `wide:max-w-[57rem]`（912 = 两栏各 24rem + `gap-12` 3rem + 左右各 3rem）。
+			    三档的栏宽因此都是 384px，差别只剩内边距、以及宽档分不分栏。2026-09 用户定的：
+			    先报「中屏切到窄屏反而变宽」——当时三档容器同为 24rem，可中档内边距 48 把一行
+			    压到 288、窄档 16 反而有 352；再说「栏目的 max-width 三档应当一致」。
+			    代价：窄档视口在 416–480 之间时容器是居中的 26rem、两侧留白，不是全宽。
 			    （2026-09 之前这里下面多 56px（`pt-12 pb-26`），当重心上移 28px 的光学补偿。
 			    用户要求内边距取同一个值，那套补偿连同注释一起收掉了——别再悄悄加回来。） */}
-			<div class="mx-auto w-full max-w-[30rem] p-12 wide:max-w-[57rem] max-narrow:max-w-[24rem] max-narrow:p-inset">
+			<div class="mx-auto w-full max-w-[30rem] p-12 wide:max-w-[57rem] max-narrow:max-w-[26rem] max-narrow:p-inset">
 				{/* 最终页就三段：标题 → 主体 → 页脚。它们在这**一个** flex 列里自上而下排，
 				    段与段都是同一个 `gap-12`——页脚也在这列里（它常驻，不用单独挂在外面），
 				    所以没有谁的间距是挂在 margin 上的：哪一段不印（标题留空、页脚留空），
