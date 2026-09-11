@@ -25,10 +25,11 @@ const str = (value: unknown, fallback = '') => (typeof value === 'string' ? valu
 const dropDefault = (value: string, fallback: string) => (value.trim() === fallback ? '' : value);
 
 /** 存档里的一列：形状对不上的整条丢掉——存档是外面来的，不能拿它当类型使 */
-const rows = (value: unknown): Record<string, unknown>[] =>
-	Array.isArray(value)
+function rows(value: unknown): Record<string, unknown>[] {
+	return Array.isArray(value)
 		? value.filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
 		: [];
+}
 
 const asMeta = (value: unknown): MetaItem[] =>
 	rows(value).map((row) => ({ id: str(row.id) || newId('m'), label: str(row.label), value: str(row.value) }));

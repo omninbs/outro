@@ -6,29 +6,33 @@ import type { CardData } from '../lib/types';
 import { Panel, SUB_TEXT, EmptyHint } from './ui';
 
 /** 分组标题：每组上面一条细线，第一组也不例外——免得它跟面板标题粘在一起 */
-const Group = ({ text, count, children }: { text: string; count: number; children: ComponentChildren }) => (
-	<section class="flex flex-col gap-2 border-t border-ctp-surface0 pt-5">
-		{/* 窄屏卡片贴边、不提供横向留白，所以标题行得自己带一次，才跟内容落在同一条竖线上
-		   （上面那条细线属于「面」，贴边是刻意的） */}
-		<div class="flex items-baseline justify-between gap-2 narrow:px-inset">
-			<h3 class="text-base font-semibold tracking-wide text-ctp-subtext1">{text}</h3>
-			<span class="text-base tabular-nums text-ctp-overlay0">{count}</span>
-		</div>
-		{children}
-	</section>
-);
+function Group({ text, count, children }: { text: string; count: number; children: ComponentChildren }) {
+	return (
+		<section class="flex flex-col gap-2 border-t border-ctp-surface0 pt-5">
+			{/* 窄屏卡片贴边、不提供横向留白，所以标题行得自己带一次，才跟内容落在同一条竖线上
+			   （上面那条细线属于「面」，贴边是刻意的） */}
+			<div class="flex items-baseline justify-between gap-2 narrow:px-inset">
+				<h3 class="text-base font-semibold tracking-wide text-ctp-subtext1">{text}</h3>
+				<span class="text-base tabular-nums text-ctp-overlay0">{count}</span>
+			</div>
+			{children}
+		</section>
+	);
+}
 
 /**
  * 摘要里的一行元数据（标题也是其中一行）。名称列的宽度定死，各行的名称才对得齐；
  * **不截断**——截断会丢字，而这是给人最后确认用的清单，宁可它高一点。
  * 窄屏上下排，跟别处的元数据行是同一条规矩。
  */
-const Row = ({ label, value }: { label: string; value: string }) => (
-	<div class="flex gap-3 text-base leading-relaxed narrow:flex-col narrow:gap-0.5">
-		<dt class="w-24 shrink-0 text-ctp-subtext0 narrow:w-full">{label}</dt>
-		<dd class="min-w-0 flex-1 break-words text-ctp-text narrow:flex-none">{value}</dd>
-	</div>
-);
+function Row({ label, value }: { label: string; value: string }) {
+	return (
+		<div class="flex gap-3 text-base leading-relaxed narrow:flex-col narrow:gap-0.5">
+			<dt class="w-24 shrink-0 text-ctp-subtext0 narrow:w-full">{label}</dt>
+			<dd class="min-w-0 flex-1 break-words text-ctp-text narrow:flex-none">{value}</dd>
+		</div>
+	);
+}
 
 /**
  * 清单：按填写步骤分成三组，内容一律取自最终的结尾页（`resolveOutro`）——所见即最终页
