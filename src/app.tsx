@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 import { OutroPage } from './components/OutroPage';
 import { FilledList } from './components/FilledList';
@@ -16,18 +16,23 @@ import { findSurvey } from './surveys/_registry';
 import type { Answers, Survey } from './lib/survey/types';
 import { STEPS, type StepContext } from './steps/_registry';
 
-/** 首页、表单、问卷、最终页都在这里分派；步骤与问卷各自长什么样，归它们自己的表 */
+/**
+ * 视图分派：地址里写着哪一页就渲染哪一页，四个分支各自把整页返回。
+ * 没有「先渲染、再回头纠正地址」那一步——屏幕与地址于是永远在说同一件事。
+ *
+ * 步骤状态留在这一层、不放进向导：结尾页退回要落在**最后一步**，而那件事发生在这儿。
+ */
 export function App() {
 	const { data, patch, reset } = useCard();
 	const { view, surveyId, navigate } = useRouter();
 	const [step, setStep] = useState(0);
 
-	// 回到表单只有一条原则：内容已经成型就停在最后一步，没有「刚才那一步」才从第一步进
-	const openForm = () => {
-		setStep(0);
-		navigate('form');
-	};
-	// 结尾页退回与问卷答完都是「内容刚成型」，停最后一步（它必须就是能进结尾页的那一步）
+	// 「地址里的 id 认不出来」与「这份入口没有问题」是两种处境：前者没有页可看，
+	// 后者要的就是表单本身。所以这里一次算清，下面按它分派。
+	const survey = view === 'survey' && surveyId ? findSurvey(surveyId) : undefined;
+	const askable = !!survey && survey.questions.length > 0;
+
+	// 回到表单只有一条原则：内容已经成型就停在最后一步——结尾页退回与问卷答完都是这样
 	const formAtLastStep = () => {
 		setStep(STEPS.length - 1);
 		navigate('form');
@@ -37,17 +42,8 @@ export function App() {
 		reset();
 		setStep(0);
 	};
-
-	// 地址里直接写入口 id（书签、别人给的链接）跟点那张卡是一回事
-	useEffect(() => {
-		if (view !== 'survey' || !surveyId) return;
-		const survey = findSurvey(surveyId);
-		if (survey && survey.questions.length === 0) openForm();
-	}, [view, surveyId]);
-
-	// 答完问卷就是「内容已经成型」，跟从结尾页退回来是同一种处境，所以两处走同一条路
-	const finishSurvey = (survey: Survey, answers: Answers) => {
-		patch(buildFrom(survey, answers));
+	const finishSurvey = (from: Survey, answers: Answers) => {
+		patch(buildFrom(from, answers));
 		formAtLastStep();
 	};
 
@@ -59,35 +55,30 @@ export function App() {
 		);
 	}
 
-	if (view === 'survey') {
-		const survey = surveyId ? findSurvey(surveyId) : undefined;
+	// 认不出的 id 不留空白页，而且只给一个标题块、不套卡片：没有内容，套一层框反而像「本该有东西」
+	if (view === 'survey' && !survey) {
+		return (
+			<PageShell width="standard">
+				<PageHeader
+					title="没有这份问卷"
+					description="地址里的问卷 id 认不出来，回首页重新选一份。"
+				/>
+			</PageShell>
+		);
+	}
 
-		// 认不出的 id 不留空白页，而且只给一个标题块、不套卡片：没有内容，套一层框反而像「本该有东西」
-		if (!survey) {
-			return (
-				<PageShell width="standard">
-					<PageHeader
-						title="没有这份问卷"
-						description="地址里的问卷 id 认不出来，回首页重新选一份。"
-					/>
-				</PageShell>
-			);
-		}
-
-		// 没有题的入口不该有问卷页：那一页上的「完成」点下去，等于把内容换成空的
-		if (survey.questions.length > 0) {
-			return (
-				<PageShell width="standard">
-					{/* 换一份问卷就是另一份答卷：换成它自己的 key，预填值才会按新题重算 */}
-					<SurveyPage
-						key={survey.id}
-						survey={survey}
-						onFinish={(answers) => finishSurvey(survey, answers)}
-						onExit={() => navigate('home')}
-					/>
-				</PageShell>
-			);
-		}
+	// 换一份问卷就是另一份答卷：换 key 让它重建，预填值才按新的题目重算
+	if (askable) {
+		return (
+			<PageShell width="standard">
+				<SurveyPage
+					key={survey.id}
+					survey={survey}
+					onFinish={(answers) => finishSurvey(survey, answers)}
+					onExit={() => navigate('home')}
+				/>
+			</PageShell>
+		);
 	}
 
 	if (view === 'outro') {
@@ -98,6 +89,7 @@ export function App() {
 		);
 	}
 
+	// 剩下的就是表单：「不用预设」那条入口没有页可看，落的也是这里
 	const ctx: StepContext = {
 		data,
 		patch,
