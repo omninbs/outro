@@ -3,7 +3,7 @@ import { COPY } from '../lib/copy';
 import type { MetaItem } from '../lib/types';
 import { AddButton, BARE_INPUT, BareRow, EmptyHint, IconButton } from './ui';
 
-/** 元数据编辑器：一行一条「名称 + 内容」，名称就是最终页上那一行的标签 */
+/** 元数据编辑器：一条一行「名称 + 内容」，名称就是最终页上那一条的标签 */
 export function MetaEditor({
 	items,
 	onChange,
@@ -22,9 +22,8 @@ export function MetaEditor({
 						<IconButton title={COPY.action.remove} onClick={() => onChange(removeById(items, item.id))} />
 					}
 				>
-					{/* 窄屏上下排：名称框固定 144px 且不让位，跟值硬挤在一行里，值那栏就只剩几十像素。
-					    窄屏本来就是一条竖着的流，名称一行、值一行反而顺；× 在右边纵向居中，
-					    所以「一条元数据 = 一个框」这件事没变。 */}
+					{/* 窄屏上下排：名称框定宽且不让位，跟值硬挤在一行里，值那栏就没剩多少了；
+					    竖着排本来就顺，× 仍在右边纵向居中，所以「一条元数据 = 一个框」没变 */}
 					<div class="flex min-w-0 flex-1 items-center gap-2 max-narrow:flex-col max-narrow:items-stretch">
 						<input
 							type="text"
@@ -33,7 +32,7 @@ export function MetaEditor({
 							class={`w-36 shrink-0 font-medium text-ctp-mauve max-narrow:w-full ${BARE_INPUT}`}
 							onInput={(e) => onChange(updateById(items, item.id, { label: e.currentTarget.value }))}
 						/>
-						{/* 上下排时 flex-1 管的是「竖着分」，会把值压成零高，所以窄屏换成 flex-none 交给宽度定 */}
+						{/* 上下排之后值那一行的高度交给内容，不再竖着分 */}
 						<input
 							type="text"
 							value={item.value}

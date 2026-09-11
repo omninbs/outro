@@ -3,7 +3,7 @@ import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
 import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from './ui';
 
-/** 文本块编辑器：一行小标题（可留空）+ 一段正文 */
+/** 文本块编辑器：每块一条小标题（可留空）配一段正文 */
 export function BlockEditor({
 	blocks,
 	onChange,
@@ -16,8 +16,7 @@ export function BlockEditor({
 			{blocks.length === 0 && <EmptyHint>还没有文本块，点下方按钮添加</EmptyHint>}
 
 			{blocks.map((block) => (
-				/* 窄屏跟 BareRow 一个待遇：横向贴边、去侧边描边与圆角，横向留白自己带一次；
-				   跨线时形状直接换，新加的一块从透明淡进来 */
+				/* 窄屏跟别的整行一个待遇：横向贴边、去掉侧边描边，横向留白自己带一次 */
 				<div
 					key={block.id}
 					class={`${BOX} p-2 max-narrow:rounded-none max-narrow:border-x-0 max-narrow:px-inset ${RISE}`}
