@@ -1,3 +1,5 @@
+import type { Ref } from 'preact';
+
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { SUB_TEXT } from './ui';
@@ -92,7 +94,16 @@ function OutroFooter({ footer, onExit }: { footer: string; onExit?: () => void }
  *
  * 它是拿去截图的那一屏，所以要的是一张**版面**：一行在三档下一样宽，整块在视口里横竖居中。
  */
-export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
+export function OutroPage({
+	data,
+	onExit,
+	boardRef,
+}: {
+	data: CardData;
+	onExit?: () => void;
+	/** 版面那一层交出去：保存图片的人要量它，就不必自己再知道版面怎么排 */
+	boardRef?: Ref<HTMLDivElement>;
+}) {
 	const { title, meta, blocks, footer } = resolveOutro(data);
 
 	return (
@@ -100,7 +111,7 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 			{/* 这一层就是版面本身：宽度上限 + 一圈内边距。上限不是照着容器定的数，是拿
 			    **「一行要多宽」反推出来的**——居中那两档里内边距其实不起作用，只有视口窄到
 			    把容器顶住时才成为那道边距。来龙去脉与那几个数见 `AGENTS.md` 的「响应式」 */}
-			<div class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[53rem]">
+			<div ref={boardRef} class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[53rem]">
 				{/* 三段（标题 / 主体 / 页脚）在**一个**列里，页脚也在这一列——所以没有谁的
 				    间距是挂在 margin 上的：哪一段不印，那一份 `gap` 自动少掉，不会留下一段空白 */}
 				<div class="flex flex-col gap-12">

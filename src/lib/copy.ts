@@ -41,6 +41,7 @@ export const COPY = {
 		addBlock: '添加文本块',
 		remove: '删除',
 		generate: '生成',
+		save: '保存为图片',
 		reset: '重置',
 		confirmReset: '确认重置',
 		backHome: '返回主页',
