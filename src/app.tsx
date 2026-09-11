@@ -85,7 +85,9 @@ export function App() {
 		if (survey.questions.length > 0) {
 			return (
 				<PageShell width="standard">
+					{/* 换一份问卷就是另一份答卷：换成它自己的 key，预填值才会按新题重算 */}
 					<SurveyPage
+						key={survey.id}
 						survey={survey}
 						onFinish={(answers) => finishSurvey(survey, answers)}
 						onExit={() => navigate('home')}
