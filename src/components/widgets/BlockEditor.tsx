@@ -1,4 +1,4 @@
-import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from '../ui';
+import { AddButton, BARE_INPUT, BareTextArea, BOX, IconButton, RISE } from '../ui';
 
 // 一块文本：本组件只认这个形状，内容层怎么定义与它无关
 interface Block {
@@ -21,8 +21,6 @@ export function BlockEditor({
 }) {
 	return (
 		<div class="flex flex-col gap-3">
-			{blocks.length === 0 && <EmptyHint>{copy.empty}</EmptyHint>}
-
 			{blocks.map((block) => (
 				<div
 					key={block.id}
@@ -57,7 +55,12 @@ export function BlockEditor({
 				</div>
 			))}
 
-			<AddButton onClick={() => onChange([...blocks, create()])}>{copy.add}</AddButton>
+			<AddButton
+				empty={blocks.length === 0 ? copy.empty : undefined}
+				onClick={() => onChange([...blocks, create()])}
+			>
+				{copy.add}
+			</AddButton>
 		</div>
 	);
 }

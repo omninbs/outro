@@ -112,7 +112,7 @@ Nothing under `components/` imports from `lib/`: a component's own shape is decl
 | Category names | spell them out in full; options are common values rather than the full set; long single-choice keeps a custom option, and what you type yourself still reaches the outro page |
 | Long-answer options | whole paragraphs laid out vertically as full-width blocks, and tapping one fills the whole paragraph into the box; they are mutually exclusive, the box appears only after tapping the custom option, and × reverts |
 | No fallback copy | the title block including its rule, and the footer signature line, do not render; spacing on conditional rendering uses `gap`; there are only two placeholder hints (hide, and write-your-own in the custom form); a prefill that is not shown is not written |
-| Empty and long text | empty answers are dropped, and an empty list section shows a dashed hint (the hint carries only its inner padding, and on narrow screens the list padding is written on the branch that has content); nothing is truncated, and long text wraps |
+| Empty and long text | empty answers are dropped; an empty list section shows a dashed hint (the hint carries only its inner padding, and on narrow screens the list padding is written on the branch that has content), while an editor's empty state rides on its add button instead of a separate hint; nothing is truncated, and long text wraps |
 | No breakpoint wording | copy is not tailored to a breakpoint: do not write directions or imply structure (right side, top right, step N all break), and point at positions with coarse wording that does not change per breakpoint |
 
 ## Environment

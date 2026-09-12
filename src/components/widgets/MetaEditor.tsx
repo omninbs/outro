@@ -1,4 +1,4 @@
-import { AddButton, EmptyHint } from '../ui';
+import { AddButton } from '../ui';
 import { KeyValueRow } from './KeyValueRow';
 
 // 一行元数据：本组件只认这个形状，内容层怎么定义与它无关
@@ -22,8 +22,6 @@ export function MetaEditor({
 }) {
 	return (
 		<div class="flex flex-col gap-2">
-			{items.length === 0 && <EmptyHint>{copy.empty}</EmptyHint>}
-
 			{items.map((item) => (
 				<KeyValueRow
 					key={item.id}
@@ -41,7 +39,12 @@ export function MetaEditor({
 				/>
 			))}
 
-			<AddButton onClick={() => onChange([...items, create()])}>{copy.add}</AddButton>
+			<AddButton
+				empty={items.length === 0 ? copy.empty : undefined}
+				onClick={() => onChange([...items, create()])}
+			>
+				{copy.add}
+			</AddButton>
 		</div>
 	);
 }

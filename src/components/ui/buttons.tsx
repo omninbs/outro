@@ -103,16 +103,30 @@ export function IconButton({ label, onClick }: { label: string; onClick: () => v
 	);
 }
 
-// 列表末尾的添加动作：虚线框，窄档跟列表条目一个待遇
-export function AddButton({ onClick, children }: { onClick: () => void; children: ComponentChildren }) {
+// 列表末尾的添加动作：虚线框，窄档跟列表条目一个待遇；列表空着时兼作空态，上面多一行说明
+export function AddButton({
+	onClick,
+	children,
+	empty,
+}: {
+	onClick: () => void;
+	children: ComponentChildren;
+	// 给了它就是空态：先说缺什么，再说怎么加
+	empty?: ComponentChildren;
+}) {
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			class={`${DASHED} flex w-full items-center justify-center gap-2 py-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${HOVER}`}
+			class={`${DASHED} flex w-full flex-col items-center justify-center gap-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
+				empty ? 'py-6' : 'py-2'
+			} ${HOVER}`}
 		>
-			<PlusIcon />
-			{children}
+			{empty && <span class="text-ctp-overlay0">{empty}</span>}
+			<span class="flex items-center gap-2">
+				<PlusIcon />
+				{children}
+			</span>
 		</button>
 	);
 }
