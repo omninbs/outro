@@ -2,20 +2,23 @@ import { createContext } from 'preact';
 import type { ComponentChildren } from 'preact';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
-import { FORM_ID, findSurvey } from '../surveys/_registry';
+import { STEPS, findStep, stepRoute } from '../steps/_registry';
+import { findSurvey } from '../surveys/_registry';
 
 /**
- * 视图状态：命中 `outro` 是预览页；命中某份入口——表单本身（「编辑表单」）与各份问卷——
- * 是填写用的页面；都命中不到就落首页。
+ * 视图状态：命中 `outro` 是预览页，命中某个步骤地址是编辑向导的那一步，
+ * 命中某份入口是问卷页；其余——包括空 hash——统统落主页。
+ *
+ * 主页因此没有自己的地址：它是「认不出」的落点，不是一条写得出来的路由。
  *
  * 用 hash 而不是路径，是因为产物要被当文件直接打开：那样照样能刷新、能前进后退，
  * 路径路由在这里直接废掉。
  */
-export type View = 'home' | 'form' | 'outro';
+export type View = 'home' | 'edit' | 'survey' | 'outro';
 
 interface Route {
 	view: View;
-	/** 只有 form 组里的问卷用得上：就是 hash 本身 */
+	/** 这一页在地址里的名字：向导是步骤地址，问卷是问卷 id */
 	id: string | null;
 }
 
@@ -24,11 +27,15 @@ function readRoute(): Route {
 
 	if (name === 'outro') return { view: 'outro', id: null };
 
-	// form 是一组页面：各份入口的 id 就是它在地址里的名字，没有问题的那份（表单本身）也在其中
-	const survey = name ? findSurvey(name) : undefined;
-	if (!survey) return { view: 'home', id: null };
+	// 向导是一组页面：每一步一个地址，地址就是它在步骤表里的名字
+	if (findStep(name) >= 0) return { view: 'edit', id: name };
 
-	return { view: 'form', id: survey.id };
+	// 剩下的名字里，认得出的才是问卷
+	const survey = findSurvey(name);
+	if (survey) return { view: 'survey', id: survey.id };
+
+	// 空 hash 与认不出的名字一样，都只是「没有这一页」——主页是纯 fallback
+	return { view: 'home', id: null };
 }
 
 /** 换一页就回到顶部：地址是自己改的（`navigate`）还是链接、前进后退改的，都归这儿管 */
@@ -40,23 +47,23 @@ function writeRoute(route: Route) {
 		return;
 	}
 
-	if (route.view === 'form') {
-		window.location.hash = route.id ?? FORM_ID;
+	if (route.view === 'edit' || route.view === 'survey') {
+		window.location.hash = route.id ?? stepRoute(STEPS[0].id);
 		return;
 	}
 
-	// 回首页会在地址栏留下一个空 fragment；抹掉它得自己动 History API，不值当，留着
+	// 主页没有自己的地址，写回空值；空值同样走 fallback，回主页照旧
 	window.location.hash = '';
 }
 
 type RouterValue = {
 	view: View;
-	/** 当前问卷 id，只在 form 组里的问卷页有值 */
-	surveyId: string | null;
+	/** 当前页面在地址里的名字，只有向导与问卷页用得上 */
+	routeId: string | null;
 	navigate: (next: View, id?: string) => void;
 };
 
-const RouterContext = createContext<RouterValue>({ view: 'home', surveyId: null, navigate: () => {} });
+const RouterContext = createContext<RouterValue>({ view: 'home', routeId: null, navigate: () => {} });
 
 export function RouterProvider({ children }: { children: ComponentChildren }) {
 	// 地址本身就是状态：首屏从地址读一次，带着地址打开或刷新都落在同一页
@@ -80,7 +87,7 @@ export function RouterProvider({ children }: { children: ComponentChildren }) {
 	}, []);
 
 	const value = useMemo(
-		() => ({ view: route.view, surveyId: route.id, navigate }),
+		() => ({ view: route.view, routeId: route.id, navigate }),
 		[route.view, route.id, navigate],
 	);
 

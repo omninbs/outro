@@ -47,3 +47,9 @@ export const STEPS: StepEntry[] = [
 		),
 	},
 ];
+
+/** 每一步在地址里的名字：`step-` 前缀加步骤 id——地址与步骤表同源，不各写一份 */
+export const stepRoute = (id: string) => `step-${id}`;
+
+/** 地址认的是哪一步；认不出返回 -1，步骤永远不以 -1 为下标 */
+export const findStep = (name: string) => STEPS.findIndex((step) => stepRoute(step.id) === name);

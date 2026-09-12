@@ -58,8 +58,8 @@ export type Answers = Record<string, string>;
  */
 export interface Survey {
 	/**
-	 * 问卷在地址里的名字（`#edit`、`#logic-redstone-music`），用小写 ASCII。
-	 * 不能占用保留名 `outro`；首页是空 hash，也用不了。
+	 * 问卷在地址里的名字（`#logic-redstone-music`），用小写 ASCII。
+	 * 不能占用保留名 `outro` 与向导的步骤地址（`step-` 起头）；空 hash 不是某一页的地址。
 	 */
 	id: string;
 	/** 首页卡片上的名字 */

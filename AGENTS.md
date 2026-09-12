@@ -67,7 +67,7 @@ npm run typecheck && npm test && npm run build
 
 - Keep controls and the card separate: the final page has no controls, going back is by clicking anywhere, and actions live in the third wizard step.
 - Footer links are a navigation list (`ui/LinkList.tsx`): `nav > ul > li > a`, stacked tight, muted at rest, blue with an underline on hover; one heading level, one style, shared via `HEADING` in `tokens.ts`.
-- Back to the form: content that has taken shape stops on the last step (`formAtLastStep`), reset goes back to the first step, and otherwise the form remembers the step you were viewing — the step is the form's own state, not in the URL. The four button variants differ only in color (40px outer height, 32px padding, 1px border), and dangerous actions rely on color and wording.
+- Back to the wizard: content that has taken shape stops on the last step, reset goes back to the first step, and the step you were viewing is the address itself (one hash per step) — so refresh, history, and links from other pages all keep it. The four button variants differ only in color (40px outer height, 32px padding, 1px border), and dangerous actions rely on color and wording.
 
 **Survey data**
 
