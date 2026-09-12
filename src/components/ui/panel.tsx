@@ -18,10 +18,10 @@ export function Panel({
 	href?: string;
 	children: ComponentChildren;
 }) {
+	// 链接上那层 after 铺满整张卡片：点哪儿都行，链接自己还是链接
 	const head = title && (
 		<h2 class={`text-lg ${CARD_HEADING} narrow:px-inset`}>
 			{href ? (
-				// after 那一层铺满卡片：点哪儿都行，链接自己还是链接
 				<a href={href} class="after:absolute after:inset-0 after:content-['']">
 					{title}
 				</a>

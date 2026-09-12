@@ -54,9 +54,10 @@ export function QuestionInput({
 	}
 
 	return (
-		// 一排预设是「一组选项」而非一个控件，标签只该包一个控件
+		// 一排预设是「一组选项」而非一个控件，标签只该包一个控件；
+		// 窄屏贴边的卡片不提供横向留白，这一栏自己带一次以对齐题面
 		<Field label={label} group={!custom}>
-				{custom ? (
+			{custom ? (
 				answer_box(
 					'自己写',
 					<IconButton
@@ -68,7 +69,6 @@ export function QuestionInput({
 					/>,
 				)
 			) : (
-				// 窄屏贴边的卡片不提供横向留白，这一栏自己带一次以对齐题面
 				<div class={`flex gap-2 narrow:px-inset ${FADE} ${long ? 'flex-col' : 'flex-wrap'}`}>
 					{options.map((option) => {
 						const active = value === option;

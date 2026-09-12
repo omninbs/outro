@@ -6,7 +6,7 @@ import { CloseIcon } from './icons';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'danger_solid';
 
-// 四种变体只在颜色上不同：几何一致（描边宽度也算几何），带描边的两款各减一像素内边距，外高才相同
+// 四种变体只在颜色上不同：几何一致，外高也就一样
 const VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust press:opacity-90',
 	ghost:
@@ -87,14 +87,13 @@ export function ConfirmButton({
 
 // 行尾的删除动作：图标由它自带
 export function IconButton({ label, on_click }: { label: string; on_click: () => void }) {
+	// 图标没有文字，名字只能在这儿给；反馈只变颜色——它贴在框里，浮出一块底色像框里又长出一个按钮
 	return (
 		<button
 			type="button"
-			// 图标没有文字，名字只能在这儿给
 			aria-label={label}
 			title={label}
 			onClick={on_click}
-			// 反馈只变颜色：它贴在框里，浮出一块底色看着像框里又长出一个按钮
 			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}
 		>
 			<CloseIcon />

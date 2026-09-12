@@ -7,6 +7,12 @@ const REPO_URL = 'https://github.com/omninbs/outro';
 
 // 页脚：由 PageShell 统一挂的固定件，宽度写死、不收 props；两栏只在放得下时才并排
 export function PageFooter() {
+	// 「返回主页」在应用内跳，「源代码」是外链
+	const links = [
+		{ text: COPY.action.back_home, href: '#' },
+		{ text: COPY.action.source, href: REPO_URL, external: true },
+	];
+
 	return (
 		<footer class="mt-auto border-t border-ctp-surface0 bg-ctp-mantle">
 			<div
@@ -19,13 +25,7 @@ export function PageFooter() {
 
 				<nav class="flex flex-col gap-2 wide:flex-[5]">
 					<h2 class={HEADING}>{COPY.section.links}</h2>
-					<LinkList
-						items={[
-							// 「返回主页」在应用内跳，「源代码」是外链
-							{ text: COPY.action.back_home, href: '#' },
-							{ text: COPY.action.source, href: REPO_URL, external: true },
-						]}
-					/>
+					<LinkList items={links} />
 				</nav>
 			</div>
 		</footer>
