@@ -55,7 +55,7 @@ function BlockList({ blocks }: { blocks: OutroBlock[] }) {
 function OutroFooter({ footer }: { footer: string }) {
 	return (
 		<footer class="flex justify-end text-base tracking-wide text-ctp-overlay0">
-			{footer && <span>{footer}</span>}
+			<span>{footer}</span>
 		</footer>
 	);
 }
@@ -63,6 +63,8 @@ function OutroFooter({ footer }: { footer: string }) {
 // 结尾页：上标题、中主体、下署名；只排版不判断，内容由 resolve_outro 决定
 export function OutroPage({ data, on_exit }: { data: CardData; on_exit?: () => void }) {
 	const { title, meta, blocks, footer } = resolve_outro(data);
+	// 空的一栏不占位：宽档下剩下那栏靠自己的 flex-[1] 吃掉整个主体
+	const has_body = meta.length > 0 || blocks.length > 0;
 	// 按下时手指在哪儿：拖选文字与双击选词也会派一次 click，那不是「点一下就走」
 	const pressed = useRef<{ x: number; y: number } | null>(null);
 
@@ -94,12 +96,14 @@ export function OutroPage({ data, on_exit }: { data: CardData; on_exit?: () => v
 				<div class="flex flex-col gap-12">
 					{title && <OutroHeader title={title} />}
 
-					<main class="flex flex-col gap-12 wide:flex-row wide:items-start wide:gap-8">
-						<MetaList meta={meta} />
-						<BlockList blocks={blocks} />
-					</main>
+					{has_body && (
+						<main class="flex flex-col gap-12 wide:flex-row wide:items-start wide:gap-8">
+							{meta.length > 0 && <MetaList meta={meta} />}
+							{blocks.length > 0 && <BlockList blocks={blocks} />}
+						</main>
+					)}
 
-					<OutroFooter footer={footer} />
+					{footer && <OutroFooter footer={footer} />}
 				</div>
 			</div>
 		</div>
