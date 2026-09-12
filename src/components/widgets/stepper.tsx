@@ -39,7 +39,7 @@ export function Stepper({
 							onClick={() => on_select(index)}
 							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${HOVER} ${tab}`}
 						>
-							<span class={`grid h-6 w-6 place-items-center rounded-full ${dot}`}>
+							<span class={`flex h-6 w-6 items-center justify-center rounded-full ${dot}`}>
 								<Icon />
 							</span>
 							<span class={`${active ? '' : 'narrow:hidden narrow:opacity-0'} ${FADE}`}>

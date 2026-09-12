@@ -94,7 +94,7 @@ export function IconButton({ label, on_click }: { label: string; on_click: () =>
 			aria-label={label}
 			title={label}
 			onClick={on_click}
-			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}
+			class={`flex h-8 w-8 shrink-0 items-center justify-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}
 		>
 			<CloseIcon />
 		</button>
