@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 
 import { Stage } from '../pages/stage';
-import { Button, ConfirmButton, Panel } from '../components/ui';
+import { Button, ConfirmButton, Panel, SUB_TEXT } from '../components/ui';
 import { COPY } from '../lib/copy';
 import { OUTPUTS, save_image, type OutputPreset } from '../lib/image';
 import type { CardData } from '../lib/types';
@@ -52,7 +52,7 @@ export function GenerateStep({
 
 	return (
 		<Panel title={COPY.step.generate}>
-			<p class="text-base leading-relaxed text-ctp-subtext0 narrow:px-inset">{COPY.hint.generate}</p>
+			<p class={`${SUB_TEXT} narrow:px-inset`}>{COPY.hint.generate}</p>
 			<div class="flex flex-col gap-3 narrow:px-inset">
 				<div class="flex items-center gap-x-2">
 					<Button variant="primary" on_click={on_preview}>
