@@ -55,7 +55,7 @@ npm run typecheck && npm test && npm run build
 
 | Knowledge | Home |
 |---|---|
-| copy | `lib/copy.ts` |
+| copy | `lib/copy.ts`, except copy a generic component owns, which sits in that component |
 | content | `lib/outro.ts` |
 | box appearance | `ui/inputs.tsx` |
 | motion | `ui/tokens.ts` |
@@ -106,7 +106,7 @@ npm run typecheck && npm test && npm run build
 
 | Topic | Rule |
 |---|---|
-| Where copy lives | UI copy always goes into `COPY` (`lib/copy.ts`), whole-sentence descriptions included; `surveys/*` is content data, and `DEFAULT_CARD` prefills and `persist.ts` old-archive literals are content truths and migration anchors, so they do not go in |
+| Where copy lives | Copy a page or step shows goes into `COPY` (`lib/copy.ts`), whole-sentence descriptions included; copy a generic component owns stays in that component and it never imports `lib/copy`, so the component carries its own default and the caller may override it; `surveys/*` is content data, and `DEFAULT_CARD` prefills and `persist.ts` old-archive literals are content truths and migration anchors, so they do not go in |
 | Category names | spell them out in full; options are common values rather than the full set; long single-choice keeps a custom option, and what you type yourself still reaches the outro page |
 | Long-answer options | whole paragraphs laid out vertically as full-width blocks, and tapping one fills the whole paragraph into the box; they are mutually exclusive, the box appears only after tapping the custom option, and × reverts |
 | No fallback copy | the title block including its rule, and the footer signature line, do not render; spacing on conditional rendering uses `gap`; there are only two placeholder hints (hide, and write-your-own in the custom form); a prefill that is not shown is not written |

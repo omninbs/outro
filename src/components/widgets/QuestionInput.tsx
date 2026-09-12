@@ -1,9 +1,16 @@
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { COPY } from '../../lib/copy';
 import type { Question } from '../../lib/survey/types';
 import { Field, FADE, IconButton, HOVER, TextArea, TextInput } from '../ui';
+
+// 组件自带的文案：借给调用方的东西写在这里
+const TEXT = {
+	placeholder: '不显示',
+	placeholderCustom: '自己写',
+	backToOptions: '退回选项',
+	custom: '自定义',
+};
 
 // 预设的选中外观：横排的词与竖排的段落共用一套
 const tone = (active: boolean) =>
@@ -47,7 +54,7 @@ export function QuestionInput({
 		);
 
 	if (options.length === 0) {
-		return <Field label={question.label}>{answerBox(COPY.placeholder)}</Field>;
+		return <Field label={question.label}>{answerBox(TEXT.placeholder)}</Field>;
 	}
 
 	return (
@@ -55,9 +62,9 @@ export function QuestionInput({
 		<Field label={question.label} group={!custom}>
 			{custom ? (
 				answerBox(
-					COPY.placeholderCustom,
+					TEXT.placeholderCustom,
 					<IconButton
-						label={COPY.action.backToOptions}
+						label={TEXT.backToOptions}
 						onClick={() => {
 							onChange(revertTo);
 							setCustom(false);
@@ -88,7 +95,7 @@ export function QuestionInput({
 						}}
 						class={`${CUSTOM} ${long ? 'w-full px-3 py-2' : 'px-3 py-1.5'}`}
 					>
-						{COPY.action.custom}
+						{TEXT.custom}
 					</button>
 				</div>
 			)}

@@ -1,9 +1,11 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-import { COPY } from '../../lib/copy';
 import { HOVER } from './tokens';
 import { CloseIcon, PlusIcon } from './icons';
+
+// 翻成确认态时补的一句：按钮换了样子，念屏的人得知道
+const CONFIRM_HINT = '再点一下确认';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
@@ -80,7 +82,7 @@ export function ConfirmButton({
 		>
 			{confirming ? confirmLabel : children}
 			<span role="status" class="sr-only">
-				{confirming ? COPY.action.confirmHint : ''}
+				{confirming ? CONFIRM_HINT : ''}
 			</span>
 		</Button>
 	);
