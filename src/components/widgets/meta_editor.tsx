@@ -20,6 +20,14 @@ export function MetaEditor({
 	create: () => Row;
 	copy: { label: string; value: string; empty: string; add: string };
 }) {
+	// 改一条：用新值盖住那条，列表其余不动
+	const replace = (id: string, next: Partial<Row>) =>
+		on_change(items.map((item) => (item.id === id ? { ...item, ...next } : item)));
+	const remove = (id: string) => on_change(items.filter((item) => item.id !== id));
+	const add = () => on_change([...items, create()]);
+	// 空着才算空态：那行说明只在没内容时出现
+	const empty = items.length === 0 ? copy.empty : undefined;
+
 	return (
 		<div class="flex flex-col gap-2">
 			{items.map((item) => (
@@ -29,20 +37,13 @@ export function MetaEditor({
 					value={item.value}
 					label_placeholder={copy.label}
 					value_placeholder={copy.value}
-					on_label_change={(label) =>
-						on_change(items.map((it) => (it.id === item.id ? { ...it, label } : it)))
-					}
-					on_value_change={(value) =>
-						on_change(items.map((it) => (it.id === item.id ? { ...it, value } : it)))
-					}
-					on_remove={() => on_change(items.filter((it) => it.id !== item.id))}
+					on_label_change={(label) => replace(item.id, { label })}
+					on_value_change={(value) => replace(item.id, { value })}
+					on_remove={() => remove(item.id)}
 				/>
 			))}
 
-			<AddButton
-				empty={items.length === 0 ? copy.empty : undefined}
-				on_click={() => on_change([...items, create()])}
-			>
+			<AddButton empty={empty} on_click={add}>
 				{copy.add}
 			</AddButton>
 		</div>
