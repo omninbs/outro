@@ -6,11 +6,10 @@ import { SurveyPage } from './components/SurveyPage';
 import { WizardShell } from './components/WizardShell';
 import { Button, ActionRow, RISE } from './components/ui';
 import { COPY } from './lib/copy';
-import { useRouter, type Navigate } from './lib/router';
+import { useRouter } from './lib/router';
 import { useCard } from './lib/store';
 import { buildFrom } from './lib/survey/build';
 import type { Answers, Survey } from './lib/survey/types';
-import type { CardData, Patch } from './lib/types';
 import {
 	STEPS,
 	firstStepName,
@@ -23,35 +22,27 @@ import { SURVEYS } from './surveys/_registry';
 
 // 路由只在这里发生：hash 是哪个名字就渲染哪一页，认不出（含空）就是主页
 export function App() {
-	const { data, patch, reset } = useCard();
-	const { name, navigate } = useRouter();
+	const { name } = useRouter();
 
+	// 逐类认地址：预览页、步骤、问卷依次认，都不命中才是主页
+	const step = STEPS.find((step) => stepRoute(step.id) === name);
 	const survey = SURVEYS.find((survey) => survey.id === name);
-	// 三步是三个独立页面：各占一个地址，落到哪一步就渲染哪一步；没有问题的入口就是表单本身
-	const step =
-		STEPS.find((step) => stepRoute(step.id) === name) ??
-		(survey && survey.questions.length === 0 ? STEPS[0] : undefined);
 
-	if (step) return <WizardView step={step} data={data} patch={patch} reset={reset} navigate={navigate} />;
-	if (survey) return <SurveyView survey={survey} patch={patch} navigate={navigate} />;
-	if (name === 'outro') return <OutroView data={data} navigate={navigate} />;
-	return <HomeView />;
+	return name === 'outro' ? (
+		<OutroView />
+	) : step ? (
+		<WizardView step={step} />
+	) : survey ? (
+		<SurveyView survey={survey} />
+	) : (
+		<HomeView />
+	);
 }
 
 // 向导页：一步一页
-function WizardView({
-	step,
-	data,
-	patch,
-	reset,
-	navigate,
-}: {
-	step: StepEntry;
-	data: CardData;
-	patch: Patch;
-	reset: () => void;
-	navigate: Navigate;
-}) {
+function WizardView({ step }: { step: StepEntry }) {
+	const { navigate } = useRouter();
+	const { data, patch, reset } = useCard();
 	const index = STEPS.indexOf(step);
 	const ctx: StepContext = {
 		data,
@@ -81,14 +72,15 @@ function WizardView({
 					</div>
 				)}
 
-				<WizardNav index={index} navigate={navigate} />
+				<WizardNav index={index} />
 			</WizardShell>
 		</PageShell>
 	);
 }
 
 // 向导底部那排动作：第一步只回主页，中间加「上一步」，最后一步没有「下一步」
-function WizardNav({ index, navigate }: { index: number; navigate: Navigate }) {
+function WizardNav({ index }: { index: number }) {
+	const { navigate } = useRouter();
 	return (
 		<ActionRow>
 			{index === 0 ? (
@@ -108,15 +100,9 @@ function WizardNav({ index, navigate }: { index: number; navigate: Navigate }) {
 }
 
 // 问卷页：一份问卷一页；换一份就是另一份答卷，换 key 让它重建
-function SurveyView({
-	survey,
-	patch,
-	navigate,
-}: {
-	survey: Survey;
-	patch: Patch;
-	navigate: Navigate;
-}) {
+function SurveyView({ survey }: { survey: Survey }) {
+	const { navigate } = useRouter();
+	const { patch } = useCard();
 	const finish = (answers: Answers) => {
 		patch(buildFrom(survey, answers));
 		navigate(lastStepName());
@@ -135,7 +121,9 @@ function SurveyView({
 }
 
 // 预览页：拿去截图的那一屏，点任意处退回向导最后一步
-function OutroView({ data, navigate }: { data: CardData; navigate: Navigate }) {
+function OutroView() {
+	const { navigate } = useRouter();
+	const { data } = useCard();
 	return (
 		<PageShell theme="latte" width={null} footer={false}>
 			<OutroPage data={data} onExit={() => navigate(lastStepName())} />
