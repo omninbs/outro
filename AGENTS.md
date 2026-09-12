@@ -54,7 +54,6 @@ npm run typecheck && npm test && npm run build
 | fully clickable row | `ui/LinkList.tsx` |
 | canvas geometry | `lib/frame.ts` |
 | index tables | `_registry.ts(x)` |
-| page table | `pages/_registry.tsx` |
 
 **Image capture** (`lib/image.ts`)
 
