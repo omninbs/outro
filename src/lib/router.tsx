@@ -10,10 +10,12 @@ function readName() {
 // 换一页就回到顶部：地址是自己改的还是链接、前进后退改的，都归这儿管
 const toTop = () => window.scrollTo(0, 0);
 
+export type Navigate = (name: string | null) => void;
+
 type RouterValue = {
 	name: string;
 	// 给一个名字就去那一页；给 null 是离开页面，地址清空、落回主页
-	navigate: (name: string | null) => void;
+	navigate: Navigate;
 };
 
 const RouterContext = createContext<RouterValue>({ name: '', navigate: () => {} });
