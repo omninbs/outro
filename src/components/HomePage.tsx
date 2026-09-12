@@ -1,6 +1,5 @@
 import { SURVEYS } from '../surveys/_registry';
 import { COPY } from '../lib/copy';
-import { surveyHref } from '../lib/router';
 import { PageHeader } from './PageHeader';
 import { Panel, SUB_TEXT } from './ui';
 
@@ -15,7 +14,7 @@ export function HomePage() {
 
 			<div class="flex flex-col gap-6">
 				{SURVEYS.map((survey) => (
-					<Panel key={survey.id} title={survey.title} href={surveyHref(survey)}>
+					<Panel key={survey.id} title={survey.title} href={`#${survey.id}`}>
 						<p class={`narrow:px-inset ${SUB_TEXT}`}>{survey.description}</p>
 					</Panel>
 				))}

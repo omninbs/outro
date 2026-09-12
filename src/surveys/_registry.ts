@@ -11,5 +11,11 @@ import { logicRedstoneMusicSurvey } from './logic-redstone-music';
  */
 export const SURVEYS: Survey[] = [editSurvey, logicRedstoneMusicSurvey];
 
+/**
+ * 没有问题要问的那份入口就是表单本身，它的 id 同时也是路由里表单那一页的地址
+ * （`formAtLastStep` 回到的就是这儿）。
+ */
+export const FORM_ID = SURVEYS.find((survey) => survey.questions.length === 0)!.id;
+
 /** 按 id 找入口；地址是手写的，认不出就当没有这一份 */
 export const findSurvey = (id: string) => SURVEYS.find((survey) => survey.id === id);
