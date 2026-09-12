@@ -118,7 +118,7 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 	canvas.width = width;
 	canvas.height = height;
 	const ctx = canvas.getContext('2d');
-	if (!ctx) throw new Error('画布开不出来');
+	if (!ctx) throw new Error('canvas context unavailable');
 	ctx.fillStyle = background;
 	ctx.fillRect(0, 0, width, height);
 	// 整幅图就是卡片那一块，照它自己的尺寸落到画布正中：上限触发的缩小因此是整幅等比，不是裁掉一块
@@ -136,7 +136,7 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 	);
 
 	const blob = await new Promise<Blob | null>((done) => canvas.toBlob(done, 'image/png'));
-	if (!blob) throw new Error('图片存不下来');
+	if (!blob) throw new Error('image blob unavailable');
 
 	const link = document.createElement('a');
 	const url = URL.createObjectURL(blob);

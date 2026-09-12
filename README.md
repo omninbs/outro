@@ -1,37 +1,36 @@
 # outro
 
-填几个字段，导出一张能直接当视频结尾页的图。
+Fill in a few fields and export an image that works directly as a video outro page.
 
-- 入口：不用预设自己填，或者让一份问卷把你问一遍（问卷是数据，加一份不用改代码）
-- 三档成品：竖版 2:3、方版 1:1、横版 3:2，点一下直接存成 PNG
-- 内容存在你自己的浏览器里（localStorage），没有后端，什么都不上传
+- Entries: fill it in yourself without a preset, or let a survey walk you through it (a survey is data; adding one needs no code change)
+- Three output formats: portrait 2:3, square 1:1, landscape 3:2, each saved as a PNG with one click
+- Content stays in your own browser (localStorage); there is no backend and nothing is uploaded
 
-## 用它
+## Usage
 
-线上：https://omninbs.github.io/outro/
+Online: https://omninbs.github.io/outro/
 
-想要一个能离线、双击就能打开的单文件：跑一次 `npm run build`，把 `dist/index.html` 发给对方即可（`file://` 打开照常能用）。
+Want a single file that works offline and opens on double-click: run `npm run build` once and send the other person `dist/index.html` (it opens fine over `file://`).
 
-## 开发
+## Development
 
 ```bash
 npm ci
 npm run dev        # http://localhost:5173
-npm run typecheck  # 类型
-npm test           # 纯函数的单测：数据搬运、存档迁移、内容过滤、画布几何
-npm run build      # 产出一个 dist/index.html
+npm run typecheck  # types
+npm test           # unit tests for pure functions: data movement, archive migration, content filtering, canvas geometry
+npm run build      # produces a single dist/index.html
 ```
 
-技术栈：Vite + Preact + TypeScript（strict）+ Tailwind v4，产物由 `vite-plugin-singlefile` 内联成单个 HTML 文件；存图走浏览器自己的 SVG + 画布，不装图形库。
+Stack: Vite + Preact + TypeScript (strict) + Tailwind v4, with `vite-plugin-singlefile` inlining the output into one HTML file; image capture uses the browser's own SVG and canvas, with no graphics library.
 
-## 它是怎么想的
+## Design notes
 
-设计与取舍写在 [`AGENTS.md`](./AGENTS.md)——那份文件是写给 AI 的干活规矩，但里面每一条都是一次设计决定：
-档位按**框**的宽判（同一份版面在页面里与出图时是同一个定义，不随观者的窗口变）、文案与内容各只有一个定义处、
-最终页就是拿去截图的那一屏（存下来的图是它的克隆，不是第二套渲染）。
+The design and its tradeoffs are written down in [`AGENTS.md`](./AGENTS.md) — that file is a rulebook for AI, but every line in it is a design decision:
+breakpoints are judged by the **box** width (the same layout has one definition in the page and when capturing, independent of the viewer's window), copy and content each have a single definition, and the final page is the very screen that gets screenshotted (the saved image is a clone of it, not a second rendering).
 
-## 许可
+## License
 
 MIT
 
-> 这个项目的代码与文档由 AI 与作者共同写成。
+> This project's code and documentation were written by AI together with the author.

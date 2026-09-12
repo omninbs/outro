@@ -1,70 +1,70 @@
-# outro —— 在这里干活的规矩
+# outro — house rules
 
-结尾页生成器：填字段，产出可直接截图的结尾页。这是给 AI 的唯一一份规矩；动了规矩、命令、目录或环境事实，同一次提交一起改。
+An outro-page generator: fill in a few fields and get a page that is ready to screenshot. This is the only rulebook for AI; if you change a rule, a command, a directory, or an environment fact, change it in the same commit.
 
-## 怎么干活
+## How to work
 
-- 用中文一次说清计划再动手；回答只给结论、改动文件、验证结果
-- 工具调用能并行就并成一批；省 token：对账性测试、探针、线上核对不跑，命令能合并就合并；单条 ≤10 秒
-- 改完跑闸门（见「验证」）就提交；取舍拿不准先问，被否的方向不换说法再来
+- State the plan in Chinese before you start; report only conclusions, changed files, and validation results
+- Batch tool calls when they can run in parallel; save tokens: skip reconciliation tests, probes, and online checks, and merge commands where possible; keep each command under 10s
+- Run the gate (see "Validation") after a change, then commit; when a tradeoff is unclear, ask first — do not re-argue a rejected direction
 
-## 提交
+## Commits
 
-- 一件事提交一次；一行 `<type>: <description>`（英文、≤50 字符、无标点；type 取 feat / fix / docs / style / refactor / test / chore）
-- 不 push，除非明确要求（要 push 加 `GIT_SSH_COMMAND="ssh -F /dev/null"`，之后不验线上）；`dist/` 不入库，临时工具放 `.git/`
+- One thing per commit; a single line `<type>: <description>` (English, ≤50 chars, no punctuation; type is feat / fix / docs / style / refactor / test / chore)
+- Do not push unless explicitly asked (to push, prefix `GIT_SSH_COMMAND="ssh -F /dev/null"`, and do not verify online afterwards); `dist/` is not committed, and throwaway tools live in `.git/`
 
-## 验证
+## Validation
 
-没有 lint，闸门三条（合成一条跑）：
+There is no lint; the gate is three commands (run them as one):
 
 ```bash
 npm run typecheck && npm test && npm run build
 ```
 
-- 单测只碰**纯函数**（`tests/`）：数据搬运、存档迁移、内容过滤、画布几何。界面与样式不测——那两样靠人看，写不出比看更准的断言
-- dev server 在 http://localhost:5173，常有后台任务不要另起；转换按秒缓存，改完同一文件 `touch` 后 `curl` 比特征串（逐个模块比），样式看不出变化先重启它
-- 探针只在读代码判断不了时用：脚本在 `.git/`，一轮量完、用完关 Firefox；profile 先建、单 BiDi 会话、端口占用换 `PROBE_PORT`；真实几何用 headless BiDi
-- Chromium 那一路探针同源、更好写：探针页把结果写进 `<pre>`，用 `chromium --headless --no-sandbox --user-data-dir=$PWD/.git/probe-profile --virtual-time-budget=15000 --dump-dom <url>` 把 DOM 取回来；不给 `--user-data-dir` 它写不了默认的 profile 目录，会直接不启动
-- 别人的 dev server 杀不掉请用户重启；自己起的换掉先 `job_kill`；杀进程用 `pkill -x` 或存 PID；装依赖 `npm ci --cache /tmp/npm-cache`
+- Unit tests touch only **pure functions** (`tests/`): data movement, archive migration, content filtering, canvas geometry. UI and styling are not tested — those are checked by eye, and no assertion is more accurate than looking
+- The dev server is at http://localhost:5173; a background one is often already running, so do not start another; transforms are cached per second, so after editing a file `touch` it and `curl` comparing a signature string (compare module by module); if a style change is not visible, restart it first
+- Use probes only when reading the code cannot settle the question: scripts live in `.git/`, measure in one pass and close Firefox when done; create the profile first, use a single BiDi session, and switch `PROBE_PORT` if the port is taken; measure real geometry with headless BiDi
+- The Chromium probe path is same-origin and easier to write: have the probe page write its result into `<pre>` and pull the DOM back with `chromium --headless --no-sandbox --user-data-dir=$PWD/.git/probe-profile --virtual-time-budget=15000 --dump-dom <url>`; without `--user-data-dir` it cannot write the default profile directory and will not start at all
+- If you cannot kill someone else's dev server, ask the user to restart it; if you started one, `job_kill` it before replacing it; kill processes with `pkill -x` or a saved PID; install dependencies with `npm ci --cache /tmp/npm-cache`
 
-## 代码约定
+## Code conventions
 
-- 一维排布一律 flex + `gap-*`（行、列、嵌套、两栏分比例）；每列写 `min-w-0`；`items-start` 只写在行方向；条件渲染的间距用父层 `gap`，不用 `space-y-*`；列里的裸件要内容宽写 `self-start`
-- `grid` 只给真二维（现仅元数据表）并显式写列模板；`<label>` 只包一个控件，一组选项用 `<div role="group" aria-label>`
-- 界面符号用图标组件（`ui/icons.tsx` 包 `lucide-preact`），不写字体字符；分隔线、下划线用元素画；依赖按需装、不抄精简版
-- 一个知识只有一个定义（含注释）：文案 `lib/copy.ts`、内容 `lib/outro.ts`、框外观 `ui/inputs.tsx`、动效 `ui/tokens.ts`、可点整行 `ui/LinkList.tsx`、画布几何 `lib/frame.ts`、目录表 `_registry.ts(x)`
-- 存图＝把屏幕上那一份装进 SVG 给浏览器画到画布，一档一颗按钮，无第二套渲染路径（`lib/image.ts`）：克隆外壳带 CSS 装进 SVG 视口，视口是 `data-card` 那块（外壳按设计宽摆好、左移空出的那段）；设计宽与比例写死在 `OUTPUTS`，出图前挂进屏幕外取景台按那个宽排；装进 `<img>` 的是 `data:` URL，**不能换回 `blob:`**——Chromium 系把「blob 里装着 `foreignObject` 的 SVG」判成异源，画到画布上会把画布弄脏、`toBlob` 直接抛 SecurityError（Firefox 不脏，所以只在 Chromium 上露，2026-09 实测）
-- 设计宽只定档不定卡片宽（钉 `min-width` 会盖掉宽度上限）；`data-card` 宽钉回克隆、高由卡片定，克隆里摘掉「至少一屏高」；画布四周留**拍下来那一块**较长边的四分之一（不少于），按比例补齐、倍率写死 2
-- 控件与卡片分开：最终页无控件，返回靠点任意处，动作在向导第三步
-- 问卷是数据：题目写 `into`（`meta` / `block` / `title` / `footer`）决定答案去处，要加工才写 `build`；答完以 `DEFAULT_CARD` 为底盖答到的部分，不是清空（问到却答空的标题、页脚写空串，空元数据与文本块丢掉）
-- 回到表单：内容已成型停最后一步（`formAtLastStep`），重置回第一步，其余时候表单记住你看过的那一步——步骤是表单自己的状态，地址里不带它；按钮四种变体只差颜色（外高 40px、内边距 32px、描边 1px），危险动作靠颜色与文案
-- 页脚链接是导航清单（`ui/LinkList.tsx`）：`nav > ul > li > a`，竖向紧挨，平时淡、悬停转 blue 加下划线；同一标题层级同款，共用 `tokens.ts` 的 `HEADING`
-- 模块里一行算式用 `const` 箭头，要写块的用 `function` 声明；组件一律 `function`——同一种东西不因为顺手就换写法
-- 注释写中文，只写设计想法，不写实现、数值、类名；常量与 prop 的说明要留；迁移锚点只认旧档
-- 不写自定义 CSS，例外只有 `style.css` 的 `.safe-area` 与 `@custom-variant press`；Tailwind 扫描来源写死在 `style.css` 的 `source(none)` + `@source`，加新目录要补
+- One-dimensional layout is always flex + `gap-*` (rows, columns, nesting, proportional two-column splits); write `min-w-0` on every column; write `items-start` only in the row direction; use the parent's `gap` for spacing on conditional rendering, not `space-y-*`; a bare child in a column that should be content-width gets `self-start`
+- Use `grid` only for genuinely two-dimensional layout (currently just the metadata table) and write the column template explicitly; a `<label>` wraps exactly one control, and a group of options uses `<div role="group" aria-label>`
+- Use icon components for UI symbols (`ui/icons.tsx` wraps `lucide-preact`), never font characters; draw separators and underlines with elements; install dependencies on demand, and do not copy a trimmed-down version
+- One piece of knowledge has exactly one definition (comments included): copy in `lib/copy.ts`, content in `lib/outro.ts`, box appearance in `ui/inputs.tsx`, motion in `ui/tokens.ts`, the fully clickable row in `ui/LinkList.tsx`, canvas geometry in `lib/frame.ts`, and the index tables in `_registry.ts(x)`
+- Saving an image means putting the on-screen copy into an SVG and letting the browser draw it onto a canvas — one button per output, no second rendering path (`lib/image.ts`): clone the shell with its CSS into an SVG viewport, the viewport being the `data-card` block (lay the shell out at the design width, then shift it left by the gap the centering left); the design widths and ratios are hardcoded in `OUTPUTS`, and before capture the shell is mounted on an off-screen stage and laid out at that width; what goes into the `<img>` is a `data:` URL and **must not go back to `blob:`** — Chromium treats an SVG with a `foreignObject` inside a blob as cross-origin, which taints the canvas so `toBlob` throws a SecurityError (Firefox does not taint, so it only shows up in Chromium; measured 2026-09)
+- The design width only fixes the breakpoint, not the card width (pinning `min-width` would override the width cap); on the clone the `data-card` width is pinned back and the height comes from the card, and "at least one viewport tall" is stripped from the clone; leave a margin of at least a quarter of the longer side of **the captured block** around the canvas, pad to the ratio, and hardcode the scale at 2
+- Keep controls and the card separate: the final page has no controls, going back is by clicking anywhere, and actions live in the third wizard step
+- A survey is data: a question writes `into` (`meta` / `block` / `title` / `footer`) to say where the answer goes, and only writes `build` when it needs processing; finishing a survey lays the answered parts over `DEFAULT_CARD` rather than clearing it (a title or footer that was asked but left empty becomes an empty string, and empty metadata and text blocks are dropped)
+- Back to the form: content that has taken shape stops on the last step (`formAtLastStep`), reset goes back to the first step, and otherwise the form remembers the step you were viewing — the step is the form's own state and is not in the URL; the four button variants differ only in color (40px outer height, 32px padding, 1px border), and dangerous actions rely on color and wording
+- Footer links are a navigation list (`ui/LinkList.tsx`): `nav > ul > li > a`, stacked tight, muted at rest, blue with an underline on hover; the same heading level uses the same style, shared via `HEADING` in `tokens.ts`
+- One-line expressions in a module use `const` arrows, and anything that needs a block uses a `function` declaration; components are always `function` — the same kind of thing does not switch style just for convenience
+- Identifiers, error and log messages, test titles, commit messages, and documentation (README, this file) are in English; comments are in Chinese, describing design intent only, not implementation, values, or class names; keep the notes on constants and props; migration anchors only recognize old archives
+- Do not write custom CSS; the only exceptions are `.safe-area` and the `@custom-variant press` in `style.css`; Tailwind's scan sources are hardcoded in `style.css` as `source(none)` + `@source`, so adding a directory means adding a line
 
-## 响应式
+## Responsive
 
-- 档位只看宽度（数在 `@theme`，代码里无宽度数字）：窄 < 30rem（`narrow:`）、中（默认）、大 ≥ 64rem（`wide:`）；`landscape:` / `portrait:` 已退役
-- 窄与宽量的是框（容器查询）：页面里框＝页面宽、出图时框＝设计宽；量具只有 `PageShell` 一处；判据写 `(width >= 数字)` / `(width < 数字)`
-- 窄屏是一维的流：容器不留横向留白，面贴边、去侧边描边圆角，留白由文字与控件自己带一次 `px-inset`（全站唯一 16）；裸控件与贴边面里的裸文字、裸列表自己补
-- 元数据行窄屏上下排（编辑态与清单同规矩）：名称与值算一条，对内紧于条间；最终页除外
-- 换行由档位或内容定：结构按档位写死（页脚两端、动作行、两栏），`flex-wrap` 只给条数由数据决定的排
-- 动效只有渐变，清单在 `tokens.ts`（透明度、文字色、底色、描边色、显示）；150ms、ease-out、不回弹，`motion-reduce` 下不动；几何量不插值；跨档不做动画
-- 可点件写 `press:`（带媒体查询的悬停加裸按下），只写 `hover:` 在触摸设备零反馈；反馈是元素自己变色，不位移不换形
-- 最终页（`OutroPage`）跟三档，是拿去截图的那一屏：要一致的是栏（一行）宽，容器上限按栏宽反推；横竖居中，内容更高退回顶部；三段同一 flex 列、间距 12，宽档才分栏；不按档位改结构
+- Breakpoints are width-only (the numbers live in `@theme`, and there are no width numbers in code): narrow < 30rem (`narrow:`), medium (default), large ≥ 64rem (`wide:`); `landscape:` / `portrait:` are retired
+- Narrow and wide measure the box (container queries): in a page the box is the page width, and when capturing it is the design width; `PageShell` is the only place that measures; write the conditions as `(width >= number)` / `(width < number)`
+- Narrow is a one-dimensional flow: containers carry no horizontal padding, surfaces touch the edges and lose their side borders and corners, and that padding is carried once by the text and controls themselves via `px-inset` (the only 16 in the app); bare controls, and bare text and lists inside edge-touching surfaces, carry it themselves
+- Metadata rows stack vertically on narrow screens (the same rule for the editor and the list): the name and value count as one item, tighter within an item than between items; the final page is the exception
+- Wrapping is decided by the breakpoint or by content: structure is hardcoded per breakpoint (footer ends, action row, two columns), and `flex-wrap` is only for rows whose count is decided by data
+- Motion is gradients only, listed in `tokens.ts` (opacity, text color, background color, border color, display); 150ms, ease-out, no bounce, and nothing moves under `motion-reduce`; geometric quantities are not interpolated; no animation across breakpoints
+- Clickable things write `press:` (a hover wrapped in a media query plus a bare active state); writing only `hover:` gives no feedback on touch devices; the feedback is the element changing its own color, with no displacement and no shape change
+- The final page (`OutroPage`) follows all three breakpoints and is the screen that gets screenshotted: what must stay consistent is the column (one row) width, and the container cap is back-calculated from that width; it is centered both ways and falls back to the top when the content is taller; the three sections share one flex column with 12px spacing, and only the wide breakpoint splits into columns; the structure does not change per breakpoint
 
-## 内容与文案
+## Content and copy
 
-- 界面文案一律进 `COPY`（`lib/copy.ts`），整句说明也不例外；`surveys/*` 是内容数据，`DEFAULT_CARD` 预填值与 `persist.ts` 的旧档字面量是内容真值与迁移锚点，都不入
-- 类别名写全；选项是常用值不是全集，长单选留「自定义」，自写的也能进结尾页
-- 多行题的选项是一整段、竖排成整宽块，点一条整段填进框；互斥、点「自定义」才出框、× 退回
-- 没有兜底文案：标题块连横线、页脚署名行都不渲染；条件渲染的间距用 `gap`；占位提示只有两句（「不显示」与自定义形态里的「自己写」）；预填值不显示就不写
-- 空答案丢掉、空清单段放虚线提示（提示只带框内内边距，清单窄屏内边距写在有内容的分支上）；不截断，写长了就换行
-- 文案不为某一档定制：不写方位、不暗示结构（「右侧」「右上角」「第 N 步」都会失效），指位置用不随档位变的粗说法
+- UI copy always goes into `COPY` (`lib/copy.ts`), whole-sentence descriptions included; `surveys/*` is content data, and `DEFAULT_CARD` prefills and `persist.ts` old-archive literals are content truths and migration anchors, so they do not go in
+- Spell category names out in full; options are common values rather than the full set, long single-choice keeps 「自定义」, and what you type yourself still reaches the outro page
+- A long-answer question's options are whole paragraphs laid out vertically as full-width blocks, and tapping one fills the whole paragraph into the box; they are mutually exclusive, the box appears only after tapping 「自定义」, and × reverts
+- There is no fallback copy: the title block including its rule, and the footer signature line, do not render; spacing on conditional rendering uses `gap`; there are only two placeholder hints (「不显示」and 「自己写」in the custom form); a prefill that is not shown is not written
+- Empty answers are dropped, and an empty list section shows a dashed hint (the hint carries only its inner padding, and on narrow screens the list padding is written on the branch that has content); nothing is truncated, and long text wraps
+- Copy is not tailored to a breakpoint: do not write directions or imply structure (「右侧」, 「右上角」, 「第 N 步」all break), and point at positions with coarse wording that does not change per breakpoint
 
-## 环境
+## Environment
 
-- Vite + Preact + TS（strict）+ Tailwind v4 + `vite-plugin-singlefile`；图标 `lucide-preact`（按需）；存图不装库
-- 仓库 `omninbs/outro`，线上 https://omninbs.github.io/outro/；数据存 localStorage（`outro.card.v2`，旧键迁移），无后端
-- 发布：push 到 main 由 deploy.yml 自动跑（跑的就是上面那条闸门，卡住的 run 去 Actions 取消）；发别人 `cp dist/index.html dist/outro.html`（`file://` 可开）；`viewport-fit=cover` 与 `.safe-area` 是一对，删 meta 静默失效
+- Vite + Preact + TS (strict) + Tailwind v4 + `vite-plugin-singlefile`; icons from `lucide-preact` (on demand); no library for image capture
+- Repository `omninbs/outro`, online at https://omninbs.github.io/outro/; data is stored in localStorage (`outro.card.v2`, migrated from old keys) and there is no backend
+- Release: pushing to main runs deploy.yml automatically (it runs the gate above; cancel stuck runs in Actions); to hand someone a file, `cp dist/index.html dist/outro.html` (opens over `file://`); `viewport-fit=cover` and `.safe-area` come as a pair, and deleting the meta silently disables it

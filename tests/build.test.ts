@@ -20,7 +20,7 @@ const q = (question: Partial<Question> & { id: string }): Question => ({
 });
 
 describe('buildCard', () => {
-	it('按 into 把答案搬到对应的去处，id 由题目 id 推出来', () => {
+	it('moves answers to the destinations named by into, deriving ids from question ids', () => {
 		const survey = surveyOf([
 			q({ id: 't', into: 'title' }),
 			q({ id: 'f', into: 'footer' }),
@@ -36,19 +36,19 @@ describe('buildCard', () => {
 		});
 	});
 
-	it('问到却答空的标题与页脚写成空串——那正是「这一块就要空着」', () => {
+	it('writes an asked-but-empty title and footer as empty strings, which is "this section stays empty"', () => {
 		const survey = surveyOf([q({ id: 't', into: 'title' }), q({ id: 'f', into: 'footer' })]);
 
 		expect(buildCard(survey, { t: '   ', f: '' })).toEqual({ title: '', footerText: '', meta: [], blocks: [] });
 	});
 
-	it('空的元数据与文本块整条丢掉，没答的题不留空标签', () => {
+	it('drops empty metadata and text blocks entirely, leaving no empty label for unanswered questions', () => {
 		const survey = surveyOf([q({ id: 'a', into: 'meta' }), q({ id: 'n', into: 'block' })]);
 
 		expect(buildCard(survey, { a: '', n: '   ' })).toEqual({ meta: [], blocks: [] });
 	});
 
-	it('没写 into 的题只给 build 用，自己不进内容', () => {
+	it('keeps a question without into for build only, never putting it into the content', () => {
 		const survey = surveyOf([q({ id: 'helper' })]);
 
 		expect(buildCard(survey, { helper: '只用来算标题' })).toEqual({ meta: [], blocks: [] });
@@ -56,14 +56,14 @@ describe('buildCard', () => {
 });
 
 describe('buildFrom', () => {
-	it('以默认内容为底，只有问到的去处被盖掉', () => {
+	it('starts from the default content and overwrites only the destinations that were asked', () => {
 		const card = buildFrom(surveyOf([q({ id: 'a', into: 'meta' })]), { a: '我' });
 
 		expect(card.footerText).toBe(DEFAULT_CARD.footerText);
 		expect(card.meta).toEqual([{ id: 'm-a', label: 'a', value: '我' }]);
 	});
 
-	it('自定义 build 顶掉默认搬运', () => {
+	it('lets a custom build override the default move', () => {
 		const survey = surveyOf([q({ id: 'a', into: 'meta' })], (answers) => ({ title: `关于 ${answers.a}` }));
 		const card = buildFrom(survey, { a: '我' });
 
