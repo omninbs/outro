@@ -1,12 +1,12 @@
 import type { ComponentChildren } from 'preact';
 
-import type { StepDef } from '../components/widgets/Stepper';
+import type { StepDef } from '../components/widgets/stepper';
 import { ListIcon, PenLineIcon, SparklesIcon } from '../components/ui';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
-import { DescribeStep } from './DescribeStep';
-import { GenerateStep } from './GenerateStep';
-import { SummaryStep } from './SummaryStep';
+import { DescribeStep } from './describe_step';
+import { GenerateStep } from './generate_step';
+import { SummaryStep } from './summary_step';
 
 // 每一步能拿到的东西：当前内容 + 三个动作
 export interface StepContext {

@@ -1,4 +1,4 @@
-import { BlockEditor } from '../components/widgets/BlockEditor';
+import { BlockEditor } from '../components/widgets/block_editor';
 import { Field, Panel, TextInput } from '../components/ui';
 import { new_block } from '../lib/card';
 import { COPY } from '../lib/copy';

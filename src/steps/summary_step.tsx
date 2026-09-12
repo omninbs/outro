@@ -1,4 +1,4 @@
-import { MetaEditor } from '../components/widgets/MetaEditor';
+import { MetaEditor } from '../components/widgets/meta_editor';
 import { Field, Panel, TextInput } from '../components/ui';
 import { new_meta_item } from '../lib/card';
 import { COPY } from '../lib/copy';

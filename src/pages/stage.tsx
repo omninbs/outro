@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 
-import { OutroPage } from './OutroPage';
-import { PageShell } from './PageShell';
+import { OutroPage } from './outro_page';
+import { PageShell } from './page_shell';
 import type { OutputPreset } from '../lib/image';
 import type { CardData } from '../lib/types';
 

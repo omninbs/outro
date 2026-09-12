@@ -1,9 +1,9 @@
 import type { ComponentChildren } from 'preact';
 
 import { COPY } from '../lib/copy';
-import { Stepper, type StepDef } from '../components/widgets/Stepper';
+import { Stepper, type StepDef } from '../components/widgets/stepper';
 import { FADE } from '../components/ui';
-import { PageHeader } from './PageHeader';
+import { PageHeader } from './page_header';
 
 // 向导骨架：标题、步骤条、两栏；宽档右侧常驻清单，更窄的档单栏顺读
 export function WizardShell({

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 
-import { Stage } from '../pages/Stage';
+import { Stage } from '../pages/stage';
 import { Button, ConfirmButton, Panel } from '../components/ui';
 import { COPY } from '../lib/copy';
 import { OUTPUTS, save_image, type OutputPreset } from '../lib/image';

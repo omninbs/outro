@@ -1,5 +1,5 @@
 import { AddButton } from '../ui';
-import { KeyValueRow } from './KeyValueRow';
+import { KeyValueRow } from './key_value_row';
 
 // 一行元数据：本组件只认这个形状，内容层怎么定义与它无关
 interface Row {

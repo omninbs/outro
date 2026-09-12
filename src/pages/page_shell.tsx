@@ -1,7 +1,7 @@
 import type { ComponentChildren } from 'preact';
 
 import { page_container, type PageWidth } from '../lib/layout';
-import { PageFooter } from './PageFooter';
+import { PageFooter } from './page_footer';
 
 // 页面外壳：撑满一屏、上色、套容器、挂页脚；宽度归这里管，也是版面的量具
 export function PageShell({
