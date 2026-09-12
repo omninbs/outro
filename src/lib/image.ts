@@ -29,9 +29,8 @@ const SCALE = 2;
 const LIMIT = 2160;
 
 // 文件名拿标题当名字：存下来的图多半是照标题认的；标题空着就叫「结尾页」
-function file_name(title: string, suffix: string) {
-	return `${title.trim().replace(/[\\/:*?"<>|]/g, '').slice(0, 60) || '结尾页'}-${suffix}.png`;
-}
+const file_name = (title: string, suffix: string) =>
+	`${title.trim().replace(/[\\/:*?"<>|]/g, '').slice(0, 60) || '结尾页'}-${suffix}.png`;
 
 // 拍 preset 那一档：视口取卡片的尺寸，外壳按设计宽摆好再左移居中留下的那一段，不用裁。
 export async function save_image(card: HTMLElement, preset: OutputPreset, title: string) {

@@ -8,11 +8,9 @@ export const new_meta_item = (label = '', value = ''): MetaItem => ({ id: new_id
 export const new_block = (label = '', text = ''): TextBlock => ({ id: new_id('b'), label, text });
 
 // 按 id 改一条，返回新数组
-export function update_by_id<T extends { id: string }>(items: T[], id: string, patch: Partial<T>): T[] {
-	return items.map((item) => (item.id === id ? { ...item, ...patch } : item));
-}
+export const update_by_id = <T extends { id: string }>(items: T[], id: string, patch: Partial<T>): T[] =>
+	items.map((item) => (item.id === id ? { ...item, ...patch } : item));
 
 // 按 id 删一条，返回新数组
-export function remove_by_id<T extends { id: string }>(items: T[], id: string): T[] {
-	return items.filter((item) => item.id !== id);
-}
+export const remove_by_id = <T extends { id: string }>(items: T[], id: string): T[] =>
+	items.filter((item) => item.id !== id);

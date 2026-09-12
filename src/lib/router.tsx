@@ -3,9 +3,7 @@ import type { ComponentChildren } from 'preact';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
 // 地址就是一个名字：名字认得出哪一页由页面表说了算，路由自己不认识任何一页
-function read_name() {
-	return window.location.hash.slice(1).trim().toLowerCase();
-}
+const read_name = () => window.location.hash.slice(1).trim().toLowerCase();
 
 // 换一页就回到顶部：地址是自己改的还是链接、前进后退改的，都归这儿管
 const to_top = () => window.scrollTo(0, 0);
