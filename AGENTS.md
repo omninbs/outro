@@ -5,6 +5,7 @@ An outro-page generator: fill in a few fields and get a page that is ready to sc
 ## How to work
 
 - State the plan in Chinese before you start; report only conclusions, changed files, and validation results
+- Never edit `README.md`: it is the author's own file, not the AI's to touch
 - Batch tool calls when they can run in parallel; save tokens: skip reconciliation tests, probes, and online checks, and merge commands where possible; keep each command under 10s
 - Run the gate (see "Validation") after a change, then commit; when a tradeoff is unclear, ask first — do not re-argue a rejected direction
 
