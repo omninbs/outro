@@ -22,14 +22,12 @@ export function AddButton({
 	empty?: ComponentChildren;
 	children: ComponentChildren;
 }) {
+	const box = `${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
+		empty ? 'py-6' : 'py-2'
+    } ${HOVER}`;
+
 	return (
-		<button
-			type="button"
-			onClick={on_click}
-			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
-				empty ? 'py-6' : 'py-2'
-			} ${HOVER}`}
-		>
+		<button type="button" onClick={on_click} class={box}>
 			{empty && <span class="text-ctp-overlay0">{empty}</span>}
 			<span class="flex items-center gap-2">
 				<PlusIcon />
