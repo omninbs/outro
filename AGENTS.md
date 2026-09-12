@@ -62,7 +62,7 @@ Nothing under `components/` imports from `lib/`: a component's own shape is decl
 | box appearance, solid | `ui/inputs.tsx` |
 | box appearance, dashed, and the pieces built on it | `ui/dashed.tsx` |
 | motion | `ui/tokens.ts` |
-| fully clickable row | `ui/LinkList.tsx` |
+| fully clickable row | `ui/link_list.tsx` |
 | canvas geometry | `lib/frame.ts` |
 | index tables | `_registry.ts(x)` |
 
@@ -77,7 +77,7 @@ Nothing under `components/` imports from `lib/`: a component's own shape is decl
 **Behaviour**
 
 - Keep controls and the card separate: the final page has no controls, going back is by clicking anywhere, and actions live in the third wizard step.
-- Footer links are a navigation list (`ui/LinkList.tsx`): `nav > ul > li > a`, stacked tight, muted at rest, blue with an underline on hover; one heading level, one style, shared via `HEADING` in `tokens.ts`.
+- Footer links are a navigation list (`ui/link_list.tsx`): `nav > ul > li > a`, stacked tight, muted at rest, blue with an underline on hover; one heading level, one style, shared via `HEADING` in `tokens.ts`.
 | Back to the wizard: each step is its own page, content that has taken shape stops on the last step, reset goes back to the first step, and the step you were viewing is the address itself (one hash per step) — so refresh, history, and links from other pages all keep it. The four button variants differ only in color (40px outer height, 32px padding, 1px border), and dangerous actions rely on color and wording.
 - Home is not a route: it is where a hash that names no page lands (empty included), so `App` renders the page that name matches, or the home fallback, and leaving a page just clears the hash.
 
@@ -85,6 +85,16 @@ Nothing under `components/` imports from `lib/`: a component's own shape is decl
 
 - A question writes `into` (`meta` / `block` / `title` / `footer`) to say where the answer goes, and writes `build` only when it needs processing.
 - Finishing a survey lays the answered parts over `DEFAULT_CARD` rather than clearing it, so a title or footer that was asked but left empty becomes an empty string; empty metadata and text blocks are dropped.
+
+**Naming (Rust style)**
+
+| Kind | Case | Example |
+|---|---|---|
+| types, interfaces, components | UpperCamelCase | `CardData`, `MetaEditor` |
+| constants | SCREAMING_SNAKE_CASE | `DEFAULT_CARD`, `BARE_INPUT` |
+| everything we name ourselves — functions, variables, fields, props, files | snake_case | `resolve_outro`, `footer_text`, `on_click`, `page_shell.tsx` |
+
+Names that belong to the platform keep their own spelling: intrinsic-element props (`onClick` on a `<button>`, while our own prop is `on_click`), framework hooks (`useState`), browser APIs (`localStorage`), test matchers, Tailwind and Catppuccin classes, and the old-archive keys in `persist.ts`.
 
 **Style**
 
