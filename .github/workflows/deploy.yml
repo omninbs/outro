@@ -1,6 +1,4 @@
-# 由 GitHub 自己构建并发布 Pages：main 上每次推送都跑一次 build，把 dist/index.html 传上去。
-# 仓库里不存构建产物，dist 照旧留在 .gitignore 里。
-# 一次性设置：仓库 Settings → Pages → Source 选 "GitHub Actions"（不选的话 deploy 那步会报错）。
+# 由 GitHub 自己构建并发布 Pages：main 上每次推送都跑一次 build，把 dist 传上去；仓库里不存构建产物
 name: deploy
 
 on:

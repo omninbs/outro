@@ -4,7 +4,7 @@ import { DEFAULT_CARD } from '../src/lib/config';
 import { buildCard, buildFrom } from '../src/lib/survey/build';
 import type { Question, Survey } from '../src/lib/survey/types';
 
-/** 一份问卷：单测只关心题目与搬运方式，其余字段与内容无关 */
+// 一份问卷：单测只关心题目与搬运方式，其余字段与内容无关
 const surveyOf = (questions: Question[], build?: Survey['build']): Survey => ({
 	id: 'test',
 	title: '测试',

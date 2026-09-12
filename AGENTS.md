@@ -77,7 +77,7 @@ npm run typecheck && npm test && npm run build
 **Style**
 
 - One-line expressions in a module use `const` arrows, and anything needing a block uses a `function` declaration; components are always `function` — the same kind of thing does not switch style for convenience.
-- Identifiers, error and log messages, test titles, commit messages, and documentation (README, this file) are in English; comments are in Chinese and describe design intent only, never implementation, values, or class names; keep the notes on constants and props; migration anchors only recognize old archives.
+- Identifiers, error and log messages, test titles, commit messages, and documentation (README, this file) are in English; comments are Chinese and single-line, design intent only, never implementation, values, or class names; no comment inside JSX; migration anchors only recognize old archives.
 - Do not write custom CSS; the only exceptions are `.safe-area` and the `@custom-variant press` in `style.css`. Tailwind's scan sources are hardcoded in `style.css` as `source(none)` + `@source`, so adding a directory means adding a line.
 
 ## Responsive
@@ -98,11 +98,11 @@ npm run typecheck && npm test && npm run build
 | Topic | Rule |
 |---|---|
 | Where copy lives | UI copy always goes into `COPY` (`lib/copy.ts`), whole-sentence descriptions included; `surveys/*` is content data, and `DEFAULT_CARD` prefills and `persist.ts` old-archive literals are content truths and migration anchors, so they do not go in |
-| Category names | spell them out in full; options are common values rather than the full set; long single-choice keeps 「自定义」, and what you type yourself still reaches the outro page |
-| Long-answer options | whole paragraphs laid out vertically as full-width blocks, and tapping one fills the whole paragraph into the box; they are mutually exclusive, the box appears only after tapping 「自定义」, and × reverts |
-| No fallback copy | the title block including its rule, and the footer signature line, do not render; spacing on conditional rendering uses `gap`; there are only two placeholder hints (「不显示」and 「自己写」in the custom form); a prefill that is not shown is not written |
+| Category names | spell them out in full; options are common values rather than the full set; long single-choice keeps a custom option, and what you type yourself still reaches the outro page |
+| Long-answer options | whole paragraphs laid out vertically as full-width blocks, and tapping one fills the whole paragraph into the box; they are mutually exclusive, the box appears only after tapping the custom option, and × reverts |
+| No fallback copy | the title block including its rule, and the footer signature line, do not render; spacing on conditional rendering uses `gap`; there are only two placeholder hints (hide, and write-your-own in the custom form); a prefill that is not shown is not written |
 | Empty and long text | empty answers are dropped, and an empty list section shows a dashed hint (the hint carries only its inner padding, and on narrow screens the list padding is written on the branch that has content); nothing is truncated, and long text wraps |
-| No breakpoint wording | copy is not tailored to a breakpoint: do not write directions or imply structure (「右侧」, 「右上角」, 「第 N 步」all break), and point at positions with coarse wording that does not change per breakpoint |
+| No breakpoint wording | copy is not tailored to a breakpoint: do not write directions or imply structure (right side, top right, step N all break), and point at positions with coarse wording that does not change per breakpoint |
 
 ## Environment
 

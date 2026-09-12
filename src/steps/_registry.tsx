@@ -8,7 +8,7 @@ import { DescribeStep } from './DescribeStep';
 import { GenerateStep } from './GenerateStep';
 import { SummaryStep } from './SummaryStep';
 
-/** 每一步能拿到的东西：当前内容 + 三个动作 */
+// 每一步能拿到的东西：当前内容 + 三个动作
 export interface StepContext {
 	data: CardData;
 	patch: Patch;
@@ -17,12 +17,12 @@ export interface StepContext {
 }
 
 export interface StepEntry extends StepDef {
-	/** 中档及以下（没有旁边那条栏）把清单显示在这一步的末尾，作最后的确认 */
+	// 中档及以下（没有旁边那条栏）把清单显示在这一步的末尾，作最后的确认
 	listBelow?: boolean;
 	body: (ctx: StepContext) => ComponentChildren;
 }
 
-/** 步骤表：加一步只要在这里加一条，向导骨架和「上一步 / 下一步」都不用改 */
+// 步骤表：加一步只要在这里加一条，向导骨架和「上一步 / 下一步」都不用改
 export const STEPS: StepEntry[] = [
 	{
 		id: 'summary',
@@ -48,8 +48,8 @@ export const STEPS: StepEntry[] = [
 	},
 ];
 
-/** 每一步在地址里的名字：`step-` 前缀加步骤 id——地址与步骤表同源，不各写一份 */
+// 每一步在地址里的名字：`step-` 前缀加步骤 id——地址与步骤表同源
 export const stepRoute = (id: string) => `step-${id}`;
 
-/** 地址认的是哪一步；认不出返回 -1，步骤永远不以 -1 为下标 */
+// 地址认的是哪一步；认不出返回 -1，步骤永远不以 -1 为下标
 export const findStep = (name: string) => STEPS.findIndex((step) => stepRoute(step.id) === name);

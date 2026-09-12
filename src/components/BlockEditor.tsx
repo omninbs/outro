@@ -3,7 +3,7 @@ import { COPY } from '../lib/copy';
 import type { TextBlock } from '../lib/types';
 import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from './ui';
 
-/** 文本块编辑器：每块一条小标题（可留空）配一段正文 */
+// 文本块编辑器：每块一条小标题（可留空）配一段正文
 export function BlockEditor({
 	blocks,
 	onChange,
@@ -16,7 +16,6 @@ export function BlockEditor({
 			{blocks.length === 0 && <EmptyHint>{COPY.emptyBlocks}</EmptyHint>}
 
 			{blocks.map((block) => (
-				/* 窄屏跟别的整行一个待遇：横向贴边、去掉侧边描边，横向留白自己带一次 */
 				<div
 					key={block.id}
 					class={`${BOX} flex flex-col gap-1 p-2 narrow:rounded-none narrow:border-x-0 narrow:px-inset ${RISE}`}

@@ -6,10 +6,7 @@ import { PageHeader } from './PageHeader';
 import { QuestionInput } from './QuestionInput';
 import { Button, Panel, ActionRow } from './ui';
 
-/**
- * 问卷页：把一份问卷（数据）渲染成题面，答案就地攒着、交回调用方去搬成内容——这里只管答题。
- * 页面上因此没有清单：问卷是「带引导的填写」，填完回表单继续，预览在那边的清单里看就够。
- */
+// 问卷页：把一份问卷渲染成题面，答案就地攒着、交回调用方搬成内容
 export function SurveyPage({
 	survey,
 	onFinish,

@@ -3,7 +3,7 @@ import { DEFAULT_CARD } from './config';
 import { loadCard, saveCard } from './persist';
 import type { CardData, Patch } from './types';
 
-/** 内容状态：读写与旧版迁移都在 persist 里，这里只管状态与动作 */
+// 内容状态：读写与旧版迁移都在 persist 里，这里只管状态与动作
 export function useCard() {
 	const [data, setData] = useState<CardData>(loadCard);
 

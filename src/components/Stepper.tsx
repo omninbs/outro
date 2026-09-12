@@ -5,10 +5,7 @@ import { FADE, HOVER, CheckIcon } from './ui';
 export interface StepDef {
 	id: string;
 	label: string;
-	/**
-	 * 这一步在圆里的图标，由调用方按这一步「干什么」挑；走完的步骤换成勾，
-	 * 所以「第几步」靠位置读。要图形不要数字字符——字形由系统字体决定。
-	 */
+	// 这一步的图标由调用方挑，走完的步骤换成勾，靠位置读「第几步」
 	icon: ComponentType;
 }
 export function Stepper({
@@ -49,7 +46,6 @@ export function Stepper({
 							>
 								<Icon />
 							</span>
-							{/* 窄屏只留图标：名称会把这排东西挤到换行；出现与消失是淡的，不硬蹦 */}
 							<span class={`${active ? '' : 'narrow:hidden narrow:opacity-0'} ${FADE}`}>
 								{step.label}
 							</span>

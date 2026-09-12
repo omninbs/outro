@@ -7,16 +7,7 @@ import { CloseIcon, PlusIcon } from './icons';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
-/**
- * 四种变体的差别**只在颜色**：几何一律一致，描边粗细也算几何——一排按钮里不能有一个看着像
- * 另一种东西，所以危险动作只靠颜色与文案表达，不给某个变体单独加粗或放大。
- * 中性那颗的底色拿文字色兑出来、不用固定的色阶：固定色阶在亮色主题下比底色深、在暗色主题下
- * 比底色浅，做中性按钮总有一边发脏。
- */
-/**
- * 描边也算几何：带描边的那两款各减掉一像素的内边距，四款的外高才是同一个数。
- * 于是这里有两处「减一」，它们不是手调的数，是描边换来的。
- */
+// 四种变体只在颜色上不同：几何一致（描边宽度也算几何），带描边的两款各减一像素内边距，外高才相同
 const VARIANTS: Record<ButtonVariant, string> = {
 	primary: 'px-4 py-2 bg-ctp-mauve text-ctp-crust press:opacity-90',
 	ghost:
@@ -53,10 +44,7 @@ export function Button({
 	);
 }
 
-/**
- * 危险动作的二次确认：按钮自己翻成确认态（换颜色、换文案），再点一下才真执行，
- * 失焦或搁置一会儿就自动退回——不弹对话框，也就不打断手里的事。
- */
+// 危险动作的二次确认：按钮翻成确认态，再点一下才执行，失焦或超时自动退回
 export function ConfirmButton({
 	children,
 	confirmLabel,
@@ -66,7 +54,7 @@ export function ConfirmButton({
 	children: ComponentChildren;
 	confirmLabel: ComponentChildren;
 	onConfirm: () => void;
-	/** 确认态的窗口：太短来不及读，太长就成了挡路的模态；失焦与超时都退回 */
+	// 确认态的窗口：失焦与超时都退回
 	timeoutMs?: number;
 }) {
 	const [confirming, setConfirming] = useState(false);
@@ -91,7 +79,6 @@ export function ConfirmButton({
 			onBlur={() => setConfirming(false)}
 		>
 			{confirming ? confirmLabel : children}
-			{/* 按钮换了样子，念屏的人不一定听得到；状态变化交给 live region 说一句 */}
 			<span role="status" class="sr-only">
 				{confirming ? COPY.action.confirmHint : ''}
 			</span>
@@ -99,12 +86,12 @@ export function ConfirmButton({
 	);
 }
 
-/** 行尾的删除动作：图标由它自带，调用点只说「点它干什么」 */
+// 行尾的删除动作：图标由它自带
 export function IconButton({ label, onClick }: { label: string; onClick: () => void }) {
 	return (
 		<button
 			type="button"
-			// 图标没有文字，名字只能在这儿给；`title` 顺带把鼠标悬停时的提示也留上
+			// 图标没有文字，名字只能在这儿给
 			aria-label={label}
 			title={label}
 			onClick={onClick}
@@ -116,7 +103,7 @@ export function IconButton({ label, onClick }: { label: string; onClick: () => v
 	);
 }
 
-/** 列表末尾的添加动作：虚线框，窄档跟列表里的条目一个待遇（贴边、去侧边描边与圆角） */
+// 列表末尾的添加动作：虚线框，窄档跟列表条目一个待遇
 export function AddButton({ onClick, children }: { onClick: () => void; children: ComponentChildren }) {
 	return (
 		<button

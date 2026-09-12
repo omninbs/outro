@@ -3,7 +3,7 @@ import { Field, Panel, TextInput } from '../components/ui';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
 
-/** 描述：内容的尾部——文本块与页脚 */
+// 描述：内容的尾部——文本块与页脚
 export function DescribeStep({ data, patch }: { data: CardData; patch: Patch }) {
 	return (
 		<>

@@ -1,9 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-/**
- * 列表还空着时的虚线占位块：窄屏照样贴边、去侧边描边，只有里面的字留出那一次留白。
- * 它不带任何动效——出现与消失是整块列表的事，它自己身上没有会变的东西。
- */
+// 列表还空着时的虚线占位块：窄屏照样贴边，只有里面的字留出留白
 export function EmptyHint({ children }: { children: ComponentChildren }) {
 	return (
 		<p

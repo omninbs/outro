@@ -5,20 +5,12 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/ho
 import { STEPS, findStep, stepRoute } from '../steps/_registry';
 import { findSurvey } from '../surveys/_registry';
 
-/**
- * 视图状态：命中 `outro` 是预览页，命中某个步骤地址是编辑向导的那一步，
- * 命中某份入口是问卷页；其余——包括空 hash——统统落主页。
- *
- * 主页因此没有自己的地址：它是「认不出」的落点，不是一条写得出来的路由。
- *
- * 用 hash 而不是路径，是因为产物要被当文件直接打开：那样照样能刷新、能前进后退，
- * 路径路由在这里直接废掉。
- */
+// 视图状态：命中 outro 是预览页，命中步骤是向导那一步，命中问卷是问卷页，其余统统落主页。
 export type View = 'home' | 'edit' | 'survey' | 'outro';
 
 interface Route {
 	view: View;
-	/** 这一页在地址里的名字：向导是步骤地址，问卷是问卷 id */
+	// 这一页在地址里的名字：向导是步骤地址，问卷是问卷 id
 	id: string | null;
 }
 
@@ -34,11 +26,11 @@ function readRoute(): Route {
 	const survey = findSurvey(name);
 	if (survey) return { view: 'survey', id: survey.id };
 
-	// 空 hash 与认不出的名字一样，都只是「没有这一页」——主页是纯 fallback
+	// 空 hash 与认不出的名字一样：主页是纯 fallback
 	return { view: 'home', id: null };
 }
 
-/** 换一页就回到顶部：地址是自己改的（`navigate`）还是链接、前进后退改的，都归这儿管 */
+// 换一页就回到顶部：地址是自己改的还是链接、前进后退改的，都归这儿管
 const toTop = () => window.scrollTo(0, 0);
 
 function writeRoute(route: Route) {
@@ -52,13 +44,13 @@ function writeRoute(route: Route) {
 		return;
 	}
 
-	// 主页没有自己的地址，写回空值；空值同样走 fallback，回主页照旧
+	// 主页没有自己的地址，写回空值；空值同样走 fallback
 	window.location.hash = '';
 }
 
 type RouterValue = {
 	view: View;
-	/** 当前页面在地址里的名字，只有向导与问卷页用得上 */
+	// 当前页面在地址里的名字，只有向导与问卷页用得上
 	routeId: string | null;
 	navigate: (next: View, id?: string) => void;
 };
@@ -66,7 +58,7 @@ type RouterValue = {
 const RouterContext = createContext<RouterValue>({ view: 'home', routeId: null, navigate: () => {} });
 
 export function RouterProvider({ children }: { children: ComponentChildren }) {
-	// 地址本身就是状态：首屏从地址读一次，带着地址打开或刷新都落在同一页
+	// 地址本身就是状态：首屏从地址读一次，刷新也落在同一页
 	const [route, setRoute] = useState<Route>(readRoute);
 
 	// 之后由地址的变化同步回来——前进 / 后退、手改地址都算

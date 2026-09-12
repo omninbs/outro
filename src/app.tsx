@@ -14,18 +14,12 @@ import { findSurvey } from './surveys/_registry';
 import type { Answers, Survey } from './lib/survey/types';
 import { STEPS, findStep, stepRoute, type StepContext } from './steps/_registry';
 
-/**
- * 视图分派：地址里写着哪一页就渲染哪一页，四组页面各自把整页返回。
- * 没有「先渲染、再回头纠正地址」那一步——屏幕与地址于是永远在说同一件事。
- *
- * 向导走到哪一步同样由地址决定，这一层不再留步骤状态：「退回最后一步」于是只是跳一个地址。
- */
+// 视图分派：地址里写着哪一页就渲染哪一页，向导走到哪一步同样只由地址决定
 export function App() {
 	const { data, patch, reset } = useCard();
 	const { view, routeId, navigate } = useRouter();
 
-	// 「地址里的 id 认不出来」与「这份入口没有问题」是两种处境：前者没有页可看，
-	// 后者要的就是表单本身。所以这里一次算清，下面按它分派。
+	// 「认不出的 id」与「这份入口没问题」是两种处境，这里一次算清再分派
 	const survey = view === 'survey' && routeId ? findSurvey(routeId) : undefined;
 	const askable = !!survey && survey.questions.length > 0;
 	// 走到哪一步同样只看地址；认不出退回第一步，免得下标落到表外
@@ -102,7 +96,6 @@ export function App() {
 				onSelect={(index) => navigate('edit', stepRoute(STEPS[index].id))}
 				sideList={<FilledList data={data} />}
 			>
-				{/* 换一步就是换一个节点，于是新内容淡进来，而不是原地把字全换掉 */}
 				<div key={current.id} class={`flex flex-col gap-6 ${RISE}`}>
 					{current.body(ctx)}
 				</div>

@@ -3,7 +3,6 @@ import preact from '@preact/preset-vite';
 import tailwindcss from '@tailwindcss/vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 
-// https://vitejs.dev/config/
 export default defineConfig({
 	// 相对路径产物 + JS/CSS 全部内联：dist/index.html 可以直接双击用 file:// 打开
 	base: './',
