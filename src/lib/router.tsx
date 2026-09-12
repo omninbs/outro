@@ -8,7 +8,7 @@ import type { Survey } from './survey/types';
 
 // 写在地址里的页面：向导某一步、某份问卷、预览页；认不出地址就没有页面，主页是它的落点
 export type Page =
-	| { kind: 'edit'; step: number }
+	| { kind: 'wizard'; step: number }
 	| { kind: 'survey'; survey: Survey }
 	| { kind: 'outro' };
 
@@ -20,7 +20,7 @@ function readPage(): Page | null {
 
 	// 向导是一组页面：每一步一个地址，地址就是它在步骤表里的名字
 	const step = findStep(name);
-	if (step >= 0) return { kind: 'edit', step };
+	if (step >= 0) return { kind: 'wizard', step };
 
 	// 剩下的名字里，认得出的才是问卷
 	const survey = findSurvey(name);
@@ -44,7 +44,7 @@ function writePage(page: Page | null) {
 		return;
 	}
 
-	if (page.kind === 'edit') {
+	if (page.kind === 'wizard') {
 		window.location.hash = stepRoute(STEPS[page.step].id);
 		return;
 	}

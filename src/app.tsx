@@ -18,11 +18,11 @@ export function App() {
 	const { page, navigate } = useRouter();
 
 	// 回到向导只有一条原则：内容已经成型就停在最后一步——结尾页退回与问卷答完都是这样
-	const toLastStep = () => navigate({ kind: 'edit', step: STEPS.length - 1 });
+	const toLastStep = () => navigate({ kind: 'wizard', step: STEPS.length - 1 });
 	// 重置是唯一会丢内容的动作，所以只有它需要一道确认；清空后回第一步
 	const handleReset = () => {
 		reset();
-		navigate({ kind: 'edit', step: 0 });
+		navigate({ kind: 'wizard', step: 0 });
 	};
 	const finishSurvey = (from: Survey, answers: Answers) => {
 		patch(buildFrom(from, answers));
@@ -61,7 +61,7 @@ export function App() {
 	}
 
 	// 剩下的就是表单：向导某一步，以及没有问题的那份入口（它就是表单本身）
-	const step = page.kind === 'edit' ? page.step : 0;
+	const step = page.kind === 'wizard' ? page.step : 0;
 	const current = STEPS[step];
 	const ctx: StepContext = {
 		data,
@@ -75,7 +75,7 @@ export function App() {
 			<WizardShell
 				steps={STEPS}
 				current={step}
-				onSelect={(index) => navigate({ kind: 'edit', step: index })}
+				onSelect={(index) => navigate({ kind: 'wizard', step: index })}
 				sideList={<FilledList data={data} />}
 			>
 				<div key={current.id} class={`flex flex-col gap-6 ${RISE}`}>
@@ -92,14 +92,14 @@ export function App() {
 					{step === 0 ? (
 						<Button onClick={() => navigate(null)}>{COPY.action.backHome}</Button>
 					) : (
-						<Button onClick={() => navigate({ kind: 'edit', step: step - 1 })}>
+						<Button onClick={() => navigate({ kind: 'wizard', step: step - 1 })}>
 							{COPY.action.prev}
 						</Button>
 					)}
 					{step < STEPS.length - 1 && (
 						<Button
 							variant="primary"
-							onClick={() => navigate({ kind: 'edit', step: step + 1 })}
+							onClick={() => navigate({ kind: 'wizard', step: step + 1 })}
 						>
 							{COPY.action.next}
 						</Button>
