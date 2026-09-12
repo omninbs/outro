@@ -10,11 +10,6 @@ export const COPY = {
 	page: {
 		home: '选一种编辑向导',
 		wizard: '按步骤填写内容，最后生成结尾页',
-		// 地址里的问卷 id 认不出来时落在的这一页
-		missingSurvey: {
-			title: '没有这份问卷',
-			description: '地址里的问卷 id 认不出来，回首页重新选一份。',
-		},
 	},
 
 	// 三个步骤：步骤条、该步的面板标题、清单里的分组都取这里

@@ -4,84 +4,82 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/ho
 
 import { STEPS, findStep, stepRoute } from '../steps/_registry';
 import { findSurvey } from '../surveys/_registry';
+import type { Survey } from './survey/types';
 
-// 视图状态：命中 outro 是预览页，命中步骤是向导那一步，命中问卷是问卷页，其余统统落主页。
-export type View = 'home' | 'edit' | 'survey' | 'outro';
+// 写在地址里的页面：向导某一步、某份问卷、预览页；认不出地址就没有页面，主页是它的落点
+export type Page =
+	| { kind: 'edit'; step: number }
+	| { kind: 'survey'; survey: Survey }
+	| { kind: 'outro' };
 
-interface Route {
-	view: View;
-	// 这一页在地址里的名字：向导是步骤地址，问卷是问卷 id
-	id: string | null;
-}
-
-function readRoute(): Route {
+// 地址认得出的页面；认不出返回 null——主页不是一个地址，只是这个 null 的落点
+function readPage(): Page | null {
 	const name = window.location.hash.slice(1).trim().toLowerCase();
 
-	if (name === 'outro') return { view: 'outro', id: null };
+	if (name === 'outro') return { kind: 'outro' };
 
 	// 向导是一组页面：每一步一个地址，地址就是它在步骤表里的名字
-	if (findStep(name) >= 0) return { view: 'edit', id: name };
+	const step = findStep(name);
+	if (step >= 0) return { kind: 'edit', step };
 
 	// 剩下的名字里，认得出的才是问卷
 	const survey = findSurvey(name);
-	if (survey) return { view: 'survey', id: survey.id };
+	if (survey) return { kind: 'survey', survey };
 
-	// 空 hash 与认不出的名字一样：主页是纯 fallback
-	return { view: 'home', id: null };
+	return null;
 }
 
 // 换一页就回到顶部：地址是自己改的还是链接、前进后退改的，都归这儿管
 const toTop = () => window.scrollTo(0, 0);
 
-function writeRoute(route: Route) {
-	if (route.view === 'outro') {
+// null 表示没有页面：把地址清空，主页就是它落的地方
+function writePage(page: Page | null) {
+	if (!page) {
+		window.location.hash = '';
+		return;
+	}
+
+	if (page.kind === 'outro') {
 		window.location.hash = 'outro';
 		return;
 	}
 
-	if (route.view === 'edit' || route.view === 'survey') {
-		window.location.hash = route.id ?? stepRoute(STEPS[0].id);
+	if (page.kind === 'edit') {
+		window.location.hash = stepRoute(STEPS[page.step].id);
 		return;
 	}
 
-	// 主页没有自己的地址，写回空值；空值同样走 fallback
-	window.location.hash = '';
+	window.location.hash = page.survey.id;
 }
 
 type RouterValue = {
-	view: View;
-	// 当前页面在地址里的名字，只有向导与问卷页用得上
-	routeId: string | null;
-	navigate: (next: View, id?: string) => void;
+	page: Page | null;
+	navigate: (page: Page | null) => void;
 };
 
-const RouterContext = createContext<RouterValue>({ view: 'home', routeId: null, navigate: () => {} });
+const RouterContext = createContext<RouterValue>({ page: null, navigate: () => {} });
 
 export function RouterProvider({ children }: { children: ComponentChildren }) {
-	// 地址本身就是状态：首屏从地址读一次，刷新也落在同一页
-	const [route, setRoute] = useState<Route>(readRoute);
+	// 地址本身就是状态：首屏从地址读一次，带地址打开或刷新都落在同一页
+	const [page, setPage] = useState<Page | null>(readPage);
 
 	// 之后由地址的变化同步回来——前进 / 后退、手改地址都算
 	useEffect(() => {
 		const sync = () => {
-			setRoute(readRoute());
+			setPage(readPage());
 			toTop();
 		};
 		window.addEventListener('hashchange', sync);
 		return () => window.removeEventListener('hashchange', sync);
 	}, []);
 
-	const navigate = useCallback((next: View, id?: string) => {
-		const to: Route = { view: next, id: id ?? null };
-		setRoute(to); // 视图先行，不等事件绕回来，免得闪一下
-		writeRoute(to);
+	const navigate = useCallback((next: Page | null) => {
+		setPage(next); // 视图先行，不等事件绕回来，免得闪一下
+		writePage(next);
 		toTop();
 	}, []);
 
-	const value = useMemo(
-		() => ({ view: route.view, routeId: route.id, navigate }),
-		[route.view, route.id, navigate],
-	);
+	const value = useMemo(() => ({ page, navigate }), [page, navigate]);
 
 	return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
 }
