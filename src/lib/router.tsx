@@ -2,48 +2,55 @@ import { createContext } from 'preact';
 import type { ComponentChildren } from 'preact';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
+import { findSurvey } from '../surveys/_registry';
+
 /**
- * 视图状态：应用就四页——首页、表单、问卷、结尾页。
+ * 视图状态：命中 `outro` 是预览页；命中 `form` 这一组——表单本身，以及各份问卷——
+ * 是填写用的页面；都命中不到就落首页。
  *
  * 用 hash 而不是路径，是因为产物要被当文件直接打开：那样照样能刷新、能前进后退，
- * 路径路由在这里直接废掉。代价是入口名跟固定页的地址共用一个命名空间，不能撞名。
+ * 路径路由在这里直接废掉。
  */
-export type View = 'home' | 'form' | 'survey' | 'outro';
-
-const RESERVED = { form: 'form', outro: 'outro' } as const;
+export type View = 'home' | 'form' | 'outro';
 
 interface Route {
 	view: View;
-	/** 只有问卷用得上：就是 hash 本身 */
+	/** 只有 form 组里的问卷用得上：就是 hash 本身 */
 	id: string | null;
 }
 
 function readRoute(): Route {
 	const name = window.location.hash.slice(1).trim().toLowerCase();
 
-	if (name === RESERVED.form) return { view: 'form', id: null };
-	if (name === RESERVED.outro) return { view: 'outro', id: null };
-	if (!name) return { view: 'home', id: null };
+	if (name === 'outro') return { view: 'outro', id: null };
+	// form 是一组页面：表单本身没有 id，各份问卷的 id 就是它在地址里的名字
+	if (name === 'form') return { view: 'form', id: null };
+	if (name && findSurvey(name)) return { view: 'form', id: name };
 
-	return { view: 'survey', id: name };
+	return { view: 'home', id: null };
 }
 
 /** 换一页就回到顶部：地址是自己改的（`navigate`）还是链接、前进后退改的，都归这儿管 */
 const toTop = () => window.scrollTo(0, 0);
 
 function writeRoute(route: Route) {
-	// 回首页会在地址栏留下一个空 fragment；抹掉它得自己动 History API，不值当，留着
-	if (route.view === 'survey') {
-		window.location.hash = route.id ?? '';
+	if (route.view === 'outro') {
+		window.location.hash = 'outro';
 		return;
 	}
 
-	window.location.hash = route.view === 'home' ? '' : RESERVED[route.view];
+	if (route.view === 'form') {
+		window.location.hash = route.id ?? 'form';
+		return;
+	}
+
+	// 回首页会在地址栏留下一个空 fragment；抹掉它得自己动 History API，不值当，留着
+	window.location.hash = '';
 }
 
 type RouterValue = {
 	view: View;
-	/** 当前问卷 id，只在 view === 'survey' 时有值 */
+	/** 当前问卷 id，只在 form 组里的问卷页有值 */
 	surveyId: string | null;
 	navigate: (next: View, id?: string) => void;
 };
