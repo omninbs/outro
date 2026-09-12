@@ -7,29 +7,6 @@ import { HOVER } from './tokens';
 const DASHED =
 	'rounded-md border border-dashed border-ctp-surface1 narrow:rounded-none narrow:border-x-0 narrow:px-inset';
 
-// 虚框按钮的壳：铺一块虚框、竖排若干行，高度随行数走
-function DashedButton({
-	on_click,
-	tall,
-	children,
-}: {
-	on_click: () => void;
-	tall: boolean;
-	children: ComponentChildren;
-}) {
-	return (
-		<button
-			type="button"
-			onClick={on_click}
-			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
-				tall ? 'py-6' : 'py-2'
-			} ${HOVER}`}
-		>
-			{children}
-		</button>
-	);
-}
-
 // 空位的一种：只说明这一处还没有内容
 export function EmptyHint({ children }: { children: ComponentChildren }) {
 	return <p class={`${DASHED} px-3 py-4 text-center text-base text-ctp-overlay0`}>{children}</p>;
@@ -46,12 +23,18 @@ export function AddButton({
 	children: ComponentChildren;
 }) {
 	return (
-		<DashedButton on_click={on_click} tall={!!empty}>
+		<button
+			type="button"
+			onClick={on_click}
+			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
+				empty ? 'py-6' : 'py-2'
+			} ${HOVER}`}
+		>
 			{empty && <span class="text-ctp-overlay0">{empty}</span>}
 			<span class="flex items-center gap-2">
 				<PlusIcon />
 				{children}
 			</span>
-		</DashedButton>
+		</button>
 	);
 }
