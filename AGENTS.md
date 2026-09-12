@@ -69,7 +69,7 @@ npm run typecheck && npm test && npm run build
 - Keep controls and the card separate: the final page has no controls, going back is by clicking anywhere, and actions live in the third wizard step.
 - Footer links are a navigation list (`ui/LinkList.tsx`): `nav > ul > li > a`, stacked tight, muted at rest, blue with an underline on hover; one heading level, one style, shared via `HEADING` in `tokens.ts`.
 | Back to the wizard: each step is its own page, content that has taken shape stops on the last step, reset goes back to the first step, and the step you were viewing is the address itself (one hash per step) — so refresh, history, and links from other pages all keep it. The four button variants differ only in color (40px outer height, 32px padding, 1px border), and dangerous actions rely on color and wording.
-- Home is not a route: it is where a hash that names no page lands (empty included), so the router resolves a page or `null`, and leaving a page just clears the hash.
+- Home is not a route: it is where a hash that names no page lands (empty included), so `App` renders the page that name matches, or the home fallback, and leaving a page just clears the hash.
 
 **Survey data**
 

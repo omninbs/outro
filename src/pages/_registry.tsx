@@ -32,13 +32,10 @@ const surveyPage = (survey: Survey): Page => ({
 	render: (deps) => <SurveyScreen key={survey.id} survey={survey} deps={deps} />,
 });
 
-// 页面表：加一步、加一份问卷都只是加一条，路由不认识它们任何一类
+// 页面表：加一步、加一份问卷都只是加一条；谁能被地址认出来由 App 说了算
 export const PAGES: Page[] = [
 	OUTRO_PAGE,
 	...STEPS.map(stepPage),
 	// 没有问题的一份入口没有自己的页面，它指向的就是表单本身
 	...SURVEYS.filter((survey) => survey.questions.length > 0).map(surveyPage),
 ];
-
-// 认地址：名字对得上哪一页就是哪一页，对不上就没有页面
-export const findPage = (name: string) => PAGES.find((page) => page.name === name);
