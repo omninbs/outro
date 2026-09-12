@@ -99,7 +99,7 @@ export function QuestionInput({
 						}}
 						class={`${CUSTOM} ${long ? 'w-full px-3 py-2' : 'px-3 py-1.5'}`}
 					>
-						自定义
+						{COPY.action.custom}
 					</button>
 				</div>
 			)}

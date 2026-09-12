@@ -39,10 +39,7 @@ export function GenerateStep({
 
 	return (
 		<Panel title={COPY.step.generate}>
-			<p class="text-base leading-relaxed text-ctp-subtext0 narrow:px-inset">
-				点「预览」看到的就是成品本身，那一屏点哪儿都能回来；存图是下面那三颗，各存一档比例，三种比例各自
-				排版，内容四周都留着边距。
-			</p>
+			<p class="text-base leading-relaxed text-ctp-subtext0 narrow:px-inset">{COPY.hint.generate}</p>
 			{/*
 				两行是两件事：「看一眼」与「拿走一张」。行内紧、行间松，人才读得出这是两行——
 				两者一样紧时就黏成一片按钮，看着像六颗并列的动作。行与行的距离由外层一次给定，
@@ -76,7 +73,7 @@ export function GenerateStep({
 					))}
 				</div>
 			</div>
-			{failed && <p class="text-base text-ctp-red narrow:px-inset">存不下来，这个浏览器画不出图片。</p>}
+			{failed && <p class="text-base text-ctp-red narrow:px-inset">{COPY.hint.saveFailed}</p>}
 
 			{job && <Stage preset={job.preset} data={data} onCard={setCard} />}
 		</Panel>

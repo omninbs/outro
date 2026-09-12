@@ -20,7 +20,7 @@ export function PageFooter() {
 			>
 				<div class="flex flex-col gap-2 wide:flex-[7]">
 					<h2 class={HEADING}>{COPY.brand}</h2>
-					<p class={SUB_TEXT}>一个生成视频结尾信息页的小工具</p>
+					<p class={SUB_TEXT}>{COPY.tagline}</p>
 				</div>
 
 				<nav class="flex flex-col gap-2 wide:flex-[5]">

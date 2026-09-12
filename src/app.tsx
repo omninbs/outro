@@ -60,8 +60,8 @@ export function App() {
 		return (
 			<PageShell width="standard">
 				<PageHeader
-					title="没有这份问卷"
-					description="地址里的问卷 id 认不出来，回首页重新选一份。"
+					title={COPY.page.missingSurvey.title}
+					description={COPY.page.missingSurvey.description}
 				/>
 			</PageShell>
 		);

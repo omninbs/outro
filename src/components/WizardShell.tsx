@@ -25,10 +25,7 @@ export function WizardShell({
 }) {
 	return (
 		<div class="flex flex-col gap-6">
-			<PageHeader
-				title={COPY.brand}
-				description="按步骤填写内容，最后生成结尾页"
-			/>
+			<PageHeader title={COPY.brand} description={COPY.page.wizard} />
 
 			<Stepper steps={steps} current={current} onSelect={onSelect} />
 

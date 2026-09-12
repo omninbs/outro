@@ -1,3 +1,4 @@
+import { COPY } from './copy';
 import { frameOf } from './frame';
 
 /**
@@ -38,9 +39,9 @@ export interface OutputPreset {
  * 两档的差别只在画布比例与四周留白。
  */
 export const OUTPUTS: OutputPreset[] = [
-	{ viewport: 456, aspect: 2 / 3, suffix: '2x3', label: '竖版' },
-	{ viewport: 640, aspect: 1, suffix: '1x1', label: '方版' },
-	{ viewport: 1148, aspect: 3 / 2, suffix: '3x2', label: '横版' },
+	{ viewport: 456, aspect: 2 / 3, suffix: '2x3', label: COPY.output.portrait },
+	{ viewport: 640, aspect: 1, suffix: '1x1', label: COPY.output.square },
+	{ viewport: 1148, aspect: 3 / 2, suffix: '3x2', label: COPY.output.landscape },
 ];
 
 /**

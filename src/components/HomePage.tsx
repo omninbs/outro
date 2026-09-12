@@ -10,7 +10,7 @@ import { Panel, SUB_TEXT } from './ui';
 export function HomePage() {
 	return (
 		<div class="flex flex-col gap-6">
-			<PageHeader title={COPY.brand} description="选一种编辑向导" />
+			<PageHeader title={COPY.brand} description={COPY.page.home} />
 
 			<div class="flex flex-col gap-6">
 				{SURVEYS.map((survey) => (
