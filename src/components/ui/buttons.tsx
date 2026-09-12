@@ -118,7 +118,7 @@ export function AddButton({
 		<button
 			type="button"
 			onClick={onClick}
-			class={`${DASHED} flex w-full flex-col items-center justify-center gap-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
+			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
 				empty ? 'py-6' : 'py-2'
 			} ${HOVER}`}
 		>
