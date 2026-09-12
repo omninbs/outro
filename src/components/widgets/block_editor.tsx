@@ -17,7 +17,7 @@ export function BlockEditor({
 	blocks: Block[];
 	on_change: (blocks: Block[]) => void;
 	create: () => Block;
-	copy: { label: string; text: string; add: string };
+	copy: { label: string; text: string; empty: string; add: string };
 }) {
 	return (
 		<div class="flex flex-col gap-3">
@@ -55,7 +55,10 @@ export function BlockEditor({
 				</div>
 			))}
 
-			<AddButton is_empty={blocks.length === 0} on_click={() => on_change([...blocks, create()])}>
+			<AddButton
+				empty={blocks.length === 0 ? copy.empty : undefined}
+				on_click={() => on_change([...blocks, create()])}
+			>
 				{copy.add}
 			</AddButton>
 		</div>

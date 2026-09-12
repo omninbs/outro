@@ -26,6 +26,7 @@ export function SummaryStep({ data, patch }: { data: CardData; patch: Patch }) {
 					copy={{
 						label: COPY.field.meta_label,
 						value: COPY.field.meta_value,
+						empty: COPY.empty_meta,
 						add: COPY.action.add_meta,
 					}}
 				/>

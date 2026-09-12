@@ -18,7 +18,7 @@ export function MetaEditor({
 	items: Row[];
 	on_change: (items: Row[]) => void;
 	create: () => Row;
-	copy: { label: string; value: string; add: string };
+	copy: { label: string; value: string; empty: string; add: string };
 }) {
 	return (
 		<div class="flex flex-col gap-2">
@@ -39,7 +39,10 @@ export function MetaEditor({
 				/>
 			))}
 
-			<AddButton is_empty={items.length === 0} on_click={() => on_change([...items, create()])}>
+			<AddButton
+				empty={items.length === 0 ? copy.empty : undefined}
+				on_click={() => on_change([...items, create()])}
+			>
 				{copy.add}
 			</AddButton>
 		</div>
