@@ -1,9 +1,9 @@
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { COPY } from '../lib/copy';
-import type { Question } from '../lib/survey/types';
-import { Field, FADE, IconButton, HOVER, TextArea, TextInput } from './ui';
+import { COPY } from '../../lib/copy';
+import type { Question } from '../../lib/survey/types';
+import { Field, FADE, IconButton, HOVER, TextArea, TextInput } from '../ui';
 
 // 预设的选中外观：横排的词与竖排的段落共用一套
 const tone = (active: boolean) =>

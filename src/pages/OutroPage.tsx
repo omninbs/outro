@@ -4,7 +4,7 @@ import { useRef } from 'preact/hooks';
 import { COPY } from '../lib/copy';
 import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
-import { BLOCK_HEADING, SUB_TEXT } from './ui';
+import { BLOCK_HEADING, SUB_TEXT } from '../components/ui';
 
 // 页首：标题 + 一条短横线；标题空着就整块不渲染
 function OutroHeader({ title }: { title: string }) {

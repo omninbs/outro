@@ -1,4 +1,4 @@
-import { BlockEditor } from '../components/BlockEditor';
+import { BlockEditor } from '../components/widgets/BlockEditor';
 import { Field, Panel, TextInput } from '../components/ui';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';

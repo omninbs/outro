@@ -1,7 +1,7 @@
 import { SURVEYS } from '../surveys/_registry';
 import { COPY } from '../lib/copy';
 import { PageHeader } from './PageHeader';
-import { Panel, SUB_TEXT } from './ui';
+import { Panel, SUB_TEXT } from '../components/ui';
 
 // 首页：入口铺成一列卡片、整块可点；清单是数据，加一份不用碰这里
 export function HomePage() {

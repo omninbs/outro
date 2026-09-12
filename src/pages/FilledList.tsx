@@ -3,7 +3,7 @@ import type { ComponentChildren } from 'preact';
 import { COPY } from '../lib/copy';
 import { resolveOutro } from '../lib/outro';
 import type { CardData } from '../lib/types';
-import { BLOCK_HEADING, CARD_HEADING, Panel, SUB_TEXT, EmptyHint } from './ui';
+import { BLOCK_HEADING, CARD_HEADING, Panel, SUB_TEXT, EmptyHint } from '../components/ui';
 
 // 分组标题：每组上面一条细线，第一组也不例外，免得跟面板标题粘在一起
 function Group({ text, count, children }: { text: string; count: number; children: ComponentChildren }) {

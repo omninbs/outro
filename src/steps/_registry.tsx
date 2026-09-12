@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import type { StepDef } from '../components/Stepper';
+import type { StepDef } from '../components/widgets/Stepper';
 import { ListIcon, PenLineIcon, SparklesIcon } from '../components/ui';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';

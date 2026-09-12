@@ -43,6 +43,14 @@ npm run typecheck && npm test && npm run build
 - `grid` only for genuinely two-dimensional layout (currently just the metadata table), with the column template written explicitly; a `<label>` wraps exactly one control, and a group of options uses `<div role="group" aria-label>`.
 - Use icon components for UI symbols (`ui/icons.tsx` wraps `lucide-preact`), never font characters; draw separators and underlines with elements; install dependencies on demand, and do not copy a trimmed-down version.
 
+**Where a component lives**
+
+| Layer | What it holds |
+|---|---|
+| `components/ui/` | primitives: stateless, no domain knowledge, one visual element or control |
+| `components/widgets/` | composites: `ui` pieces wired together, with interaction or internal state, still reusable elsewhere |
+| `pages/` | pages and the shells that serve only this app: flow, copy, or framing that means nothing outside it |
+
 **One definition per piece of knowledge (comments included)**
 
 | Knowledge | Home |

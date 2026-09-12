@@ -1,6 +1,6 @@
 import { COPY } from '../lib/copy';
 import { FOOTER_MIN_HEIGHT, footerContainer } from '../lib/layout';
-import { LinkList, SUB_TEXT, HEADING } from './ui';
+import { LinkList, SUB_TEXT, HEADING } from '../components/ui';
 
 // 页脚「链接」里那条外链指向的仓库
 const REPO_URL = 'https://github.com/omninbs/outro';

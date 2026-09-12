@@ -2,9 +2,9 @@ import { useState } from 'preact/hooks';
 
 import { COPY } from '../lib/copy';
 import type { Answers, Survey } from '../lib/survey/types';
+import { QuestionInput } from '../components/widgets/QuestionInput';
+import { Button, Panel, ActionRow } from '../components/ui';
 import { PageHeader } from './PageHeader';
-import { QuestionInput } from './QuestionInput';
-import { Button, Panel, ActionRow } from './ui';
 
 // 问卷页：把一份问卷渲染成题面，答案就地攒着、交回调用方搬成内容
 export function SurveyPage({

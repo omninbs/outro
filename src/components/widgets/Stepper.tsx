@@ -1,6 +1,6 @@
 import type { ComponentType } from 'preact';
 
-import { FADE, HOVER, CheckIcon } from './ui';
+import { FADE, HOVER, CheckIcon } from '../ui';
 
 export interface StepDef {
 	id: string;

@@ -1,9 +1,9 @@
-import { OutroPage } from './components/OutroPage';
-import { FilledList } from './components/FilledList';
-import { HomePage } from './components/HomePage';
-import { PageShell } from './components/PageShell';
-import { SurveyPage } from './components/SurveyPage';
-import { WizardShell } from './components/WizardShell';
+import { OutroPage } from './pages/OutroPage';
+import { FilledList } from './pages/FilledList';
+import { HomePage } from './pages/HomePage';
+import { PageShell } from './pages/PageShell';
+import { SurveyPage } from './pages/SurveyPage';
+import { WizardShell } from './pages/WizardShell';
 import { Button, ActionRow, RISE } from './components/ui';
 import { COPY } from './lib/copy';
 import { useRouter } from './lib/router';

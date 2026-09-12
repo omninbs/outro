@@ -1,4 +1,4 @@
-import { HEADING } from './ui';
+import { HEADING } from '../components/ui';
 
 // 页面标题块：一个标题 + 一句说明，几个页面共用这一套
 export function PageHeader({ title, description }: { title: string; description: string }) {

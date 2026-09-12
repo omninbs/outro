@@ -1,7 +1,7 @@
-import { newBlock, removeById, updateById } from '../lib/card';
-import { COPY } from '../lib/copy';
-import type { TextBlock } from '../lib/types';
-import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from './ui';
+import { newBlock, removeById, updateById } from '../../lib/card';
+import { COPY } from '../../lib/copy';
+import type { TextBlock } from '../../lib/types';
+import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from '../ui';
 
 // 文本块编辑器：每块一条小标题（可留空）配一段正文
 export function BlockEditor({

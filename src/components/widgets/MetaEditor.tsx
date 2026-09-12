@@ -1,7 +1,7 @@
-import { newMetaItem, removeById, updateById } from '../lib/card';
-import { COPY } from '../lib/copy';
-import type { MetaItem } from '../lib/types';
-import { AddButton, BARE_INPUT, BareRow, EmptyHint, IconButton } from './ui';
+import { newMetaItem, removeById, updateById } from '../../lib/card';
+import { COPY } from '../../lib/copy';
+import type { MetaItem } from '../../lib/types';
+import { AddButton, BARE_INPUT, BareRow, EmptyHint, IconButton } from '../ui';
 
 // 元数据编辑器：一条一行「名称 + 内容」，名称就是最终页那条的标签
 export function MetaEditor({

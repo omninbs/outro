@@ -1,4 +1,4 @@
-import { MetaEditor } from '../components/MetaEditor';
+import { MetaEditor } from '../components/widgets/MetaEditor';
 import { Field, Panel, TextInput } from '../components/ui';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
