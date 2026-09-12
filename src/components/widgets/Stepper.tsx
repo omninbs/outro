@@ -11,11 +11,11 @@ export interface StepDef {
 export function Stepper({
 	steps,
 	current,
-	onSelect,
+	on_select,
 }: {
 	steps: StepDef[];
 	current: number;
-	onSelect: (index: number) => void;
+	on_select: (index: number) => void;
 }) {
 	return (
 		<ol class="flex flex-wrap items-center gap-x-2 gap-y-2 narrow:px-inset">
@@ -28,7 +28,7 @@ export function Stepper({
 						<button
 							type="button"
 							aria-current={active ? 'step' : undefined}
-							onClick={() => onSelect(index)}
+							onClick={() => on_select(index)}
 							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${HOVER} ${
 								active
 									? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'

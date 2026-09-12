@@ -1,5 +1,5 @@
 import { DEFAULT_CARD } from './config';
-import { newId } from './id';
+import { new_id } from './id';
 import type { CardData, MetaItem, TextBlock } from './types';
 
 const STORAGE_KEY = 'outro.card.v2';
@@ -22,7 +22,7 @@ const LEGACY_DEFAULT_FOOTER = '底部一行字';
 const str = (value: unknown, fallback = '') => (typeof value === 'string' ? value : fallback);
 
 // 旧档把默认文案直接预填进了框里，迁移时那等于「没填」
-const dropDefault = (value: string, fallback: string) => (value.trim() === fallback ? '' : value);
+const drop_default = (value: string, fallback: string) => (value.trim() === fallback ? '' : value);
 
 // 存档里的一列：形状对不上的整条丢掉
 function rows(value: unknown): Record<string, unknown>[] {
@@ -31,32 +31,32 @@ function rows(value: unknown): Record<string, unknown>[] {
 		: [];
 }
 
-// 存档的顶层：解析结果不是对象时按空档读；JSON 本身坏掉仍抛，由 loadCard 兜。
-function archiveOf(raw: string): Record<string, unknown> {
+// 存档的顶层：解析结果不是对象时按空档读；JSON 本身坏掉仍抛，由 load_card 兜。
+function archive_of(raw: string): Record<string, unknown> {
 	const parsed: unknown = JSON.parse(raw);
 	if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
 
 	return parsed as Record<string, unknown>;
 }
 
-const asMeta = (value: unknown): MetaItem[] =>
-	rows(value).map((row) => ({ id: str(row.id) || newId('m'), label: str(row.label), value: str(row.value) }));
+const as_meta = (value: unknown): MetaItem[] =>
+	rows(value).map((row) => ({ id: str(row.id) || new_id('m'), label: str(row.label), value: str(row.value) }));
 
-const asBlocks = (value: unknown): TextBlock[] =>
-	rows(value).map((row) => ({ id: str(row.id) || newId('b'), label: str(row.label), text: str(row.text) }));
+const as_blocks = (value: unknown): TextBlock[] =>
+	rows(value).map((row) => ({ id: str(row.id) || new_id('b'), label: str(row.label), text: str(row.text) }));
 
 // 存档 JSON → 当前结构，顺带兼容旧写法；纯函数，迁移可以单独试
-export function parseCard(raw: string): CardData {
-	const old = archiveOf(raw);
+export function parse_card(raw: string): CardData {
+	const old = archive_of(raw);
 
-	const meta = asMeta(Array.isArray(old.meta) ? old.meta : Array.isArray(old.fields) ? old.fields : DEFAULT_CARD.meta);
+	const meta = as_meta(Array.isArray(old.meta) ? old.meta : Array.isArray(old.fields) ? old.fields : DEFAULT_CARD.meta);
 
 	const blocks: TextBlock[] = Array.isArray(old.blocks)
-		? asBlocks(old.blocks)
+		? as_blocks(old.blocks)
 		: str(old.notice).trim()
 			? [
 					{
-						id: newId('b'),
+						id: new_id('b'),
 						label: str(old.noticeLabel, LEGACY_NOTICE_LABEL),
 						text: str(old.notice),
 					},
@@ -67,24 +67,24 @@ export function parseCard(raw: string): CardData {
 		title: str(old.title),
 		meta,
 		blocks,
-		footerText: str(old.footerText),
+		footer_text: str(old.footer_text ?? old.footerText),
 	};
 }
 
 // 读存档：当前版本优先，其次旧版本，都没有才起一份全新的
-export function loadCard(): CardData {
+export function load_card(): CardData {
 	try {
 		const current = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(OLD_CURRENT_KEY);
-		if (current) return parseCard(current);
+		if (current) return parse_card(current);
 
 		const legacy = localStorage.getItem(LEGACY_KEY) ?? localStorage.getItem(OLD_LEGACY_KEY);
 		if (!legacy) return structuredClone(DEFAULT_CARD);
 
-		const card = parseCard(legacy);
+		const card = parse_card(legacy);
 		return {
 			...card,
-			title: dropDefault(card.title, LEGACY_DEFAULT_TITLE),
-			footerText: dropDefault(card.footerText, LEGACY_DEFAULT_FOOTER),
+			title: drop_default(card.title, LEGACY_DEFAULT_TITLE),
+			footer_text: drop_default(card.footer_text, LEGACY_DEFAULT_FOOTER),
 			blocks: card.blocks.filter(
 				(block) =>
 					!(
@@ -99,7 +99,7 @@ export function loadCard(): CardData {
 }
 
 // 写存档：存不上（比如隐私模式）也不该影响这一轮编辑
-export function saveCard(data: CardData): void {
+export function save_card(data: CardData): void {
 	try {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 	} catch {

@@ -9,21 +9,21 @@ import { PageHeader } from './PageHeader';
 export function WizardShell({
 	steps,
 	current,
-	onSelect,
-	sideList,
+	on_select,
+	side_list,
 	children,
 }: {
 	steps: StepDef[];
 	current: number;
-	onSelect: (index: number) => void;
-	sideList: ComponentChildren;
+	on_select: (index: number) => void;
+	side_list: ComponentChildren;
 	children: ComponentChildren;
 }) {
 	return (
 		<div class="flex flex-col gap-6">
 			<PageHeader title={COPY.brand} description={COPY.page.wizard} />
 
-			<Stepper steps={steps} current={current} onSelect={onSelect} />
+			<Stepper steps={steps} current={current} on_select={on_select} />
 
 			<div class="flex flex-col gap-6 wide:flex-row wide:items-start">
 				<div class="flex min-w-0 flex-col gap-6 wide:flex-[1]">{children}</div>
@@ -31,7 +31,7 @@ export function WizardShell({
 				<div
 					class={`hidden min-w-0 opacity-0 wide:sticky wide:top-12 wide:block wide:flex-[1.1] wide:opacity-100 wide:starting:opacity-0 ${FADE}`}
 				>
-					{sideList}
+					{side_list}
 				</div>
 			</div>
 		</div>

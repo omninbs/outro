@@ -4,36 +4,36 @@ import { BARE_INPUT, BareRow, IconButton } from '../ui';
 export function KeyValueRow({
 	label,
 	value,
-	labelPlaceholder,
-	valuePlaceholder,
-	onLabelChange,
-	onValueChange,
-	onRemove,
+	label_placeholder,
+	value_placeholder,
+	on_label_change,
+	on_value_change,
+	on_remove,
 }: {
 	label: string;
 	value: string;
-	labelPlaceholder: string;
-	valuePlaceholder: string;
-	onLabelChange: (label: string) => void;
-	onValueChange: (value: string) => void;
-	onRemove: () => void;
+	label_placeholder: string;
+	value_placeholder: string;
+	on_label_change: (label: string) => void;
+	on_value_change: (value: string) => void;
+	on_remove: () => void;
 }) {
 	return (
-		<BareRow action={<IconButton label="删除" onClick={onRemove} />}>
+		<BareRow action={<IconButton label="删除" on_click={on_remove} />}>
 			<div class="flex min-w-0 flex-1 items-center gap-2 narrow:flex-col narrow:items-stretch">
 				<input
 					type="text"
 					value={label}
-					placeholder={labelPlaceholder}
+					placeholder={label_placeholder}
 					class={`w-36 shrink-0 font-medium text-ctp-mauve narrow:w-full ${BARE_INPUT}`}
-					onInput={(e) => onLabelChange(e.currentTarget.value)}
+					onInput={(e) => on_label_change(e.currentTarget.value)}
 				/>
 				<input
 					type="text"
 					value={value}
-					placeholder={valuePlaceholder}
+					placeholder={value_placeholder}
 					class={`min-w-0 flex-1 text-ctp-text narrow:w-full narrow:flex-none ${BARE_INPUT}`}
-					onInput={(e) => onValueChange(e.currentTarget.value)}
+					onInput={(e) => on_value_change(e.currentTarget.value)}
 				/>
 			</div>
 		</BareRow>

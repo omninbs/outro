@@ -4,7 +4,7 @@
 const MARGIN = 1 / 4;
 
 // 画布定法：先按留白撑开那一块，再把短的一条撑到长宽比上，留白是下限不是定数。
-export function frameOf(aspect: number, box: { width: number; height: number }) {
+export function frame_of(aspect: number, box: { width: number; height: number }) {
 	const spread = 2 * MARGIN * Math.max(box.width, box.height);
 	const wide = box.width + spread;
 	const high = box.height + spread;

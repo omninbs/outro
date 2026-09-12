@@ -33,31 +33,31 @@ export const COPY = {
 	field: {
 		// 面板标题已经写着「标题」，这一栏的标签就得自己说清是哪一个标题
 		title: '页面标题',
-		footerText: '页脚文字',
-		metaLabel: '名称',
-		metaValue: '填写内容',
-		blockLabel: '小标题（可留空）',
-		blockText: '正文',
+		footer_text: '页脚文字',
+		meta_label: '名称',
+		meta_value: '填写内容',
+		block_label: '小标题（可留空）',
+		block_text: '正文',
 	},
 
 	// 动作名：按钮上的字
 	action: {
-		addMeta: '添加元数据',
-		addBlock: '添加文本块',
+		add_meta: '添加元数据',
+		add_block: '添加文本块',
 		preview: '预览',
 		// 最终页那一屏整块可点，这个动作名只在无障碍里念得出来
-		backToEdit: '返回编辑',
+		back_to_edit: '返回编辑',
 		// 三颗存图按钮共用它：按钮挤在一行里，动作名得短；后面接的是那一档的名字
 		save: '保存',
 		reset: '重置',
-		confirmReset: '确认重置',
+		confirm_reset: '确认重置',
 		// 问卷答完，把答案搬进内容
 		finish: '完成',
 		prev: '上一步',
 		next: '下一步',
 		// 页脚那条外链的名字
 		source: '源代码',
-		backHome: '返回主页',
+		back_home: '返回主页',
 	},
 
 	// 三档成品的名字：存图按钮上接在「保存」后面，认的是哪一档
@@ -72,7 +72,7 @@ export const COPY = {
 		generate:
 			'点「预览」看到的就是成品本身，那一屏点哪儿都能回来；' +
 			'存图是下面那三颗，各存一档比例，三种比例各自排版，内容四周都留着边距。',
-		saveFailed: '存不下来，这个浏览器画不出图片。',
+		save_failed: '存不下来，这个浏览器画不出图片。',
 	},
 
 	// 占位提示：留空就是不印出来，不是兜底文案

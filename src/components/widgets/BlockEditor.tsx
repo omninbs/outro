@@ -10,12 +10,12 @@ interface Block {
 // 文本块编辑器：每块一条小标题（可留空）配一段正文
 export function BlockEditor({
 	blocks,
-	onChange,
+	on_change,
 	create,
 	copy,
 }: {
 	blocks: Block[];
-	onChange: (blocks: Block[]) => void;
+	on_change: (blocks: Block[]) => void;
 	create: () => Block;
 	copy: { label: string; text: string; add: string };
 }) {
@@ -33,7 +33,7 @@ export function BlockEditor({
 							placeholder={copy.label}
 							class={`min-w-0 flex-1 font-medium text-ctp-mauve ${BARE_INPUT}`}
 							onInput={(e) =>
-								onChange(
+								on_change(
 									blocks.map((it) =>
 										it.id === block.id ? { ...it, label: e.currentTarget.value } : it,
 									),
@@ -42,20 +42,20 @@ export function BlockEditor({
 						/>
 						<IconButton
 							label="删除"
-							onClick={() => onChange(blocks.filter((it) => it.id !== block.id))}
+							on_click={() => on_change(blocks.filter((it) => it.id !== block.id))}
 						/>
 					</div>
 					<BareTextArea
 						value={block.text}
 						placeholder={copy.text}
-						onInput={(text) =>
-							onChange(blocks.map((it) => (it.id === block.id ? { ...it, text } : it)))
+						on_input={(text) =>
+							on_change(blocks.map((it) => (it.id === block.id ? { ...it, text } : it)))
 						}
 					/>
 				</div>
 			))}
 
-			<AddButton is_empty={blocks.length === 0} onClick={() => onChange([...blocks, create()])}>
+			<AddButton is_empty={blocks.length === 0} on_click={() => on_change([...blocks, create()])}>
 				{copy.add}
 			</AddButton>
 		</div>

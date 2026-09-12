@@ -6,15 +6,15 @@ import { SurveyPage } from './pages/SurveyPage';
 import { WizardShell } from './pages/WizardShell';
 import { Button, ActionRow, RISE } from './components/ui';
 import { COPY } from './lib/copy';
-import { useRouter } from './lib/router';
-import { useCard } from './lib/store';
-import { buildFrom } from './lib/survey/build';
+import { use_router } from './lib/router';
+import { use_card } from './lib/store';
+import { build_from } from './lib/survey/build';
 import type { Answers, Survey } from './lib/survey/types';
 import {
 	STEPS,
-	firstStepName,
-	lastStepName,
-	stepRoute,
+	first_step_name,
+	last_step_name,
+	step_route,
 	type StepContext,
 	type StepEntry,
 } from './steps/_registry';
@@ -22,10 +22,10 @@ import { SURVEYS } from './surveys/_registry';
 
 // 路由只在这里发生：hash 是哪个名字就渲染哪一页，认不出（含空）就是主页
 export function App() {
-	const { name } = useRouter();
+	const { name } = use_router();
 
 	// 逐类认地址：预览页、步骤、问卷依次认，都不命中才是主页
-	const step = STEPS.find((step) => stepRoute(step.id) === name);
+	const step = STEPS.find((step) => step_route(step.id) === name);
 	const survey = SURVEYS.find((survey) => survey.id === name);
 
 	return name === 'outro' ? (
@@ -41,17 +41,17 @@ export function App() {
 
 // 向导页：一步一页
 function WizardView({ step }: { step: StepEntry }) {
-	const { navigate } = useRouter();
-	const { data, patch, reset } = useCard();
+	const { navigate } = use_router();
+	const { data, patch, reset } = use_card();
 	const index = STEPS.indexOf(step);
 	const ctx: StepContext = {
 		data,
 		patch,
-		onReset: () => {
+		on_reset: () => {
 			reset();
-			navigate(firstStepName());
+			navigate(first_step_name());
 		},
-		onPreview: () => navigate('outro'),
+		on_preview: () => navigate('outro'),
 	};
 
 	return (
@@ -59,14 +59,14 @@ function WizardView({ step }: { step: StepEntry }) {
 			<WizardShell
 				steps={STEPS}
 				current={index}
-				onSelect={(at) => navigate(stepRoute(STEPS[at].id))}
-				sideList={<FilledList data={data} />}
+				on_select={(at) => navigate(step_route(STEPS[at].id))}
+				side_list={<FilledList data={data} />}
 			>
 				<div key={step.id} class={`flex flex-col gap-6 ${RISE}`}>
 					{step.body(ctx)}
 				</div>
 
-				{step.listBelow && (
+				{step.list_below && (
 					<div class="wide:hidden">
 						<FilledList data={data} />
 					</div>
@@ -80,18 +80,18 @@ function WizardView({ step }: { step: StepEntry }) {
 
 // 向导底部那排动作：第一步只回主页，中间加「上一步」，最后一步没有「下一步」
 function WizardNav({ index }: { index: number }) {
-	const { navigate } = useRouter();
+	const { navigate } = use_router();
 	return (
 		<ActionRow>
 			{index === 0 ? (
-				<Button onClick={() => navigate(null)}>{COPY.action.backHome}</Button>
+				<Button on_click={() => navigate(null)}>{COPY.action.back_home}</Button>
 			) : (
-				<Button onClick={() => navigate(stepRoute(STEPS[index - 1].id))}>
+				<Button on_click={() => navigate(step_route(STEPS[index - 1].id))}>
 					{COPY.action.prev}
 				</Button>
 			)}
 			{index < STEPS.length - 1 && (
-				<Button variant="primary" onClick={() => navigate(stepRoute(STEPS[index + 1].id))}>
+				<Button variant="primary" on_click={() => navigate(step_route(STEPS[index + 1].id))}>
 					{COPY.action.next}
 				</Button>
 			)}
@@ -101,11 +101,11 @@ function WizardNav({ index }: { index: number }) {
 
 // 问卷页：一份问卷一页；换一份就是另一份答卷，换 key 让它重建
 function SurveyView({ survey }: { survey: Survey }) {
-	const { navigate } = useRouter();
-	const { patch } = useCard();
+	const { navigate } = use_router();
+	const { patch } = use_card();
 	const finish = (answers: Answers) => {
-		patch(buildFrom(survey, answers));
-		navigate(lastStepName());
+		patch(build_from(survey, answers));
+		navigate(last_step_name());
 	};
 
 	return (
@@ -113,8 +113,8 @@ function SurveyView({ survey }: { survey: Survey }) {
 			<SurveyPage
 				key={survey.id}
 				survey={survey}
-				onFinish={finish}
-				onExit={() => navigate(null)}
+				on_finish={finish}
+				on_exit={() => navigate(null)}
 			/>
 		</PageShell>
 	);
@@ -122,11 +122,11 @@ function SurveyView({ survey }: { survey: Survey }) {
 
 // 预览页：拿去截图的那一屏，点任意处退回向导最后一步
 function OutroView() {
-	const { navigate } = useRouter();
-	const { data } = useCard();
+	const { navigate } = use_router();
+	const { data } = use_card();
 	return (
 		<PageShell theme="latte" width={null} footer={false}>
-			<OutroPage data={data} onExit={() => navigate(lastStepName())} />
+			<OutroPage data={data} on_exit={() => navigate(last_step_name())} />
 		</PageShell>
 	);
 }

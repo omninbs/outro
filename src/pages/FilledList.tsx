@@ -1,7 +1,7 @@
 import type { ComponentChildren } from 'preact';
 
 import { COPY } from '../lib/copy';
-import { resolveOutro } from '../lib/outro';
+import { resolve_outro } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { BLOCK_HEADING, CARD_HEADING, Panel, SUB_TEXT, EmptyHint } from '../components/ui';
 
@@ -28,9 +28,9 @@ function Row({ label, value }: { label: string; value: string }) {
 	);
 }
 
-// 清单：按填写步骤分三组，内容取自最终页（resolveOutro）；哪组空着就放虚线提示
+// 清单：按填写步骤分三组，内容取自最终页（resolve_outro）；哪组空着就放虚线提示
 export function FilledList({ data }: { data: CardData }) {
-	const { title, meta, blocks, footer } = resolveOutro(data);
+	const { title, meta, blocks, footer } = resolve_outro(data);
 
 	return (
 		<Panel title={COPY.section.list}>

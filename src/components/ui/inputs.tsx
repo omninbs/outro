@@ -25,12 +25,12 @@ export function BareRow({ children, action }: { children: ComponentChildren; act
 // 单行输入：框的一种填法，带 × 的自定义框只是多一个行尾动作，两者同高
 export function TextInput({
 	value,
-	onInput,
+	on_input,
 	placeholder,
 	action,
 }: {
 	value: string;
-	onInput: (value: string) => void;
+	on_input: (value: string) => void;
 	placeholder?: string;
 	// 行尾的动作，比如退回选项的 ×
 	action?: ComponentChildren;
@@ -42,7 +42,7 @@ export function TextInput({
 				value={value}
 				placeholder={placeholder}
 				class={`min-w-0 flex-1 text-ctp-text ${BARE_INPUT}`}
-				onInput={(e) => onInput(e.currentTarget.value)}
+				onInput={(e) => on_input(e.currentTarget.value)}
 			/>
 		</BareRow>
 	);
@@ -54,11 +54,11 @@ const TEXTAREA_ROWS = 3;
 // 裸的多行框：自己不套框，套成一行还是一列由用处定
 export function BareTextArea({
 	value,
-	onInput,
+	on_input,
 	placeholder,
 }: {
 	value: string;
-	onInput: (value: string) => void;
+	on_input: (value: string) => void;
 	placeholder?: string;
 }) {
 	return (
@@ -67,7 +67,7 @@ export function BareTextArea({
 			rows={TEXTAREA_ROWS}
 			placeholder={placeholder}
 			class={`w-full resize-y leading-relaxed text-ctp-text ${BARE_INPUT}`}
-			onInput={(e) => onInput(e.currentTarget.value)}
+			onInput={(e) => on_input(e.currentTarget.value)}
 		/>
 	);
 }
@@ -78,7 +78,7 @@ export function TextArea({
 	...props
 }: {
 	value: string;
-	onInput: (value: string) => void;
+	on_input: (value: string) => void;
 	placeholder?: string;
 	// 行尾的动作，比如退回选项的 ×
 	action?: ComponentChildren;

@@ -5,5 +5,5 @@ export const DEFAULT_CARD: CardData = {
 	title: '',
 	meta: [],
 	blocks: [],
-	footerText: '由 omninbs/outro 生成',
+	footer_text: '由 omninbs/outro 生成',
 };

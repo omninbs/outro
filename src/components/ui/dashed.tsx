@@ -9,18 +9,18 @@ const DASHED =
 
 // 虚框按钮的壳：铺一块虚框、竖排若干行，高度随行数走
 function DashedButton({
-	onClick,
+	on_click,
 	tall,
 	children,
 }: {
-	onClick: () => void;
+	on_click: () => void;
 	tall: boolean;
 	children: ComponentChildren;
 }) {
 	return (
 		<button
 			type="button"
-			onClick={onClick}
+			onClick={on_click}
 			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
 				tall ? 'py-6' : 'py-2'
 			} ${HOVER}`}
@@ -37,16 +37,16 @@ export function EmptyHint({ children }: { children: ComponentChildren }) {
 
 // 空位的另一种：列表末尾那个入口；列表空着时兼作空态，上面多一行说明，纵向也更高
 export function AddButton({
-	onClick,
+	on_click,
 	is_empty,
 	children,
 }: {
-	onClick: () => void;
+	on_click: () => void;
 	is_empty: boolean;
 	children: ComponentChildren;
 }) {
 	return (
-		<DashedButton onClick={onClick} tall={is_empty}>
+		<DashedButton on_click={on_click} tall={is_empty}>
 			{is_empty && <span class="text-ctp-overlay0">没有内容</span>}
 			<span class="flex items-center gap-2">
 				<PlusIcon />

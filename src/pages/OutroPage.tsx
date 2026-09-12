@@ -2,7 +2,7 @@ import { Fragment } from 'preact';
 import { useRef } from 'preact/hooks';
 
 import { COPY } from '../lib/copy';
-import { resolveOutro, type OutroBlock, type OutroMeta } from '../lib/outro';
+import { resolve_outro, type OutroBlock, type OutroMeta } from '../lib/outro';
 import type { CardData } from '../lib/types';
 import { BLOCK_HEADING, SUB_TEXT } from '../components/ui';
 
@@ -60,9 +60,9 @@ function OutroFooter({ footer }: { footer: string }) {
 	);
 }
 
-// 结尾页：上标题、中主体、下署名；只排版不判断，内容由 resolveOutro 决定
-export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => void }) {
-	const { title, meta, blocks, footer } = resolveOutro(data);
+// 结尾页：上标题、中主体、下署名；只排版不判断，内容由 resolve_outro 决定
+export function OutroPage({ data, on_exit }: { data: CardData; on_exit?: () => void }) {
+	const { title, meta, blocks, footer } = resolve_outro(data);
 	// 按下时手指在哪儿：拖选文字与双击选词也会派一次 click，那不是「点一下就走」
 	const pressed = useRef<{ x: number; y: number } | null>(null);
 
@@ -70,24 +70,24 @@ export function OutroPage({ data, onExit }: { data: CardData; onExit?: () => voi
 		// 整屏都是「回去」的靶子：点哪儿都行，键盘用 Tab 进来按回车或空格
 		<div
 			class="flex flex-1 cursor-pointer flex-col justify-center-safe"
-			role={onExit ? 'button' : undefined}
-			tabIndex={onExit ? 0 : undefined}
-			aria-label={onExit ? COPY.action.backToEdit : undefined}
+			role={on_exit ? 'button' : undefined}
+			tabIndex={on_exit ? 0 : undefined}
+			aria-label={on_exit ? COPY.action.back_to_edit : undefined}
 			onPointerDown={(event) => {
 				pressed.current = { x: event.clientX, y: event.clientY };
 			}}
 			onClick={(event) => {
 				const from = pressed.current;
 				pressed.current = null;
-				if (!onExit || !from) return;
+				if (!on_exit || !from) return;
 				// 手移开了就是在选字：选中的内容不该连同这一屏一起没了
 				if (Math.hypot(event.clientX - from.x, event.clientY - from.y) > 8) return;
-				onExit();
+				on_exit();
 			}}
 			onKeyDown={(event) => {
-				if (!onExit || (event.key !== 'Enter' && event.key !== ' ')) return;
+				if (!on_exit || (event.key !== 'Enter' && event.key !== ' ')) return;
 				event.preventDefault();
-				onExit();
+				on_exit();
 			}}
 		>
 			<div data-card class="mx-auto w-full max-w-[26rem] p-inset wide:max-w-[45rem]">

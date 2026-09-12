@@ -1,7 +1,7 @@
 import type { Survey } from '../lib/survey/types';
 
 // 逻辑红石音乐：这个类别作品的问卷，类别名写全，选项最新在前
-export const logicRedstoneMusicSurvey: Survey = {
+export const logic_redstone_music_survey: Survey = {
 	id: 'logic-redstone-music',
 	title: '逻辑红石音乐',
 	description: '适用于逻辑红石音乐类别作品的问卷',
@@ -22,7 +22,7 @@ export const logicRedstoneMusicSurvey: Survey = {
 		},
 		{
 			into: 'meta',
-			id: 'stateSpace',
+			id: 'state_space',
 			label: '状态空间族',
 			kind: 'choice',
 			// 问的是**族**：多族 = 不同初始状态各走一套互不相通的状态空间，无分歧 = 只有单调的一条推进
@@ -31,7 +31,7 @@ export const logicRedstoneMusicSurvey: Survey = {
 		},
 		{
 			into: 'meta',
-			id: 'buildRequirement',
+			id: 'build_requirement',
 			label: '建造要求',
 			kind: 'choice',
 			options: ['无要求', '不建议跨区块', '方向性', '位置性'],
@@ -47,25 +47,25 @@ export const logicRedstoneMusicSurvey: Survey = {
 		},
 		{
 			into: 'meta',
-			id: 'originalAuthor',
+			id: 'original_author',
 			label: '原曲作者',
 			kind: 'text',
 		},
 		{
 			into: 'meta',
-			id: 'scoreAuthor',
+			id: 'score_author',
 			label: '乐谱作者',
 			kind: 'text',
 		},
 		{
 			into: 'meta',
-			id: 'structureAuthor',
+			id: 'structure_author',
 			label: '结构作者',
 			kind: 'text',
 		},
 		{
 			into: 'meta',
-			id: 'videoAuthor',
+			id: 'video_author',
 			label: '视频作者',
 			kind: 'text',
 		},

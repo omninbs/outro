@@ -11,12 +11,12 @@ interface Row {
 // 元数据编辑器：一条一行「名称 + 内容」，名称就是最终页那条的标签
 export function MetaEditor({
 	items,
-	onChange,
+	on_change,
 	create,
 	copy,
 }: {
 	items: Row[];
-	onChange: (items: Row[]) => void;
+	on_change: (items: Row[]) => void;
 	create: () => Row;
 	copy: { label: string; value: string; add: string };
 }) {
@@ -27,19 +27,19 @@ export function MetaEditor({
 					key={item.id}
 					label={item.label}
 					value={item.value}
-					labelPlaceholder={copy.label}
-					valuePlaceholder={copy.value}
-					onLabelChange={(label) =>
-						onChange(items.map((it) => (it.id === item.id ? { ...it, label } : it)))
+					label_placeholder={copy.label}
+					value_placeholder={copy.value}
+					on_label_change={(label) =>
+						on_change(items.map((it) => (it.id === item.id ? { ...it, label } : it)))
 					}
-					onValueChange={(value) =>
-						onChange(items.map((it) => (it.id === item.id ? { ...it, value } : it)))
+					on_value_change={(value) =>
+						on_change(items.map((it) => (it.id === item.id ? { ...it, value } : it)))
 					}
-					onRemove={() => onChange(items.filter((it) => it.id !== item.id))}
+					on_remove={() => on_change(items.filter((it) => it.id !== item.id))}
 				/>
 			))}
 
-			<AddButton is_empty={items.length === 0} onClick={() => onChange([...items, create()])}>
+			<AddButton is_empty={items.length === 0} on_click={() => on_change([...items, create()])}>
 				{copy.add}
 			</AddButton>
 		</div>

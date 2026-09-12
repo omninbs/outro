@@ -12,13 +12,13 @@ import { SummaryStep } from './SummaryStep';
 export interface StepContext {
 	data: CardData;
 	patch: Patch;
-	onReset: () => void;
-	onPreview: () => void;
+	on_reset: () => void;
+	on_preview: () => void;
 }
 
 export interface StepEntry extends StepDef {
 	// 中档及以下（没有旁边那条栏）把清单显示在这一步的末尾，作最后的确认
-	listBelow?: boolean;
+	list_below?: boolean;
 	body: (ctx: StepContext) => ComponentChildren;
 }
 
@@ -41,16 +41,16 @@ export const STEPS: StepEntry[] = [
 		id: 'generate',
 		label: COPY.step.generate,
 		icon: SparklesIcon,
-		listBelow: true,
-		body: ({ data, onReset, onPreview }) => (
-			<GenerateStep data={data} onReset={onReset} onPreview={onPreview} />
+		list_below: true,
+		body: ({ data, on_reset, on_preview }) => (
+			<GenerateStep data={data} on_reset={on_reset} on_preview={on_preview} />
 		),
 	},
 ];
 
 // 每一步在地址里的名字：`step-` 前缀加步骤 id——地址与步骤表同源
-export const stepRoute = (id: string) => `step-${id}`;
+export const step_route = (id: string) => `step-${id}`;
 
 // 向导第一步、最后一步在地址里的名字：从别的页面回到向导时落的那两步
-export const firstStepName = () => stepRoute(STEPS[0].id);
-export const lastStepName = () => stepRoute(STEPS[STEPS.length - 1].id);
+export const first_step_name = () => step_route(STEPS[0].id);
+export const last_step_name = () => step_route(STEPS[STEPS.length - 1].id);

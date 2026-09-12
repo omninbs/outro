@@ -1,5 +1,5 @@
 import { COPY } from './copy';
-import { frameOf } from './frame';
+import { frame_of } from './frame';
 
 // 保存图片：把页面上排好的那一份装进 SVG，让浏览器按同一套条件当场画到画布上。
 
@@ -29,12 +29,12 @@ const SCALE = 2;
 const LIMIT = 2160;
 
 // 文件名拿标题当名字：存下来的图多半是照标题认的；标题空着就叫「结尾页」
-function fileName(title: string, suffix: string) {
+function file_name(title: string, suffix: string) {
 	return `${title.trim().replace(/[\\/:*?"<>|]/g, '').slice(0, 60) || '结尾页'}-${suffix}.png`;
 }
 
 // 拍 preset 那一档：视口取卡片的尺寸，外壳按设计宽摆好再左移居中留下的那一段，不用裁。
-export async function saveImage(card: HTMLElement, preset: OutputPreset, title: string) {
+export async function save_image(card: HTMLElement, preset: OutputPreset, title: string) {
 	const content = { width: card.offsetWidth, height: card.offsetHeight };
 	const left = Math.max(0, (preset.viewport - content.width) / 2);
 	const shell = card.closest('.safe-area') ?? card;
@@ -69,14 +69,14 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 
 	// 装成 data: 而不是 blob：Chromium 把 blob 里的外来内容当异源，画布会被弄脏、toBlob 抛错
 	const shot = new Image();
-	const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(drawn)}`;
+	const svg_url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(drawn)}`;
 	await new Promise((done, fail) => {
 		shot.onload = done;
 		shot.onerror = fail;
-		shot.src = svgUrl;
+		shot.src = svg_url;
 	});
 
-	const frame = frameOf(preset.aspect, content);
+	const frame = frame_of(preset.aspect, content);
 	// 画布被顶到上限时整幅一起收：卡片与留白同比例，图小一号但版面不变
 	const size = Math.min(1, LIMIT / (frame.width * SCALE), LIMIT / (frame.height * SCALE));
 	const width = Math.round(frame.width * size * SCALE);
@@ -108,7 +108,7 @@ export async function saveImage(card: HTMLElement, preset: OutputPreset, title: 
 	const link = document.createElement('a');
 	const url = URL.createObjectURL(blob);
 	link.href = url;
-	link.download = fileName(title, preset.suffix);
+	link.download = file_name(title, preset.suffix);
 	link.click();
 	// 浏览器还要把 blob 读走，地址晚一步再放掉
 	setTimeout(() => URL.revokeObjectURL(url), 10_000);

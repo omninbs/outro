@@ -22,7 +22,7 @@ export interface OutroContent {
 }
 
 // 「最终页会真正显示什么」的唯一实现：滤掉空的、去掉首尾空白，没有兜底文案。
-export function resolveOutro(data: CardData): OutroContent {
+export function resolve_outro(data: CardData): OutroContent {
 	return {
 		title: data.title.trim(),
 		meta: data.meta
@@ -31,6 +31,6 @@ export function resolveOutro(data: CardData): OutroContent {
 		blocks: data.blocks
 			.filter((block) => block.text.trim() !== '')
 			.map((block) => ({ id: block.id, label: block.label.trim(), text: block.text.trim() })),
-		footer: data.footerText.trim(),
+		footer: data.footer_text.trim(),
 	};
 }

@@ -16,7 +16,7 @@ export const FOOTER_MIN_HEIGHT = 'min-h-56';
 const container = (width: string) => `mx-auto w-full ${width} px-6 narrow:px-0`;
 
 // 页面内容的容器
-export const pageContainer = (width: PageWidth) => container(PAGE_WIDTHS[width]);
+export const page_container = (width: PageWidth) => container(PAGE_WIDTHS[width]);
 
 // 页脚的容器：宽度固定，每页都一样
-export const footerContainer = () => container(FOOTER_WIDTH);
+export const footer_container = () => container(FOOTER_WIDTH);

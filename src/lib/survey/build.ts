@@ -3,11 +3,11 @@ import type { CardData, MetaItem, TextBlock } from '../types';
 import type { Answers, Question, Survey } from './types';
 
 // 内容的 id 由题目 id 推出来：随机 id 会让清单每次换一批身份、整列重挂载。
-const metaId = (question: Question) => `m-${question.id}`;
-const blockId = (question: Question) => `b-${question.id}`;
+const meta_id = (question: Question) => `m-${question.id}`;
+const block_id = (question: Question) => `b-${question.id}`;
 
 // 按每道题的 into 把答案搬成内容；纯函数，只返回问到的去处，没问到的留给默认值。
-export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
+export function build_card(survey: Survey, answers: Answers): Partial<CardData> {
 	const meta: MetaItem[] = [];
 	const blocks: TextBlock[] = [];
 	const said: Partial<CardData> = { meta, blocks };
@@ -22,15 +22,15 @@ export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
 				said.title = value;
 				break;
 			case 'footer':
-				said.footerText = value;
+				said.footer_text = value;
 				break;
 			case 'meta':
-				if (value) meta.push({ id: metaId(question), label: question.label, value });
+				if (value) meta.push({ id: meta_id(question), label: question.label, value });
 				break;
 			case 'block':
 				if (value) {
 					blocks.push({
-						id: blockId(question),
+						id: block_id(question),
 						label: question.label,
 						text: value,
 					});
@@ -43,7 +43,7 @@ export function buildCard(survey: Survey, answers: Answers): Partial<CardData> {
 }
 
 // 问卷答案 → 内容：以默认内容为底，问卷答到的部分盖在上面；答完不等于清空。
-export function buildFrom(survey: Survey, answers: Answers): CardData {
-	const said = survey.build ? survey.build(answers) : buildCard(survey, answers);
+export function build_from(survey: Survey, answers: Answers): CardData {
+	const said = survey.build ? survey.build(answers) : build_card(survey, answers);
 	return { ...structuredClone(DEFAULT_CARD), ...said };
 }

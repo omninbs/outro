@@ -26,7 +26,7 @@ export function QuestionInput({
 	long,
 	options = [],
 	value,
-	onChange,
+	on_change,
 	placeholder,
 }: {
 	label: string;
@@ -34,36 +34,36 @@ export function QuestionInput({
 	long?: boolean;
 	options?: string[];
 	value: string;
-	onChange: (value: string) => void;
+	on_change: (value: string) => void;
 	placeholder: string;
 }) {
-	const [custom, setCustom] = useState(() => value !== '' && !options.includes(value));
+	const [custom, set_custom] = useState(() => value !== '' && !options.includes(value));
 	// 叉掉时放回的那一项：× 是撤销，不是清空
-	const [revertTo, setRevertTo] = useState('');
+	const [revert_to, set_revert_to] = useState('');
 
 	// 当前题的框：形态跟着答案的形状走
-	const answerBox = (hint: string, action?: ComponentChildren) =>
+	const answer_box = (hint: string, action?: ComponentChildren) =>
 		long ? (
-			<TextArea value={value} onInput={onChange} placeholder={hint} action={action} />
+			<TextArea value={value} on_input={on_change} placeholder={hint} action={action} />
 		) : (
-			<TextInput value={value} onInput={onChange} placeholder={hint} action={action} />
+			<TextInput value={value} on_input={on_change} placeholder={hint} action={action} />
 		);
 
 	if (options.length === 0) {
-		return <Field label={label}>{answerBox(placeholder)}</Field>;
+		return <Field label={label}>{answer_box(placeholder)}</Field>;
 	}
 
 	return (
 		// 一排预设是「一组选项」而非一个控件，标签只该包一个控件
 		<Field label={label} group={!custom}>
-			{custom ? (
-				answerBox(
+				{custom ? (
+				answer_box(
 					'自己写',
 					<IconButton
 						label="退回选项"
-						onClick={() => {
-							onChange(revertTo);
-							setCustom(false);
+						on_click={() => {
+							on_change(revert_to);
+							set_custom(false);
 						}}
 					/>,
 				)
@@ -76,7 +76,7 @@ export function QuestionInput({
 							<button
 								key={option}
 								type="button"
-								onClick={() => onChange(active ? '' : option)}
+								onClick={() => on_change(active ? '' : option)}
 								class={`${long ? BLOCK : PILL} ${tone(active)}`}
 							>
 								{option}
@@ -86,8 +86,8 @@ export function QuestionInput({
 					<button
 						type="button"
 						onClick={() => {
-							setRevertTo(value);
-							setCustom(true);
+							set_revert_to(value);
+							set_custom(true);
 						}}
 						class={`${CUSTOM} ${long ? 'w-full px-3 py-2' : 'px-3 py-1.5'}`}
 					>

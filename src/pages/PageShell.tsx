@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 
-import { pageContainer, type PageWidth } from '../lib/layout';
+import { page_container, type PageWidth } from '../lib/layout';
 import { PageFooter } from './PageFooter';
 
 // 页面外壳：撑满一屏、上色、套容器、挂页脚；宽度归这里管，也是版面的量具
@@ -24,7 +24,7 @@ export function PageShell({
 			{width === null ? (
 				children
 			) : (
-				<div class={`${pageContainer(width)} flex flex-1 flex-col py-12`}>{children}</div>
+				<div class={`${page_container(width)} flex flex-1 flex-col py-12`}>{children}</div>
 			)}
 			{footer && width !== null && <PageFooter />}
 		</div>

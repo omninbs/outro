@@ -16,7 +16,7 @@ export interface CardData {
 	title: string;
 	meta: MetaItem[];
 	blocks: TextBlock[];
-	footerText: string;
+	footer_text: string;
 }
 
 // 局部更新内容：步骤组件用它改自己那一部分
