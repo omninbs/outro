@@ -59,7 +59,8 @@ Nothing under `components/` imports from `lib/`: a component's own shape is decl
 |---|---|
 | copy | `lib/copy.ts`; a generic component writes fixed words inline and takes the rest as props |
 | content | `lib/outro.ts` |
-| box appearance, solid and dashed | `ui/inputs.tsx` |
+| box appearance, solid | `ui/inputs.tsx` |
+| box appearance, dashed, and the pieces built on it | `ui/dashed.tsx` |
 | motion | `ui/tokens.ts` |
 | fully clickable row | `ui/LinkList.tsx` |
 | canvas geometry | `lib/frame.ts` |

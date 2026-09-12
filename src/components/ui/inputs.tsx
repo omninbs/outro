@@ -10,10 +10,6 @@ export const BARE_INPUT =
 // 框的长相：底色、描边、圆角，留白与排布归用处，所以是常量不是组件
 export const BOX = 'rounded-md border border-ctp-surface0 bg-ctp-crust';
 
-// 虚框的长相：空态提示与添加按钮共用一套，一处定义才不会分叉
-export const DASHED =
-	'rounded-md border border-dashed border-ctp-surface1 narrow:rounded-none narrow:border-x-0 narrow:px-inset';
-
 // 一行式的框：全应用只有这一处定义「框」，窄屏贴边、横向留白自己带一次
 export function BareRow({ children, action }: { children: ComponentChildren; action?: ComponentChildren }) {
 	return (

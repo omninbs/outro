@@ -2,8 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { HOVER } from './tokens';
-import { DASHED } from './inputs';
-import { CloseIcon, PlusIcon } from './icons';
+import { CloseIcon } from './icons';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
@@ -99,34 +98,6 @@ export function IconButton({ label, onClick }: { label: string; onClick: () => v
 			class={`grid h-8 w-8 shrink-0 place-items-center rounded text-ctp-overlay0 press:text-ctp-red ${HOVER}`}
 		>
 			<CloseIcon />
-		</button>
-	);
-}
-
-// 列表末尾的添加动作：虚线框，窄档跟列表条目一个待遇；列表空着时兼作空态，上面多一行说明
-export function AddButton({
-	onClick,
-	children,
-	empty,
-}: {
-	onClick: () => void;
-	children: ComponentChildren;
-	// 给了它就是空态：先说缺什么，再说怎么加
-	empty?: ComponentChildren;
-}) {
-	return (
-		<button
-			type="button"
-			onClick={onClick}
-			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
-				empty ? 'py-6' : 'py-2'
-			} ${HOVER}`}
-		>
-			{empty && <span class="text-ctp-overlay0">{empty}</span>}
-			<span class="flex items-center gap-2">
-				<PlusIcon />
-				{children}
-			</span>
 		</button>
 	);
 }
