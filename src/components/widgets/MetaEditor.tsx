@@ -1,4 +1,5 @@
-import { AddButton, BARE_INPUT, BareRow, EmptyHint, IconButton } from '../ui';
+import { AddButton, EmptyHint } from '../ui';
+import { KeyValueRow } from './KeyValueRow';
 
 // 一行元数据：本组件只认这个形状，内容层怎么定义与它无关
 interface Row {
@@ -24,44 +25,20 @@ export function MetaEditor({
 			{items.length === 0 && <EmptyHint>{copy.empty}</EmptyHint>}
 
 			{items.map((item) => (
-				<BareRow
+				<KeyValueRow
 					key={item.id}
-					action={
-						<IconButton
-							label="删除"
-							onClick={() => onChange(items.filter((it) => it.id !== item.id))}
-						/>
+					label={item.label}
+					value={item.value}
+					labelPlaceholder={copy.label}
+					valuePlaceholder={copy.value}
+					onLabelChange={(label) =>
+						onChange(items.map((it) => (it.id === item.id ? { ...it, label } : it)))
 					}
-				>
-					<div class="flex min-w-0 flex-1 items-center gap-2 narrow:flex-col narrow:items-stretch">
-						<input
-							type="text"
-							value={item.label}
-							placeholder={copy.label}
-							class={`w-36 shrink-0 font-medium text-ctp-mauve narrow:w-full ${BARE_INPUT}`}
-							onInput={(e) =>
-								onChange(
-									items.map((it) =>
-										it.id === item.id ? { ...it, label: e.currentTarget.value } : it,
-									),
-								)
-							}
-						/>
-						<input
-							type="text"
-							value={item.value}
-							placeholder={copy.value}
-							class={`min-w-0 flex-1 text-ctp-text narrow:w-full narrow:flex-none ${BARE_INPUT}`}
-							onInput={(e) =>
-								onChange(
-									items.map((it) =>
-										it.id === item.id ? { ...it, value: e.currentTarget.value } : it,
-									),
-								)
-							}
-						/>
-					</div>
-				</BareRow>
+					onValueChange={(value) =>
+						onChange(items.map((it) => (it.id === item.id ? { ...it, value } : it)))
+					}
+					onRemove={() => onChange(items.filter((it) => it.id !== item.id))}
+				/>
 			))}
 
 			<AddButton onClick={() => onChange([...items, create()])}>{copy.add}</AddButton>

@@ -2,6 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { HOVER } from './tokens';
+import { DASHED } from './inputs';
 import { CloseIcon, PlusIcon } from './icons';
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
@@ -108,7 +109,7 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
 		<button
 			type="button"
 			onClick={onClick}
-			class={`flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-ctp-surface1 py-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve narrow:rounded-none narrow:border-x-0 narrow:px-inset ${HOVER}`}
+			class={`${DASHED} flex w-full items-center justify-center gap-2 py-2 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${HOVER}`}
 		>
 			<PlusIcon />
 			{children}
