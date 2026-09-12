@@ -42,7 +42,6 @@ export function AddButton({
 	children,
 }: {
 	on_click: () => void;
-	// 给了它就是空态：先说缺什么，再说怎么加
 	empty?: ComponentChildren;
 	children: ComponentChildren;
 }) {
