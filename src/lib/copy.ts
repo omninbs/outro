@@ -80,8 +80,4 @@ export const COPY = {
 
 	// 清单里某一段空着时的提示，只说「这一段是空的」
 	empty: '留空',
-
-	// 空列表上那颗添加按钮的第一行：只说缺什么，添加动作在它下面一行
-	emptyMeta: '没有元数据',
-	emptyBlocks: '没有文本块',
 } as const;

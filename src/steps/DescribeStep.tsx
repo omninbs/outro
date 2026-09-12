@@ -16,7 +16,6 @@ export function DescribeStep({ data, patch }: { data: CardData; patch: Patch }) 
 					copy={{
 						label: COPY.field.blockLabel,
 						text: COPY.field.blockText,
-						empty: COPY.emptyBlocks,
 						add: COPY.action.addBlock,
 					}}
 				/>

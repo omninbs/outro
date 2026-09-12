@@ -38,17 +38,16 @@ export function EmptyHint({ children }: { children: ComponentChildren }) {
 // 空位的另一种：列表末尾那个入口；列表空着时兼作空态，上面多一行说明，纵向也更高
 export function AddButton({
 	onClick,
+	is_empty,
 	children,
-	empty,
 }: {
 	onClick: () => void;
+	is_empty: boolean;
 	children: ComponentChildren;
-	// 给了它就是空态：先说缺什么，再说怎么加
-	empty?: ComponentChildren;
 }) {
 	return (
-		<DashedButton onClick={onClick} tall={!!empty}>
-			{empty && <span class="text-ctp-overlay0">{empty}</span>}
+		<DashedButton onClick={onClick} tall={is_empty}>
+			{is_empty && <span class="text-ctp-overlay0">没有内容</span>}
 			<span class="flex items-center gap-2">
 				<PlusIcon />
 				{children}
