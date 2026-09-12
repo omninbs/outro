@@ -34,6 +34,22 @@ export function GenerateStep({
 		);
 	}, [job, card]);
 
+	// 存图按钮一档一个：按下的那一刻才把结尾页挂出来，存完就收
+	const save_buttons = OUTPUTS.map((preset) => (
+		<Button
+			key={preset.suffix}
+			disabled={job !== null}
+			on_click={() => {
+				set_failed(false);
+				set_card(null);
+				set_job({ preset, title: data.title });
+			}}
+		>
+			{COPY.action.save}
+			{preset.label}
+		</Button>
+	));
+
 	return (
 		<Panel title={COPY.step.generate}>
 			<p class="text-base leading-relaxed text-ctp-subtext0 narrow:px-inset">{COPY.hint.generate}</p>
@@ -47,20 +63,7 @@ export function GenerateStep({
 					</ConfirmButton>
 				</div>
 				<div class="flex flex-wrap items-center gap-x-2 gap-y-3">
-					{OUTPUTS.map((preset) => (
-						<Button
-							key={preset.suffix}
-							disabled={job !== null}
-							on_click={() => {
-								set_failed(false);
-								set_card(null);
-								set_job({ preset, title: data.title });
-							}}
-						>
-							{COPY.action.save}
-							{preset.label}
-						</Button>
-					))}
+					{save_buttons}
 				</div>
 			</div>
 			{failed && <p class="text-base text-ctp-red narrow:px-inset">{COPY.hint.save_failed}</p>}

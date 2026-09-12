@@ -23,27 +23,23 @@ export function Stepper({
 				const active = index === current;
 				const done = index < current;
 				const Icon = done ? CheckIcon : step.icon;
+				const tab = active
+					? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
+					: 'border-ctp-surface0 text-ctp-subtext0 press:text-ctp-text';
+				const dot = active
+					? 'bg-ctp-mauve text-ctp-crust'
+					: done
+						? 'bg-ctp-green text-ctp-crust'
+						: 'bg-ctp-surface1 text-ctp-subtext0';
 				return (
 					<li key={step.id} class="flex items-center gap-2">
 						<button
 							type="button"
 							aria-current={active ? 'step' : undefined}
 							onClick={() => on_select(index)}
-							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${HOVER} ${
-								active
-									? 'border-ctp-mauve bg-ctp-mauve/10 text-ctp-text'
-									: 'border-ctp-surface0 text-ctp-subtext0 press:text-ctp-text'
-							}`}
+							class={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-base ${HOVER} ${tab}`}
 						>
-							<span
-								class={`grid h-6 w-6 place-items-center rounded-full ${
-									active
-										? 'bg-ctp-mauve text-ctp-crust'
-										: done
-											? 'bg-ctp-green text-ctp-crust'
-											: 'bg-ctp-surface1 text-ctp-subtext0'
-								}`}
-							>
+							<span class={`grid h-6 w-6 place-items-center rounded-full ${dot}`}>
 								<Icon />
 							</span>
 							<span class={`${active ? '' : 'narrow:hidden narrow:opacity-0'} ${FADE}`}>

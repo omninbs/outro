@@ -5,6 +5,11 @@ import { Stepper, type StepDef } from '../components/widgets/stepper';
 import { FADE } from '../components/ui';
 import { PageHeader } from './page_header';
 
+// 右侧清单那一栏：宽档才常驻，出现时淡进来
+const SIDE_LIST =
+	'hidden min-w-0 opacity-0 wide:sticky wide:top-12 wide:block ' +
+	`wide:flex-[1.1] wide:opacity-100 wide:starting:opacity-0 ${FADE}`;
+
 // 向导骨架：标题、步骤条、两栏；宽档右侧常驻清单，更窄的档单栏顺读
 export function WizardShell({
 	steps,
@@ -28,9 +33,7 @@ export function WizardShell({
 			<div class="flex flex-col gap-6 wide:flex-row wide:items-start">
 				<div class="flex min-w-0 flex-col gap-6 wide:flex-[1]">{children}</div>
 
-				<div
-					class={`hidden min-w-0 opacity-0 wide:sticky wide:top-12 wide:block wide:flex-[1.1] wide:opacity-100 wide:starting:opacity-0 ${FADE}`}
-				>
+				<div class={SIDE_LIST}>
 					{side_list}
 				</div>
 			</div>
