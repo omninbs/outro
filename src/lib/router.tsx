@@ -2,84 +2,43 @@ import { createContext } from 'preact';
 import type { ComponentChildren } from 'preact';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
-import { findStep, stepRoute, type StepEntry } from '../steps/_registry';
-import { findSurvey } from '../surveys/_registry';
-import type { Survey } from './survey/types';
-
-// 写在地址里的页面：每一步各自是一页、某份问卷、预览页；认不出地址就没有页面，主页是它的落点
-export type Page =
-	| { kind: 'step'; step: StepEntry }
-	| { kind: 'survey'; survey: Survey }
-	| { kind: 'outro' };
-
-// 地址认得出的页面；认不出返回 null——主页不是一个地址，只是这个 null 的落点
-function readPage(): Page | null {
-	const name = window.location.hash.slice(1).trim().toLowerCase();
-
-	if (name === 'outro') return { kind: 'outro' };
-
-	// 三步是三个独立页面：地址就是这一步在步骤表里的名字，认出的是那一步本身
-	const step = findStep(name);
-	if (step) return { kind: 'step', step };
-
-	// 剩下的名字里，认得出的才是问卷
-	const survey = findSurvey(name);
-	if (survey) return { kind: 'survey', survey };
-
-	return null;
+// 地址就是一个名字：名字认得出哪一页由页面表说了算，路由自己不认识任何一页
+function readName() {
+	return window.location.hash.slice(1).trim().toLowerCase();
 }
 
 // 换一页就回到顶部：地址是自己改的还是链接、前进后退改的，都归这儿管
 const toTop = () => window.scrollTo(0, 0);
 
-// null 表示没有页面：把地址清空，主页就是它落的地方
-function writePage(page: Page | null) {
-	if (!page) {
-		window.location.hash = '';
-		return;
-	}
-
-	if (page.kind === 'outro') {
-		window.location.hash = 'outro';
-		return;
-	}
-
-	if (page.kind === 'step') {
-		window.location.hash = stepRoute(page.step.id);
-		return;
-	}
-
-	window.location.hash = page.survey.id;
-}
-
 type RouterValue = {
-	page: Page | null;
-	navigate: (page: Page | null) => void;
+	name: string;
+	// 给一个名字就去那一页；给 null 是离开页面，地址清空、落回主页
+	navigate: (name: string | null) => void;
 };
 
-const RouterContext = createContext<RouterValue>({ page: null, navigate: () => {} });
+const RouterContext = createContext<RouterValue>({ name: '', navigate: () => {} });
 
 export function RouterProvider({ children }: { children: ComponentChildren }) {
 	// 地址本身就是状态：首屏从地址读一次，带地址打开或刷新都落在同一页
-	const [page, setPage] = useState<Page | null>(readPage);
+	const [name, setName] = useState(readName);
 
 	// 之后由地址的变化同步回来——前进 / 后退、手改地址都算
 	useEffect(() => {
 		const sync = () => {
-			setPage(readPage());
+			setName(readName());
 			toTop();
 		};
 		window.addEventListener('hashchange', sync);
 		return () => window.removeEventListener('hashchange', sync);
 	}, []);
 
-	const navigate = useCallback((next: Page | null) => {
-		setPage(next); // 视图先行，不等事件绕回来，免得闪一下
-		writePage(next);
+	const navigate = useCallback((next: string | null) => {
+		setName(next ?? ''); // 视图先行，不等事件绕回来，免得闪一下
+		window.location.hash = next ?? '';
 		toTop();
 	}, []);
 
-	const value = useMemo(() => ({ page, navigate }), [page, navigate]);
+	const value = useMemo(() => ({ name, navigate }), [name, navigate]);
 
 	return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
 }

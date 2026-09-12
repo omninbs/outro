@@ -51,5 +51,6 @@ export const STEPS: StepEntry[] = [
 // 每一步在地址里的名字：`step-` 前缀加步骤 id——地址与步骤表同源
 export const stepRoute = (id: string) => `step-${id}`;
 
-// 地址认的是哪一个步骤页；认不出返回 undefined
-export const findStep = (name: string) => STEPS.find((step) => stepRoute(step.id) === name);
+// 向导第一步、最后一步在地址里的名字：从别的页面回到向导时落的那两步
+export const firstStepName = () => stepRoute(STEPS[0].id);
+export const lastStepName = () => stepRoute(STEPS[STEPS.length - 1].id);
