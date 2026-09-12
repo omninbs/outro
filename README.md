@@ -2,4 +2,4 @@
 
 A tool designed to generate simple video end credits pages.
 
-> This is a project generated entirely by AI
+> I'm sorry that the entire project was completed by AI, even though I would have loved to take the time to implement it according to my own ideas.
