@@ -24,18 +24,35 @@ export function AddButton({
 	empty?: ComponentChildren;
 }) {
 	return (
-		<button
-			type="button"
-			onClick={onClick}
-			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
-				empty ? 'py-6' : 'py-2'
-			} ${HOVER}`}
-		>
+		<DashedButton onClick={onClick} tall={!!empty}>
 			{empty && <span class="text-ctp-overlay0">{empty}</span>}
 			<span class="flex items-center gap-2">
 				<PlusIcon />
 				{children}
 			</span>
+		</DashedButton>
+	);
+}
+
+// 虚框按钮的壳：铺一块虚框、竖排若干行，高度随行数走
+function DashedButton({
+	onClick,
+	tall,
+	children,
+}: {
+	onClick: () => void;
+	tall: boolean;
+	children: ComponentChildren;
+}) {
+	return (
+		<button
+			type="button"
+			onClick={onClick}
+			class={`${DASHED} flex w-full flex-col items-center justify-center gap-3 text-base text-ctp-subtext0 press:border-ctp-mauve press:text-ctp-mauve ${
+				tall ? 'py-6' : 'py-2'
+			} ${HOVER}`}
+		>
+			{children}
 		</button>
 	);
 }
