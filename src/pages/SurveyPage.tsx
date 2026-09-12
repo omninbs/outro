@@ -32,9 +32,12 @@ export function SurveyPage({
 				{survey.questions.map((question) => (
 					<QuestionInput
 						key={question.id}
-						question={question}
+						label={question.label}
+						long={question.kind === 'long'}
+						options={question.options}
 						value={answers[question.id] ?? ''}
 						onChange={(value) => answer(question.id, value)}
+						placeholder={COPY.placeholder}
 					/>
 				))}
 			</Panel>

@@ -1,27 +1,27 @@
-import { newBlock, removeById, updateById } from '../../lib/card';
-import type { TextBlock } from '../../lib/types';
 import { AddButton, BARE_INPUT, BareTextArea, BOX, EmptyHint, IconButton, RISE } from '../ui';
 
-// 组件自带的文案：借给调用方的东西写在这里
-const TEXT = {
-	empty: '还没有文本块，点下方按钮添加',
-	label: '小标题（可留空）',
-	text: '正文',
-	remove: '删除',
-	add: '添加文本块',
-};
+// 一块文本：本组件只认这个形状，内容层怎么定义与它无关
+interface Block {
+	id: string;
+	label: string;
+	text: string;
+}
 
 // 文本块编辑器：每块一条小标题（可留空）配一段正文
 export function BlockEditor({
 	blocks,
 	onChange,
+	create,
+	copy,
 }: {
-	blocks: TextBlock[];
-	onChange: (blocks: TextBlock[]) => void;
+	blocks: Block[];
+	onChange: (blocks: Block[]) => void;
+	create: () => Block;
+	copy: { label: string; text: string; empty: string; add: string };
 }) {
 	return (
 		<div class="flex flex-col gap-3">
-			{blocks.length === 0 && <EmptyHint>{TEXT.empty}</EmptyHint>}
+			{blocks.length === 0 && <EmptyHint>{copy.empty}</EmptyHint>}
 
 			{blocks.map((block) => (
 				<div
@@ -32,21 +32,32 @@ export function BlockEditor({
 						<input
 							type="text"
 							value={block.label}
-							placeholder={TEXT.label}
+							placeholder={copy.label}
 							class={`min-w-0 flex-1 font-medium text-ctp-mauve ${BARE_INPUT}`}
-							onInput={(e) => onChange(updateById(blocks, block.id, { label: e.currentTarget.value }))}
+							onInput={(e) =>
+								onChange(
+									blocks.map((it) =>
+										it.id === block.id ? { ...it, label: e.currentTarget.value } : it,
+									),
+								)
+							}
 						/>
-						<IconButton label={TEXT.remove} onClick={() => onChange(removeById(blocks, block.id))} />
+						<IconButton
+							label="删除"
+							onClick={() => onChange(blocks.filter((it) => it.id !== block.id))}
+						/>
 					</div>
 					<BareTextArea
 						value={block.text}
-						placeholder={TEXT.text}
-						onInput={(text) => onChange(updateById(blocks, block.id, { text }))}
+						placeholder={copy.text}
+						onInput={(text) =>
+							onChange(blocks.map((it) => (it.id === block.id ? { ...it, text } : it)))
+						}
 					/>
 				</div>
 			))}
 
-			<AddButton onClick={() => onChange([...blocks, newBlock()])}>{TEXT.add}</AddButton>
+			<AddButton onClick={() => onChange([...blocks, create()])}>{copy.add}</AddButton>
 		</div>
 	);
 }

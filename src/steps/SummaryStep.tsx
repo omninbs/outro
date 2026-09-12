@@ -1,5 +1,6 @@
 import { MetaEditor } from '../components/widgets/MetaEditor';
 import { Field, Panel, TextInput } from '../components/ui';
+import { newMetaItem } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
 
@@ -18,7 +19,17 @@ export function SummaryStep({ data, patch }: { data: CardData; patch: Patch }) {
 			</Panel>
 
 			<Panel title={COPY.section.meta}>
-				<MetaEditor items={data.meta} onChange={(meta) => patch({ meta })} />
+				<MetaEditor
+					items={data.meta}
+					onChange={(meta) => patch({ meta })}
+					create={newMetaItem}
+					copy={{
+						label: COPY.field.metaLabel,
+						value: COPY.field.metaValue,
+						empty: COPY.emptyMeta,
+						add: COPY.action.addMeta,
+					}}
+				/>
 			</Panel>
 		</>
 	);

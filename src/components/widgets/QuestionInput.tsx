@@ -1,16 +1,7 @@
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 
-import type { Question } from '../../lib/survey/types';
 import { Field, FADE, IconButton, HOVER, TextArea, TextInput } from '../ui';
-
-// 组件自带的文案：借给调用方的东西写在这里
-const TEXT = {
-	placeholder: '不显示',
-	placeholderCustom: '自己写',
-	backToOptions: '退回选项',
-	custom: '自定义',
-};
 
 // 预设的选中外观：横排的词与竖排的段落共用一套
 const tone = (active: boolean) =>
@@ -29,42 +20,47 @@ const CUSTOM =
 	'rounded-md border border-dashed border-ctp-surface1 text-base text-ctp-subtext0 ' +
 	`${HOVER} press:border-ctp-mauve press:text-ctp-mauve`;
 
-// 一道题的答题控件：只认题型不认内容；带预设的题靠「自定义」在两个形态间切换
+// 一道题的答题控件：只认题面与预设，不认问卷怎么定义；带预设的题靠「自定义」在两个形态间切换
 export function QuestionInput({
-	question,
+	label,
+	long,
+	options = [],
 	value,
 	onChange,
+	placeholder,
 }: {
-	question: Question;
+	label: string;
+	// 长答用多行框，预设也竖排成整宽
+	long?: boolean;
+	options?: string[];
 	value: string;
 	onChange: (value: string) => void;
+	placeholder: string;
 }) {
-	const options = question.options ?? [];
-	const long = question.kind === 'long';
 	const [custom, setCustom] = useState(() => value !== '' && !options.includes(value));
 	// 叉掉时放回的那一项：× 是撤销，不是清空
 	const [revertTo, setRevertTo] = useState('');
 
 	// 当前题的框：形态跟着答案的形状走
-	const answerBox = (placeholder: string, action?: ComponentChildren) =>
+	const answerBox = (hint: string, action?: ComponentChildren) =>
 		long ? (
-			<TextArea value={value} onInput={onChange} placeholder={placeholder} action={action} />
+			<TextArea value={value} onInput={onChange} placeholder={hint} action={action} />
 		) : (
-			<TextInput value={value} onInput={onChange} placeholder={placeholder} action={action} />
+			<TextInput value={value} onInput={onChange} placeholder={hint} action={action} />
 		);
 
 	if (options.length === 0) {
-		return <Field label={question.label}>{answerBox(TEXT.placeholder)}</Field>;
+		return <Field label={label}>{answerBox(placeholder)}</Field>;
 	}
 
 	return (
 		// 一排预设是「一组选项」而非一个控件，标签只该包一个控件
-		<Field label={question.label} group={!custom}>
+		<Field label={label} group={!custom}>
 			{custom ? (
 				answerBox(
-					TEXT.placeholderCustom,
+					'自己写',
 					<IconButton
-						label={TEXT.backToOptions}
+						label="退回选项"
 						onClick={() => {
 							onChange(revertTo);
 							setCustom(false);
@@ -95,7 +91,7 @@ export function QuestionInput({
 						}}
 						class={`${CUSTOM} ${long ? 'w-full px-3 py-2' : 'px-3 py-1.5'}`}
 					>
-						{TEXT.custom}
+						自定义
 					</button>
 				</div>
 			)}

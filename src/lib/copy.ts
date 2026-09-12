@@ -34,10 +34,16 @@ export const COPY = {
 		// 面板标题已经写着「标题」，这一栏的标签就得自己说清是哪一个标题
 		title: '页面标题',
 		footerText: '页脚文字',
+		metaLabel: '名称',
+		metaValue: '填写内容',
+		blockLabel: '小标题（可留空）',
+		blockText: '正文',
 	},
 
 	// 动作名：按钮上的字
 	action: {
+		addMeta: '添加元数据',
+		addBlock: '添加文本块',
 		preview: '预览',
 		// 最终页那一屏整块可点，这个动作名只在无障碍里念得出来
 		backToEdit: '返回编辑',
@@ -74,4 +80,8 @@ export const COPY = {
 
 	// 清单里某一段空着时的提示，只说「这一段是空的」
 	empty: '留空',
+
+	// 编辑器里还没有条目时的提示：要做什么写在下面那颗按钮上，这里只说缺什么
+	emptyMeta: '还没有元数据，点下方按钮添加',
+	emptyBlocks: '还没有文本块，点下方按钮添加',
 } as const;

@@ -1,5 +1,6 @@
 import { BlockEditor } from '../components/widgets/BlockEditor';
 import { Field, Panel, TextInput } from '../components/ui';
+import { newBlock } from '../lib/card';
 import { COPY } from '../lib/copy';
 import type { CardData, Patch } from '../lib/types';
 
@@ -8,7 +9,17 @@ export function DescribeStep({ data, patch }: { data: CardData; patch: Patch }) 
 	return (
 		<>
 			<Panel title={COPY.section.blocks}>
-				<BlockEditor blocks={data.blocks} onChange={(blocks) => patch({ blocks })} />
+				<BlockEditor
+					blocks={data.blocks}
+					onChange={(blocks) => patch({ blocks })}
+					create={newBlock}
+					copy={{
+						label: COPY.field.blockLabel,
+						text: COPY.field.blockText,
+						empty: COPY.emptyBlocks,
+						add: COPY.action.addBlock,
+					}}
+				/>
 			</Panel>
 
 			<Panel title={COPY.section.footer}>

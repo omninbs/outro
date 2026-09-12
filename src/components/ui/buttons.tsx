@@ -4,9 +4,6 @@ import { useEffect, useState } from 'preact/hooks';
 import { HOVER } from './tokens';
 import { CloseIcon, PlusIcon } from './icons';
 
-// 翻成确认态时补的一句：按钮换了样子，念屏的人得知道
-const CONFIRM_HINT = '再点一下确认';
-
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'dangerSolid';
 
 // 四种变体只在颜色上不同：几何一致（描边宽度也算几何），带描边的两款各减一像素内边距，外高才相同
@@ -82,7 +79,7 @@ export function ConfirmButton({
 		>
 			{confirming ? confirmLabel : children}
 			<span role="status" class="sr-only">
-				{confirming ? CONFIRM_HINT : ''}
+				{confirming ? '再点一下确认' : ''}
 			</span>
 		</Button>
 	);

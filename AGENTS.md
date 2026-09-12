@@ -51,11 +51,13 @@ npm run typecheck && npm test && npm run build
 | `components/widgets/` | composites: `ui` pieces wired together, with interaction or internal state, still reusable elsewhere |
 | `pages/` | pages and the shells that serve only this app: flow, copy, or framing that means nothing outside it |
 
+Nothing under `components/` imports from `lib/`: a component's own shape is declared locally, and the types, constructors, data, and copy it needs arrive as props.
+
 **One definition per piece of knowledge (comments included)**
 
 | Knowledge | Home |
 |---|---|
-| copy | `lib/copy.ts`, except copy a generic component owns, which sits in that component |
+| copy | `lib/copy.ts`; a generic component writes fixed words inline and takes the rest as props |
 | content | `lib/outro.ts` |
 | box appearance | `ui/inputs.tsx` |
 | motion | `ui/tokens.ts` |
@@ -106,7 +108,7 @@ npm run typecheck && npm test && npm run build
 
 | Topic | Rule |
 |---|---|
-| Where copy lives | Copy a page or step shows goes into `COPY` (`lib/copy.ts`), whole-sentence descriptions included; copy a generic component owns stays in that component and it never imports `lib/copy`, so the component carries its own default and the caller may override it; `surveys/*` is content data, and `DEFAULT_CARD` prefills and `persist.ts` old-archive literals are content truths and migration anchors, so they do not go in |
+| Where copy lives | Copy a page or step shows goes into `COPY` (`lib/copy.ts`), whole-sentence descriptions included; a generic component writes the words it never varies inline and takes the words a caller may vary as props, and it never imports `lib/copy`; `surveys/*` is content data, and `DEFAULT_CARD` prefills and `persist.ts` old-archive literals are content truths and migration anchors, so they do not go in |
 | Category names | spell them out in full; options are common values rather than the full set; long single-choice keeps a custom option, and what you type yourself still reaches the outro page |
 | Long-answer options | whole paragraphs laid out vertically as full-width blocks, and tapping one fills the whole paragraph into the box; they are mutually exclusive, the box appears only after tapping the custom option, and × reverts |
 | No fallback copy | the title block including its rule, and the footer signature line, do not render; spacing on conditional rendering uses `gap`; there are only two placeholder hints (hide, and write-your-own in the custom form); a prefill that is not shown is not written |
