@@ -26,7 +26,7 @@ export function PageShell({
 			) : (
 				<div class={`${page_container(width)} flex flex-1 flex-col py-12`}>{children}</div>
 			)}
-			{footer && width !== null && <PageFooter />}
+			{footer && width !== null && <PageFooter width={width} />}
 		</div>
 	);
 }
