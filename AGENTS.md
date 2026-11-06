@@ -132,4 +132,5 @@ Names that belong to the platform keep their own spelling: intrinsic-element pro
 |---|---|
 | Stack | Vite + Preact + TS (strict) + Tailwind v4 + `vite-plugin-singlefile`; icons from `lucide-preact` (on demand); no library for image capture |
 | Repository | `omninbs/outro`, online at https://omninbs.github.io/outro/; data is stored in localStorage (`outro.card.v2`, migrated from old keys) and there is no backend |
+| Favicon | `src/assets/favicon.svg` is the only static asset; `index.html` references it with the `?inline` query so the build keeps it a data URI inside `dist/index.html`, and it must stay out of `public/` or the single-file handoff loses it |
 | Release | pushing to main runs deploy.yml automatically (it runs the gate above; cancel stuck runs in Actions); to hand someone a file, `cp dist/index.html dist/outro.html` (opens over `file://`); `viewport-fit=cover` and `.safe-area` come as a pair, and deleting the meta silently disables it |
